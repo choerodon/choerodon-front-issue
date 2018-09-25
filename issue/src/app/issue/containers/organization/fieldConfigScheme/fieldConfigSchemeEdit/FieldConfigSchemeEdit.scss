@@ -1,0 +1,52 @@
+.cloopm-fieldConfigScheme {
+  &-icon {
+    margin-right: 10px;
+    vertical-align: top;
+  }
+
+  &-tip {
+    width: 520px;
+    font-size: 14px;
+    color: #000;
+    margin-bottom: 20px;
+    margin-top: -14px;
+    & div {
+      margin-bottom: 10px;
+    }
+  }
+  &-related {
+    &-wrapper {
+      background-color:  #ECECEC;
+      padding: 20px;
+      width: 520px;
+    }
+    &-title {
+      // background-color: #fff;
+      padding: 14px 16px;
+      border-bottom: 1px solid #E9E9E9;
+      font-size: 14px;
+      color: #000000;
+      position: relative;
+    }
+    &-content {
+      &-wrapper {
+        border-radius: 4px;
+        background-color: #fff;
+      }
+      padding: 20px;
+    }
+    &-action {
+      position: absolute;
+      right: 16px;
+      bottom: 9px;
+    }
+  }
+  &-footer {
+    border-top: 1px solid rgba(0,0,0,0.12);
+    margin-top: 20px;
+    padding: 20px 0;
+    & button {
+      margin-right: 10px;
+    }
+  }
+}

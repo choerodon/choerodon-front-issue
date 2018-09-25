@@ -1,0 +1,20 @@
+.cloopm-page {
+  //&-tip {
+  //  width: 520px;
+  //  font-size: 14px;
+  //  color: #000000;
+  //  margin-bottom: 20px;
+  //  margin-top: -14px;
+  //  & div {
+  //    margin-bottom: 10px;
+  //  }
+  //}
+  &-footer {
+    border-top: 1px solid rgba(0,0,0,0.12);
+    margin-top: 20px;
+    padding: 20px 0;
+    & button {
+      margin-right: 10px;
+    }
+  }
+}

@@ -1,0 +1,47 @@
+.cloopm-issueTypeDrag-content {
+  background: #ECECEC;
+  padding: 20px;
+  width: 787px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cloopm-issueTypeDrag-card {
+  background: #FFFFFF;
+  border-radius: 4px;
+  width: 363px;
+
+  .ant-card-body {
+    height: calc(100% - 55px);
+  }
+}
+
+.cloopm-issueTypeDrag-drop {
+  min-height: 170px;
+  height: 100%;
+}
+
+.cloopm-issueTypeDrag-drag {
+  height: 20px;
+  margin-right: 10px;
+  vertical-align: top;
+}
+
+.cloopm-issueTypeDrag-icon {
+  margin-right: 10px;
+  vertical-align: top;
+}
+
+.cloopm-issueTypeDrag-des {
+  margin-bottom: 10px;
+}
+
+.cloopm-transferDrag-error {
+  border: 1px solid #d50000;
+  border-radius: 4px;
+}
+
+.cloopm-transferDrag-error-tip {
+  color: #d50000;
+  margin-top: 3px;
+}

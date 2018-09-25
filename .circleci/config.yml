@@ -1,0 +1,95 @@
+default: &default
+  docker:
+  - image: choerodon/cifront:0.6.0
+
+version: 2
+jobs:
+  node_build:
+    <<: *default
+    working_directory: ~/repo
+    environment:
+      CI_PROJECT_PATH: $CIRCLE_PROJECT_REPONAME
+    steps:
+      - checkout
+      - run: |
+            cd issue && npm install -registry https://nexus.choerodon.com.cn/repository/choerodon-npm/ && cd ..
+            python ./issue/node_modules/choerodon-front-boot/structure/configAuto.py issue
+            cd issue
+            chmod -R 777 node_modules
+            npm run build
+            find dist -name '*.js' | xargs sed -i "s/localhost:version/${CIRCLE_TAG}/g"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - config.yml
+            - issue/dist
+            - issue/node_modules/choerodon-front-boot/structure
+  docker_build:
+    machine: true
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run: |
+          mv issue/dist ./dist
+          mv issue/node_modules/choerodon-front-boot/structure structure
+          mv issue/issue-structure issue-structure
+          sed -i "s/registry.cn-hangzhou.aliyuncs.com\/choerodon-tools/choerodon/g" Dockerfile
+          docker login -u ${REGISTRY_USER} -p ${REGISTRY_PASSWORD}
+          docker build --pull -t ${DOCKER_GROUP_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG} .
+          docker push ${DOCKER_GROUP_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}
+  helm_chart_build:
+    docker:
+    - image: choerodon/cibase:0.6.0
+    steps:
+      - checkout
+      - run: |
+          CHART_PATH=`find . -name Chart.yaml`
+          yq w -i ${CHART_PATH%/*}/values.yaml image.repository ${DOCKER_GROUP_NAME}/${CIRCLE_PROJECT_REPONAME}
+          yq w -i ${CHART_PATH%/*}/values.yaml image.tag ${CIRCLE_TAG}
+          helm repo add choerodon "${CHART_REPOSITORY}/${CHART_ORGANIZATION}/${CHART_PROJECT}/"
+          helm push --username ${HELM_USER} --password ${HELM_PASSWORD} ${CHART_PATH%/*} --version ${CIRCLE_TAG} choerodon
+workflows:
+  version: 2
+  release:
+    jobs:
+      - node_build:
+          context: org-global
+          filters:
+            tags:
+              only: /^.*/
+            branches:
+              only:
+                - /^release-.*$/
+                - /^hotfix-.*$/
+      - docker_build:
+          context: org-global
+          requires:
+          - node_build
+          filters:
+            tags:
+              only: /^.*/
+            branches:
+              only:
+                - /^release-.*$/
+                - /^hotfix-.*$/
+      - helm_chart_build:
+          context: org-global
+          requires:
+          - node_build
+          - docker_build
+          filters:
+            tags:
+              only: /^.*/
+            branches:
+              only:
+                - /^release-.*$/
+                - /^hotfix-.*$/
+  daily:
+    jobs:
+      - node_build:
+          context: org-global
+          filters:
+            branches:
+              only: 
+               - master
