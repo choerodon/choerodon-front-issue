@@ -1,0 +1,28 @@
+.cloopm-fieldConfigScheme {
+  &-tip {
+    width: 520px;
+    font-size: 14px;
+    color: #000000;
+    margin-bottom: 20px;
+    & div:first-child {
+      margin-bottom: 10px;
+    }
+    & ul {
+      margin-left: 15px;
+    }
+  }
+  &-del {
+    &-tip {
+      margin-top: 10px;
+    }
+    &-content {
+      margin-top: 20px;
+      &-name {
+        font-size: 14px;
+        color: #000000;
+        font-weight: 500;
+        margin-left: 5px;
+      }
+    }
+  }
+}

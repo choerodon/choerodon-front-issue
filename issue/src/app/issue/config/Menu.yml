@@ -1,0 +1,70 @@
+"issue":
+  icon: home
+  sort: 1
+  organization:
+    - "issue-type":
+        icon: style
+        Routes: /issue/issue-type
+        sort: 1
+        permission:
+          - 'cloopm-service.cloopm.hello'
+    - "issue-type-schemes":
+        icon: assignment_late
+        Routes: /issue/issue-type-schemes
+        sort: 2
+        permission:
+          - 'cloopm-service.cloopm.hello'
+    - "state-machine-schemes":
+        icon: flip_to_back
+        Routes: /issue/state-machine-schemes
+        sort: 3
+        permission:
+          - 'cloopm-service.cloopm.hello'
+    - "screens":
+        icon: description
+        Routes: /issue/screens
+        sort: 4
+        permission:
+          - 'cloopm-service.cloopm.hello'
+    - "screen-schemes":
+        icon: library_books
+        Routes: /issue/screen-schemes
+        sort: 5
+        permission:
+          - 'cloopm-service.cloopm.hello'
+    - "issue-type-screen-schemes":
+        icon: collections_bookmark
+        Routes: /issue/issue-type-screen-schemes
+        sort: 6
+        permission:
+          - 'cloopm-service.cloopm.hello'
+    - "custom-fields":
+        icon: aspect_ratio
+        Routes: /issue/custom-fields
+        sort: 7
+        permission:
+          - 'cloopm-service.cloopm.hello'
+    - "field-configurations":
+        icon: spellcheck
+        Routes: /issue/field-configurations
+        sort: 8
+        permission:
+          - 'cloopm-service.cloopm.hello'
+    - "field-configuration-schemes":
+        icon: filter_none
+        Routes: /issue/field-configuration-schemes
+        sort: 9
+        permission:
+          - 'cloopm-service.cloopm.hello'
+    - "priorities":
+        icon: format_list_numbered
+        Routes: /issue/priorities
+        sort: 10
+        permission:
+          - 'cloopm-service.cloopm.hello'
+    - "notification-schemes":
+        icon: notifications
+        Routes: /issue/notification-schemes
+        sort: 11
+        permission:
+          - 'cloopm-service.cloopm.hello'

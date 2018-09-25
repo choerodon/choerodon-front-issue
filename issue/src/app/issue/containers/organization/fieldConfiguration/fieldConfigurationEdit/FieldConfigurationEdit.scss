@@ -1,0 +1,20 @@
+.cloopm-fieldConfiguration {
+  &-tip {
+    width: 520px;
+    font-size: 14px;
+    color: #000000;
+    margin-bottom: 20px;
+    & div {
+      margin-bottom: 10px;
+    }
+  }
+  &-name {
+    font-size: 18px;
+    color: rgba(0,0,0,0.98);
+    margin-bottom: 5px;
+  }
+  &-des {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+}

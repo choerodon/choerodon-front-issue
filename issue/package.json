@@ -1,0 +1,31 @@
+{
+  "name": "choerodon-front-issue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app/issue/containers/ISSUEIndex.js",
+  "scripts": {
+    "start": "choerodon-front-boot start --config ../config.js",
+    "build": "choerodon-front-boot build --config ../config.js",
+    "test": "mocha"
+  },
+  "contributors": [
+    "choerodon"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "choerodon-front-boot": "^0.7.3",
+    "immutability-helper": "^2.7.1",
+    "mxgraph-js": "^1.0.1",
+    "react-beautiful-dnd": "^8.0.7",
+    "react-color": "^2.14.1",
+    "react-dnd": "^5.0.0",
+    "react-dnd-html5-backend": "^5.0.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "mocha": "^5.2.0",
+    "uuid": "^3.3.2",
+    "yamljs": "^0.3.0"
+  }
+}
