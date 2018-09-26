@@ -84,7 +84,7 @@ class CustomFieldsStore {
     param: '',
   }) => {
     this.setIsLoading(true);
-    return axios.get(`/cloopm/v1/organizations/${orgId}/field?${querystring.stringify(map)}&page=${page}&size=${pageSize}&sort=${sort.field},${sort.order}`).then((data) => {
+    return axios.get(`/issue/v1/organizations/${orgId}/field?${querystring.stringify(map)}&page=${page}&size=${pageSize}&sort=${sort.field},${sort.order}`).then((data) => {
       const res = this.handleProptError(data);
       if (res) {
         this.setCustomFields(data.content);
@@ -95,7 +95,7 @@ class CustomFieldsStore {
     });
   };
 
-  loadCustomFieldById = (orgId, id) => axios.get(`/cloopm/v1/organizations/${orgId}/field/${id}`).then((data) => {
+  loadCustomFieldById = (orgId, id) => axios.get(`/issue/v1/organizations/${orgId}/field/${id}`).then((data) => {
     const res = this.handleProptError(data);
     if (res) {
       this.setField(res);
@@ -103,24 +103,24 @@ class CustomFieldsStore {
     return res;
   });
 
-  createCustomField = (orgId, field) => axios.post(`/cloopm/v1/organizations/${orgId}/field`, JSON.stringify(field))
+  createCustomField = (orgId, field) => axios.post(`/issue/v1/organizations/${orgId}/field`, JSON.stringify(field))
     .then(data => this.handleProptError(data));
 
-  updateCustomField = (orgId, id, field) => axios.put(`/cloopm/v1/organizations/${orgId}/field/${id}`, JSON.stringify(field))
+  updateCustomField = (orgId, id, field) => axios.put(`/issue/v1/organizations/${orgId}/field/${id}`, JSON.stringify(field))
     .then(data => this.handleProptError(data));
 
-  checkDelete = (orgId, id) => axios.get(`/cloopm/v1/organizations/${orgId}/field/check_delete/${id}`)
+  checkDelete = (orgId, id) => axios.get(`/issue/v1/organizations/${orgId}/field/check_delete/${id}`)
     .then(data => this.handleProptError(data));
 
-  checkName = (orgId, name, id) => axios.get(`/cloopm/v1/organizations/${orgId}/field/check_name?name=${name}${id ? `&id=${id}` : ''}`)
+  checkName = (orgId, name, id) => axios.get(`/issue/v1/organizations/${orgId}/field/check_name?name=${name}${id ? `&id=${id}` : ''}`)
     .then(data => this.handleProptError(data));
 
-  deleteCustomField = (orgId, id) => axios.delete(`/cloopm/v1/organizations/${orgId}/field/${id}`)
+  deleteCustomField = (orgId, id) => axios.delete(`/issue/v1/organizations/${orgId}/field/${id}`)
     .then(data => this.handleProptError(data));
 
   loadScreens = (orgId, map) => {
     this.setIsLoading(true);
-    return axios.get(`/cloopm/v1/organizations/${orgId}/page/pages? ${querystring.stringify(map)}`).then((data) => {
+    return axios.get(`/issue/v1/organizations/${orgId}/page/pages? ${querystring.stringify(map)}`).then((data) => {
       const res = this.handleProptError(data);
       if (res) {
         this.setScreens(data);
@@ -129,10 +129,10 @@ class CustomFieldsStore {
     });
   };
 
-  loadAssociateScreens = (orgId, id) => axios.get(`/cloopm/v1/organizations/${orgId}/field/query_related_page?field_id=${id}`)
+  loadAssociateScreens = (orgId, id) => axios.get(`/issue/v1/organizations/${orgId}/field/query_related_page?field_id=${id}`)
     .then(data => this.handleProptError(data));
 
-  associateScreens = (orgId, id, screens) => axios.post(`/cloopm/v1/organizations/${orgId}/field/update_related_page?field_id=${id}`, JSON.stringify(screens))
+  associateScreens = (orgId, id, screens) => axios.post(`/issue/v1/organizations/${orgId}/field/update_related_page?field_id=${id}`, JSON.stringify(screens))
     .then(data => this.handleProptError(data));
 
   handleProptError = (error) => {

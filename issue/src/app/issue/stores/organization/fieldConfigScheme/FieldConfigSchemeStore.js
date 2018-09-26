@@ -61,7 +61,7 @@ class FieldConfigSchemeStore {
 
   loadFieldConfigScheme = (orgId, sort = { field: 'id', order: 'desc' }, map = { param: '' }) => {
     this.setIsLoading(true);
-    return axios.get(`cloopm/v1/organizations/${orgId}/field_config_scheme?${querystring.stringify(map)}&sort=${sort.field},${sort.order}`).then((data) => {
+    return axios.get(`/issue/v1/organizations/${orgId}/field_config_scheme?${querystring.stringify(map)}&sort=${sort.field},${sort.order}`).then((data) => {
       this.setIsLoading(false);
       const res = this.handleProptError(data);
       if (res) {
@@ -75,29 +75,29 @@ class FieldConfigSchemeStore {
     });
   };
 
-  loadFieldConfiguration = orgId => axios.get(`/cloopm/v1/organizations/${orgId}/field_config/configs`).then(data => this.handleProptError(data));
+  loadFieldConfiguration = orgId => axios.get(`/issue/v1/organizations/${orgId}/field_config/configs`).then(data => this.handleProptError(data));
 
-  loadFieldList = orgId => axios.get(`/cloopm/v1/organizations/${orgId}/field/fields`);
+  loadFieldList = orgId => axios.get(`/issue/v1/organizations/${orgId}/field/fields`);
 
-  createFieldConfigScheme = (orgId, map) => axios.post(`cloopm/v1/organizations/${orgId}/field_config_scheme`, JSON.stringify(map))
+  createFieldConfigScheme = (orgId, map) => axios.post(`/issue/v1/organizations/${orgId}/field_config_scheme`, JSON.stringify(map))
     .then(data => this.handleProptError(data));
 
-  loadFieldConfigSchemeById = (orgId, id) => axios.get(`cloopm/v1/organizations/${orgId}/field_config_scheme/${id}`)
+  loadFieldConfigSchemeById = (orgId, id) => axios.get(`/issue/v1/organizations/${orgId}/field_config_scheme/${id}`)
     .then(data => this.handleProptError(data));
 
-  updateFieldConfigSchemeById = (orgId, id, map) => axios.put(`cloopm/v1/organizations/${orgId}/field_config_scheme/${id}`, JSON.stringify(map))
+  updateFieldConfigSchemeById = (orgId, id, map) => axios.put(`/issue/v1/organizations/${orgId}/field_config_scheme/${id}`, JSON.stringify(map))
     .then(data => this.handleProptError(data));
 
-  createFieldConfiguration = (orgId, map) => axios.post(`/cloopm/v1/organizations/${orgId}/issue_type`, JSON.stringify(map))
+  createFieldConfiguration = (orgId, map) => axios.post(`/issue/v1/organizations/${orgId}/issue_type`, JSON.stringify(map))
     .then(data => this.handleProptError(data));
 
-  checkDelete = (orgId, id) => axios.get(`/cloopm/v1/organizations/${orgId}/issue_type/check_delete/${id}`)
+  checkDelete = (orgId, id) => axios.get(`/issue/v1/organizations/${orgId}/issue_type/check_delete/${id}`)
     .then(data => this.handleProptError(data));
 
-  checkName = (orgId, name, id) => axios.get(`/cloopm/v1/organizations/${orgId}/issue_type/check_name?name=${name}${id ? `&id=${id}` : ''}`)
+  checkName = (orgId, name, id) => axios.get(`/issue/v1/organizations/${orgId}/issue_type/check_name?name=${name}${id ? `&id=${id}` : ''}`)
     .then(data => this.handleProptError(data));
 
-  deleteFieldConfiguration = (orgId, id) => axios.delete(`/cloopm/v1/organizations/${orgId}/field_config_scheme/${id}`)
+  deleteFieldConfiguration = (orgId, id) => axios.delete(`/issue/v1/organizations/${orgId}/field_config_scheme/${id}`)
     .then(data => this.handleProptError(data));
 
   handleProptError = (error) => {

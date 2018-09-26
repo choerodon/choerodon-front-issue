@@ -82,7 +82,7 @@ class PriorityStore {
 
   @action
   loadPriorityList = async (orgId) => {
-    const URL = `/cloopm/v1/organizations/${orgId}/priority`;
+    const URL = `/issue/v1/organizations/${orgId}/priority`;
     try {
       this.onLoadingList = true;
       const data = await axios.get(URL);
@@ -103,7 +103,7 @@ class PriorityStore {
   }
 
   loadAllPriority = async (orgId) => {
-    const URL = `/cloopm/v1/organizations/${orgId}/priority`;
+    const URL = `/issue/v1/organizations/${orgId}/priority`;
     try {
       const data = await axios.get(URL);
       runInAction(
@@ -118,11 +118,11 @@ class PriorityStore {
   }
 
   checkName = (orgId, name) => axios.get(
-    `/cloopm/v1/organizations/${orgId}/priority/check_name?name=${name}`,
+    `/issue/v1/organizations/${orgId}/priority/check_name?name=${name}`,
   );
 
   editPriorityById = (orgId, priority) => axios.put(
-    `/cloopm/v1/organizations/${orgId}/priority/${priority.id}`,
+    `/issue/v1/organizations/${orgId}/priority/${priority.id}`,
     {
       colour: priority.priorityColor,
       description: priority.des,
@@ -135,7 +135,7 @@ class PriorityStore {
   );
 
   createPriority = (orgId, priority) => axios.post(
-    `/cloopm/v1/organizations/${orgId}/priority`,
+    `/issue/v1/organizations/${orgId}/priority`,
     {
       colour: priority.priorityColor,
       description: priority.des,
@@ -146,13 +146,13 @@ class PriorityStore {
   );
 
   deletePriorityById = (orgId, priorityId) => axios.delete(
-    `/cloopm/v1/organizations/${orgId}/priority/${priorityId}`,
+    `/issue/v1/organizations/${orgId}/priority/${priorityId}`,
   );
 
   deleteAndChooseNewPriority = (orgId, prePriorityId, newPriorityId) => axios.post('');
 
   reOrder = orgId => axios.put(
-    `/cloopm/v1/organizations/${orgId}/priority/sequence`,
+    `/issue/v1/organizations/${orgId}/priority/sequence`,
     this.priorityList.map(item => ({
       id: item.id,
       sequence: item.sequence,

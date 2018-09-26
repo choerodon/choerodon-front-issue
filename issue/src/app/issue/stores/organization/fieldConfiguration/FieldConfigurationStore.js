@@ -37,7 +37,7 @@ class FieldConfigurationStore {
 
   loadFieldConfiguration = (orgId, sort = { field: 'id', order: 'desc' }, map = { param: '' }) => {
     this.setIsLoading(true);
-    return axios.get(`/cloopm/v1/organizations/${orgId}/field_config?${querystring.stringify(map)}&sort=${sort.field},${sort.order}`).then((data) => {
+    return axios.get(`/issue/v1/organizations/${orgId}/field_config?${querystring.stringify(map)}&sort=${sort.field},${sort.order}`).then((data) => {
       const res = this.handleProptError(data);
       this.setIsLoading(false);
       if (res) {
@@ -51,10 +51,10 @@ class FieldConfigurationStore {
     });
   };
 
-  createFieldConfiguration = (orgId, map) => axios.post(`/cloopm/v1/organizations/${orgId}/field_config`, JSON.stringify(map))
+  createFieldConfiguration = (orgId, map) => axios.post(`/issue/v1/organizations/${orgId}/field_config`, JSON.stringify(map))
     .then(data => this.handleProptError(data));
 
-  loadFieldConfigurationById = (orgId, id) => axios.get(`/cloopm/v1/organizations/${orgId}/field_config/${id}`).then((data) => {
+  loadFieldConfigurationById = (orgId, id) => axios.get(`/issue/v1/organizations/${orgId}/field_config/${id}`).then((data) => {
     const res = this.handleProptError(data);
     if (res) {
       this.setFieldConfigurationLine(data.fieldConfigLineDTOList);
@@ -62,13 +62,13 @@ class FieldConfigurationStore {
     return res;
   });
 
-  updateLineByConfigId = (orgId, id, map) => axios.put(`/cloopm/v1/organizations/${orgId}/field_config_line/${id}`, JSON.stringify(map))
+  updateLineByConfigId = (orgId, id, map) => axios.put(`/issue/v1/organizations/${orgId}/field_config_line/${id}`, JSON.stringify(map))
     .then(data => this.handleProptError(data));
 
-  deleteFieldConfiguration = (orgId, id) => axios.delete(`/cloopm/v1/organizations/${orgId}/field_config/${id}`)
+  deleteFieldConfiguration = (orgId, id) => axios.delete(`/issue/v1/organizations/${orgId}/field_config/${id}`)
     .then(data => this.handleProptError(data));
 
-  checkName = (orgId, name, id) => axios.get(`/cloopm/v1/organizations/${orgId}/issue_type/check_name?name=${name}${id ? `&id=${id}` : ''}`)
+  checkName = (orgId, name, id) => axios.get(`/issue/v1/organizations/${orgId}/issue_type/check_name?name=${name}${id ? `&id=${id}` : ''}`)
     .then(data => this.handleProptError(data));
 
   handleProptError = (error) => {
