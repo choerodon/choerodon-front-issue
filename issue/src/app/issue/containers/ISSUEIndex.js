@@ -68,18 +68,6 @@ class ISSUEIndex extends React.Component {
             path={`${match.url}/field-configuration-schemes`}
             component={FieldConfigurationSchemeIndex}
           />
-          <Route
-            path={`${match.url}/issue`}
-            component={IssueIndex}
-          />
-          <Route
-            path={`${match.url}/summary`}
-            component={SummaryIndex}
-          />
-          <Route
-            path={`${match.url}/project-users`}
-            component={UserIndex}
-          />
           <Route path="*" component={nomatch} />
         </Switch>
       </IntlProviderAsync>
