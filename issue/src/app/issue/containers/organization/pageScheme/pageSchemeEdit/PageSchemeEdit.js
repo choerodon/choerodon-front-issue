@@ -262,7 +262,7 @@ class PageSchemeEdit extends Component {
   handleCancel = () => {
     const { PageSchemeStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/cloopm/screen-schemes?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/screen-schemes?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   }
 
   handleSubmit = () => {
@@ -345,7 +345,7 @@ class PageSchemeEdit extends Component {
       <Page className="cloopm-region">
         <Header
           title={<FormattedMessage id="pageScheme.edit.title" />}
-          backPath={`/cloopm/screen-schemes?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
+          backPath={`/issue/screen-schemes?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
         />
         <Content>
           <div className={`${prefixCls}-tip`}>

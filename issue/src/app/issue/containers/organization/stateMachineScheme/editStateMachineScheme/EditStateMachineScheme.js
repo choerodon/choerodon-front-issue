@@ -393,7 +393,7 @@ class EditStateMachineScheme extends Component {
       <Page>
         <Header
           title={<FormattedMessage id="stateMachineScheme.edit" />}
-          backPath={`/cloopm/state-machine-schemes?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
+          backPath={`/issue/state-machine-schemes?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
         >
           <Button onClick={this.loadAllData} funcType="flat">
             <i className="icon-refresh icon" />

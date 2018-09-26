@@ -114,13 +114,13 @@ class IssueTypeScreenSchemesList extends Component {
   handleToCreate = () => {
     const { history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/cloopm/issue-type-screen-schemes/create?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/issue-type-screen-schemes/create?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   };
 
   handleToEdit = (schemeId) => {
     const { history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/cloopm/issue-type-screen-schemes/edit/${schemeId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/issue-type-screen-schemes/edit/${schemeId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   };
 
   openRemove = (record) => {

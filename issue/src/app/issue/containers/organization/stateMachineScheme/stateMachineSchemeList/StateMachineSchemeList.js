@@ -157,7 +157,7 @@ class StateMachineSchemeList extends Component {
     const { StateMachineSchemeStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
     StateMachineSchemeStore.loadStateMachine(organizationId, id);
-    history.push(`/cloopm/state-machine-schemes/edit/${record.id}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/state-machine-schemes/edit/${record.id}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   }
 
   handleDelete = (deleteId, deleteItemName) => {

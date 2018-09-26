@@ -115,13 +115,13 @@ class PageList extends Component {
               required: true,
               whitespace: true,
               max: 47,
-              message: intl.formatMessage({ id: 'state.name.required' }),
+              message: intl.formatMessage({ id: 'required' }),
             }],
           })(
             <Input
               style={{ width: 520 }}
               autoFocus
-              label={<FormattedMessage id="state.name" />}
+              label={<FormattedMessage id="page.name" />}
               size="default"
             />,
           )}
@@ -133,7 +133,7 @@ class PageList extends Component {
           {getFieldDecorator('description')(
             <TextArea
               style={{ width: 520 }}
-              label={<FormattedMessage id="state.des" />}
+              label={<FormattedMessage id="page.des" />}
             />,
           )}
         </FormItem>
@@ -161,19 +161,19 @@ class PageList extends Component {
   handleSchemeClick = (schemeId) => {
     const { StateMachineStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/cloopm/screen-schemes/edit/${schemeId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/screen-schemes/edit/${schemeId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   }
 
   showCreate = () => {
     const { PageStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/cloopm/screens/create?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/screens/create?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   };
 
   showEdit = (fieldConfigId) => {
     const { PageStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/cloopm/screens/edit/${fieldConfigId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/screens/edit/${fieldConfigId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   }
 
   openRemove = (record) => {

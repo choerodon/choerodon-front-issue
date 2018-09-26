@@ -104,13 +104,13 @@ class CustomFieldsList extends Component {
   showEdit = (fieldId) => {
     const { history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/cloopm/custom-fields/edit/${fieldId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/custom-fields/edit/${fieldId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   };
 
   showAssociate = (fieldId) => {
     const { history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/cloopm/custom-fields/associate/${fieldId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/custom-fields/associate/${fieldId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   };
 
   hideSidebar = (id) => {
