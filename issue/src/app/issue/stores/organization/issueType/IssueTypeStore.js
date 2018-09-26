@@ -63,7 +63,7 @@ class IssueTypeStore {
     param: '',
   }) => {
     this.setIsLoading(true);
-    return axios.get(`/cloopm/v1/organizations/${orgId}/issue_type?${querystring.stringify(map)}&page=${page}&size=${pageSize}&sort=${sort.field},${sort.order}`).then((data) => {
+    return axios.get(`/issue/v1/organizations/${orgId}/issue_type?${querystring.stringify(map)}&page=${page}&size=${pageSize}&sort=${sort.field},${sort.order}`).then((data) => {
       const res = this.handleProptError(data);
       if (res) {
         this.setIssueTypes(data.content);
@@ -75,7 +75,7 @@ class IssueTypeStore {
   };
 
   loadIssueTypeById = (orgId, id) =>
-    axios.get(`/cloopm/v1/organizations/${orgId}/issue_type/${id}`).then((data) => {
+    axios.get(`/issue/v1/organizations/${orgId}/issue_type/${id}`).then((data) => {
       const res = this.handleProptError(data);
       if (res) {
         this.setIssueType(res);
@@ -84,23 +84,23 @@ class IssueTypeStore {
     });
 
   createIssueType = (orgId, issueType) =>
-    axios.post(`/cloopm/v1/organizations/${orgId}/issue_type`, JSON.stringify(issueType))
+    axios.post(`/issue/v1/organizations/${orgId}/issue_type`, JSON.stringify(issueType))
       .then(data => this.handleProptError(data));
 
   updateIssueType = (orgId, id, issueType) =>
-    axios.put(`/cloopm/v1/organizations/${orgId}/issue_type/${id}`, JSON.stringify(issueType))
+    axios.put(`/issue/v1/organizations/${orgId}/issue_type/${id}`, JSON.stringify(issueType))
       .then(data => this.handleProptError(data));
 
   checkDelete = (orgId, id) =>
-    axios.get(`/cloopm/v1/organizations/${orgId}/issue_type/check_delete/${id}`)
+    axios.get(`/issue/v1/organizations/${orgId}/issue_type/check_delete/${id}`)
       .then(data => this.handleProptError(data));
 
   checkName = (orgId, name, id) =>
-    axios.get(`/cloopm/v1/organizations/${orgId}/issue_type/check_name?name=${name}${id ? `&id=${id}` : ''}`)
+    axios.get(`/issue/v1/organizations/${orgId}/issue_type/check_name?name=${name}${id ? `&id=${id}` : ''}`)
       .then(data => this.handleProptError(data));
 
   deleteIssueType = (orgId, id) =>
-    axios.delete(`/cloopm/v1/organizations/${orgId}/issue_type/${id}`)
+    axios.delete(`/issue/v1/organizations/${orgId}/issue_type/${id}`)
       .then(data => this.handleProptError(data));
 
   handleProptError = (error) => {

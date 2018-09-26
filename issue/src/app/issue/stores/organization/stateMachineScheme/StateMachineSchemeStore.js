@@ -180,7 +180,7 @@ class StateMachineSchemeStore {
   loadStateMachineSchemeList = (orgId, pagination = this.pagination, sort = { field: 'id', order: 'desc' }, map = {}) => {
     this.setIsLoading(true);
     const { current, pageSize } = pagination;
-    return axios.get(`/cloopm/v1/organizations/${orgId}/state_machine_scheme?page=${current - 1}&size=${pageSize}&${querystring.stringify(map)}&sort=${sort.field},${sort.order}`)
+    return axios.get(`/issue/v1/organizations/${orgId}/state_machine_scheme?page=${current - 1}&size=${pageSize}&${querystring.stringify(map)}&sort=${sort.field},${sort.order}`)
       .then(
       action(data => {
         this.setIsLoading(false);
@@ -206,7 +206,7 @@ class StateMachineSchemeStore {
   createStateMachineScheme = (stateMachineScheme, organizationId) => {
     axios
       .post(
-      `/cloopm/v1/organizations/${organizationId}/state_machine_scheme`,
+      `/issue/v1/organizations/${organizationId}/state_machine_scheme`,
       JSON.stringify(stateMachineScheme)
       )
       .then(
@@ -225,7 +225,7 @@ class StateMachineSchemeStore {
     this.setStateMachineLoading(true);
     return axios
       .get(
-      `/cloopm/v1/organizations/${orgId}/state_machine_scheme/${scheme_id}`
+      `/issue/v1/organizations/${orgId}/state_machine_scheme/${scheme_id}`
       // ?page=${current -
       //   1}&size=${pageSize}
       //   `
@@ -274,7 +274,7 @@ class StateMachineSchemeStore {
   loadAllIssueType(orgId, scheme_id) {
     return axios
       .get(
-      `/cloopm/v1/organizations/${orgId}/issue_type/query_issue_type/${scheme_id}`
+      `/issue/v1/organizations/${orgId}/issue_type/query_issue_type/${scheme_id}`
       )
       .then(
       action(res => {
@@ -287,7 +287,7 @@ class StateMachineSchemeStore {
   saveStateMachine(orgId, scheme_id, state_machine_id, schemeDTOs) {
     return axios
       .post(
-      `/cloopm/v1/organizations/${orgId}/state_machine_scheme/create_config/${scheme_id}/${state_machine_id}`,
+      `/issue/v1/organizations/${orgId}/state_machine_scheme/create_config/${scheme_id}/${state_machine_id}`,
       schemeDTOs
       )
       .then(
@@ -300,7 +300,7 @@ class StateMachineSchemeStore {
   deleteStateMachine(orgId, scheme_id, state_machine_id) {
     return axios
       .delete(
-      `/cloopm/v1/organizations/${orgId}/state_machine_scheme/delete_config/${scheme_id}/${state_machine_id}`
+      `/issue/v1/organizations/${orgId}/state_machine_scheme/delete_config/${scheme_id}/${state_machine_id}`
       )
       .then(
       action(() => {
@@ -310,7 +310,7 @@ class StateMachineSchemeStore {
   }
 
   @action
-  deleteStateMachineScheme = (orgId, scheme_id) => axios.delete(`cloopm/v1/organizations/${orgId}/state_machine_scheme/${scheme_id}`)
+  deleteStateMachineScheme = (orgId, scheme_id) => axios.delete(`/issue/v1/organizations/${orgId}/state_machine_scheme/${scheme_id}`)
     .then(data => this.handleProptError(data));
 
   handleProptError = (error) => {

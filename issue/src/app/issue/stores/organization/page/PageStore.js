@@ -64,7 +64,7 @@ class PageStore {
 
   loadPage = (orgId, sort = { field: 'id', order: 'desc' }, map = { param: '' }) => {
     this.setIsLoading(true);
-    return axios.get(`cloopm/v1/organizations/${orgId}/page?${querystring.stringify(map)}&sort=${sort.field},${sort.order}`).then((data) => {
+    return axios.get(`/issue/v1/organizations/${orgId}/page?${querystring.stringify(map)}&sort=${sort.field},${sort.order}`).then((data) => {
       this.setIsLoading(false);
       const res = this.handleProptError(data);
       if (res) {
@@ -78,21 +78,21 @@ class PageStore {
     });
   };
 
-  loadFieldList = orgId => axios.get(`/cloopm/v1/organizations/${orgId}/field/fields`);
+  loadFieldList = orgId => axios.get(`/issue/v1/organizations/${orgId}/field/fields`);
 
-  createPage = (orgId, map) => axios.post(`cloopm/v1/organizations/${orgId}/page`, JSON.stringify(map))
+  createPage = (orgId, map) => axios.post(`/issue/v1/organizations/${orgId}/page`, JSON.stringify(map))
     .then(data => this.handleProptError(data));
 
-  loadPageById = (orgId, id) => axios.get(`cloopm/v1/organizations/${orgId}/page/${id}`)
+  loadPageById = (orgId, id) => axios.get(`/issue/v1/organizations/${orgId}/page/${id}`)
     .then(data => this.handleProptError(data));
 
-  updatePageById = (orgId, id, map) => axios.put(`cloopm/v1/organizations/${orgId}/page/${id}`, JSON.stringify(map))
+  updatePageById = (orgId, id, map) => axios.put(`/issue/v1/organizations/${orgId}/page/${id}`, JSON.stringify(map))
     .then(data => this.handleProptError(data));
 
-  createFieldConfiguration = (orgId, map) => axios.post(`/cloopm/v1/organizations/${orgId}/issue_type`, JSON.stringify(map))
+  createFieldConfiguration = (orgId, map) => axios.post(`/issue/v1/organizations/${orgId}/issue_type`, JSON.stringify(map))
     .then(data => this.handleProptError(data));
 
-  loadIssueTypeById = (orgId, id) => axios.get(`/cloopm/v1/organizations/${orgId}/issue_type/${id}`).then((data) => {
+  loadIssueTypeById = (orgId, id) => axios.get(`/issue/v1/organizations/${orgId}/issue_type/${id}`).then((data) => {
     const res = this.handleProptError(data);
     if (res) {
       this.setIssueType(res);
@@ -100,10 +100,10 @@ class PageStore {
     return res;
   });
 
-  checkName = (orgId, name, id) => axios.get(`/cloopm/v1/organizations/${orgId}/issue_type/check_name?name=${name}${id ? `&id=${id}` : ''}`)
+  checkName = (orgId, name, id) => axios.get(`/issue/v1/organizations/${orgId}/issue_type/check_name?name=${name}${id ? `&id=${id}` : ''}`)
     .then(data => this.handleProptError(data));
 
-  deletePage = (orgId, id) => axios.delete(`/cloopm/v1/organizations/${orgId}/page/${id}`)
+  deletePage = (orgId, id) => axios.delete(`/issue/v1/organizations/${orgId}/page/${id}`)
     .then(data => this.handleProptError(data));
 
   handleProptError = (error) => {

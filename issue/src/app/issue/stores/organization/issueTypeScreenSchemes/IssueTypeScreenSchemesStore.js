@@ -86,7 +86,7 @@ class IssueTypeScreenSchemesStore {
     param: '',
   }) => {
     this.setIsLoading(true);
-    return axios.get(`/cloopm/v1/organizations/${orgId}/page_issue?${querystring.stringify(map)}&page=${page}&size=${pageSize}&sort=${sort.field},${sort.order}`).then((data) => {
+    return axios.get(`/issue/v1/organizations/${orgId}/page_issue?${querystring.stringify(map)}&page=${page}&size=${pageSize}&sort=${sort.field},${sort.order}`).then((data) => {
       const res = this.handleProptError(data);
       if (res) {
         this.setSchemeList(data.content);
@@ -97,7 +97,7 @@ class IssueTypeScreenSchemesStore {
     });
   };
 
-  loadSchemeById = (orgId, id) => axios.get(`/cloopm/v1/organizations/${orgId}/page_issue/${id}`).then((data) => {
+  loadSchemeById = (orgId, id) => axios.get(`/issue/v1/organizations/${orgId}/page_issue/${id}`).then((data) => {
     const res = this.handleProptError(data);
     if (res) {
       this.setScheme(res);
@@ -105,22 +105,22 @@ class IssueTypeScreenSchemesStore {
     return res;
   });
 
-  createScheme = (orgId, scheme) => axios.post(`/cloopm/v1/organizations/${orgId}/page_issue`, JSON.stringify(scheme))
+  createScheme = (orgId, scheme) => axios.post(`/issue/v1/organizations/${orgId}/page_issue`, JSON.stringify(scheme))
     .then(data => this.handleProptError(data));
 
-  updateScheme = (orgId, id, scheme) => axios.put(`/cloopm/v1/organizations/${orgId}/page_issue/${id}`, JSON.stringify(scheme))
+  updateScheme = (orgId, id, scheme) => axios.put(`/issue/v1/organizations/${orgId}/page_issue/${id}`, JSON.stringify(scheme))
     .then(data => this.handleProptError(data));
 
-  checkDelete = (orgId, id) => axios.get(`/cloopm/v1/organizations/${orgId}/page_issue/check_delete/${id}`)
+  checkDelete = (orgId, id) => axios.get(`/issue/v1/organizations/${orgId}/page_issue/check_delete/${id}`)
     .then(data => this.handleProptError(data));
 
-  checkName = (orgId, name) => axios.get(`/cloopm/v1/organizations/${orgId}/page_issue/check_name?name=${name}`)
+  checkName = (orgId, name) => axios.get(`/issue/v1/organizations/${orgId}/page_issue/check_name?name=${name}`)
     .then(data => this.handleProptError(data));
 
-  deleteScheme = (orgId, id) => axios.delete(`/cloopm/v1/organizations/${orgId}/page_issue/${id}`)
+  deleteScheme = (orgId, id) => axios.delete(`/issue/v1/organizations/${orgId}/page_issue/${id}`)
     .then(data => this.handleProptError(data));
 
-  loadIssueTypes = orgId => axios.get(`/cloopm/v1/organizations/${orgId}/issue_type/types`).then((data) => {
+  loadIssueTypes = orgId => axios.get(`/issue/v1/organizations/${orgId}/issue_type/types`).then((data) => {
     const res = this.handleProptError(data);
     if (res) {
       this.setIssueTypeList(res);
@@ -128,7 +128,7 @@ class IssueTypeScreenSchemesStore {
     return res;
   });
 
-  loadScreens = orgId => axios.get(`/cloopm/v1/organizations/${orgId}/page_scheme/query_all`).then((data) => {
+  loadScreens = orgId => axios.get(`/issue/v1/organizations/${orgId}/page_scheme/query_all`).then((data) => {
     const res = this.handleProptError(data);
     if (res) {
       this.setScreenList(res);
