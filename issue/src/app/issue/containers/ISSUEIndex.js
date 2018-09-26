@@ -17,6 +17,8 @@ const PageIndex = asyncRouter(() => import('./organization/page'));
 const IssueTypeScreenSchemes = asyncRouter(() => import('./organization/issueTypeScreenSchemes'));
 const PageSchemeIndex = asyncRouter(() => import('./organization/pageScheme'));
 const FieldConfigurationSchemeIndex = asyncRouter(() => import('./organization/fieldConfigScheme'));
+const StateIndex = asyncRouter(() => import('./organization/state'));
+const StateMachineIndex = asyncRouter(() => import('./organization/stateMachine'));
 
 @inject('AppState')
 class ISSUEIndex extends React.Component {
@@ -67,6 +69,14 @@ class ISSUEIndex extends React.Component {
           <Route
             path={`${match.url}/field-configuration-schemes`}
             component={FieldConfigurationSchemeIndex}
+          />
+          <Route
+            path={`${match.url}/states`}
+            component={StateIndex}
+          />
+          <Route
+            path={`${match.url}/state-machines`}
+            component={StateMachineIndex}
           />
           <Route path="*" component={nomatch} />
         </Switch>
