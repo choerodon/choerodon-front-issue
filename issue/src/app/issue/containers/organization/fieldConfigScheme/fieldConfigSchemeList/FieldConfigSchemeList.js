@@ -101,13 +101,13 @@ class FieldConfigSchemeList extends Component {
   showCreate = () => {
     const { history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/cloopm/field-configuration-schemes/create?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/field-configuration-schemes/create?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   };
 
   showEdit = (fieldConfigId) => {
     const { history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/cloopm/field-configuration-schemes/edit/${fieldConfigId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/field-configuration-schemes/edit/${fieldConfigId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   }
 
   openRemove = (record) => {

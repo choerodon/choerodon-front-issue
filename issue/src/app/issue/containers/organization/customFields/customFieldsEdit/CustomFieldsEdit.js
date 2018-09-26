@@ -218,7 +218,7 @@ class CustomFieldsEdit extends Component {
     const {
       name, id, organizationId, type,
     } = AppState.currentMenuType;
-    history.push(`/cloopm/custom-fields?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/custom-fields?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   };
 
   onTreeChange = (fieldOptions) => {
@@ -324,7 +324,7 @@ class CustomFieldsEdit extends Component {
       <Page>
         <Header
           title={<FormattedMessage id="customFields.edit" />}
-          backPath={`/cloopm/custom-fields?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`}
+          backPath={`/issue/custom-fields?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`}
         />
         <Spin spinning={spinning}>
           <Content>

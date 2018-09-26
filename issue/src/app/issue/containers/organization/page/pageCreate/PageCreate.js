@@ -92,13 +92,13 @@ class PageCreate extends Component {
                 required: true,
                 whitespace: true,
                 max: 47,
-                message: intl.formatMessage({ id: 'state.name.required' }),
+                message: intl.formatMessage({ id: 'required' }),
               }],
             })(
               <Input
                 style={{ width: 520 }}
                 autoFocus
-                label={<FormattedMessage id="state.name" />}
+                label={<FormattedMessage id="page.name" />}
                 size="default"
               />,
             )}
@@ -110,7 +110,7 @@ class PageCreate extends Component {
             {getFieldDecorator('description')(
               <TextArea
                 style={{ width: 520 }}
-                label={<FormattedMessage id="state.des" />}
+                label={<FormattedMessage id="page.des" />}
               />,
             )}
           </FormItem>
@@ -144,7 +144,7 @@ class PageCreate extends Component {
   handleCancel = () => {
     const { PageStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/cloopm/screens?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/screens?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   }
 
   handleSubmit = () => {
@@ -229,7 +229,7 @@ class PageCreate extends Component {
       <Page className="cloopm-region">
         <Header
           title={<FormattedMessage id="page.create.title" />}
-          backPath={`/cloopm/screens?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
+          backPath={`/issue/screens?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
         />
         <Content>
           <Form layout="vertical" className="cloopm-sidebar-form">
@@ -241,12 +241,12 @@ class PageCreate extends Component {
                   required: true,
                   whitespace: true,
                   max: 47,
-                  message: intl.formatMessage({ id: 'state.name.required' }),
+                  message: intl.formatMessage({ id: 'required' }),
                 }],
               })(
                 <Input
                   style={{ width: 520 }}
-                  label={<FormattedMessage id="state.name" />}
+                  label={<FormattedMessage id="page.name" />}
                   size="default"
                 />,
               )}
@@ -258,7 +258,7 @@ class PageCreate extends Component {
               {getFieldDecorator('description')(
                 <TextArea
                   style={{ width: 520 }}
-                  label={<FormattedMessage id="state.des" />}
+                  label={<FormattedMessage id="page.des" />}
                 />,
               )}
             </FormItem>

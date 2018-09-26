@@ -253,7 +253,7 @@ class FieldConfigSchemeEdit extends Component {
   handleCancel = () => {
     const { history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/cloopm/field-configuration-schemes?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/field-configuration-schemes?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   }
 
   handleSubmit = () => {
@@ -335,7 +335,7 @@ class FieldConfigSchemeEdit extends Component {
       <Page className="cloopm-region">
         <Header
           title={<FormattedMessage id="fieldConfigScheme.edit.title" />}
-          backPath={`/cloopm/field-configuration-schemes?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
+          backPath={`/issue/field-configuration-schemes?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
         />
         <Content>
           <div className={`${prefixCls}-tip`}>

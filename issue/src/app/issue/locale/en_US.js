@@ -203,6 +203,7 @@ const enUS = {
   'page.title': 'Page',
   'page.create': 'Add Page',
   'page.name': 'Name',
+  'page.des': 'Description',
   'page.scheme': 'Page Scheme',
   'page.stateMachine': 'stateMachine',
   'page.tip1': '页面是对字段的排列布局，也是状态机中创建、编辑或转换问题时显示的页面。',

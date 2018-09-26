@@ -64,7 +64,7 @@ class AssociateFieldToScreens extends Component {
     const {
       name, id, organizationId, type,
     } = AppState.currentMenuType;
-    history.push(`/cloopm/custom-fields?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/custom-fields?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   };
 
   handleTableChange =(pagination, filters, sorter, param) => {
@@ -96,7 +96,7 @@ class AssociateFieldToScreens extends Component {
       <Page>
         <Header
           title={<FormattedMessage id="customFields.associate" />}
-          backPath={`/cloopm/custom-fields?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`}
+          backPath={`/issue/custom-fields?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`}
         />
         <Content>
           <p className="cloopm-associate-tip">

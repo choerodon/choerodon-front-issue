@@ -43,7 +43,7 @@ class IssueTypeScreenSchemesEditTemplate extends Component {
     const {
       type, id, organizationId, name,
     } = menu;
-    return `/cloopm/issue-type-screen-schemes?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`
+    return `/issue/issue-type-screen-schemes?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`
   };
 
   onAssociationChange = (data, key) => {

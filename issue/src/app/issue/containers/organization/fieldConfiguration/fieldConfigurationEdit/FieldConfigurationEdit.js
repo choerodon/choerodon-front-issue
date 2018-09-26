@@ -185,7 +185,7 @@ class FieldConfigurationEdit extends Component {
       <Page className="cloopm-region">
         <Header
           title={<FormattedMessage id="fieldConfiguration.edit.title" />}
-          backPath={`/cloopm/field-configurations?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
+          backPath={`/issue/field-configurations?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
         >
           <Button onClick={this.refresh}>
             <i className="icon-refresh icon" />

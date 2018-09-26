@@ -175,6 +175,7 @@ const zh_CN = {
   'page.title': '页面',
   'page.create': '添加页面',
   'page.name': '名称',
+  'page.des': '描述',
   'page.scheme': '页面方案',
   'page.stateMachine': '状态机',
   'page.tip1': '页面是对字段的排列布局，也是状态机中创建、编辑或转换问题时显示的页面。',

@@ -116,13 +116,13 @@ class FieldConfigurationList extends Component {
                 required: true,
                 whitespace: true,
                 max: 47,
-                message: intl.formatMessage({ id: 'state.name.required' }),
+                message: intl.formatMessage({ id: 'required' }),
               }],
             })(
               <Input
                 style={{ width: 520 }}
                 autoFocus
-                label={<FormattedMessage id="state.name" />}
+                label={<FormattedMessage id="fieldConfiguration.name" />}
                 size="default"
               />,
             )}
@@ -134,7 +134,7 @@ class FieldConfigurationList extends Component {
             {getFieldDecorator('description')(
               <TextArea
                 style={{ width: 520 }}
-                label={<FormattedMessage id="state.des" />}
+                label={<FormattedMessage id="fieldConfiguration.des" />}
               />,
             )}
           </FormItem>
@@ -166,13 +166,13 @@ class FieldConfigurationList extends Component {
   handleSchemeClick = (schemeId) => {
     const { StateMachineStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/cloopm/field-configuration-schemes/edit/${schemeId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/field-configuration-schemes/edit/${schemeId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   }
 
   showEdit = (fieldConfigId) => {
     const { StateMachineStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/cloopm/field-configurations/edit/${fieldConfigId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/field-configurations/edit/${fieldConfigId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   };
 
   hideSidebar = () => {
