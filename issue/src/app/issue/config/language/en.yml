@@ -12,3 +12,5 @@
 "issue.field-configuration-schemes": "Field Configuration Schemes"
 "issue.priorities": "Priorities"
 "issue.notification-schemes": "Notification Schemes"
+"issue.state": "State"
+"issue.state-machine": "StateMachine"

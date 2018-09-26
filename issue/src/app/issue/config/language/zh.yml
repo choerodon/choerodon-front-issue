@@ -12,3 +12,5 @@
 "issue.field-configuration-schemes": "字段配置方案"
 "issue.priorities": "优先级"
 "issue.notification-schemes": "通知方案"
+"issue.state": "状态"
+"issue.state-machine": "状态机"
