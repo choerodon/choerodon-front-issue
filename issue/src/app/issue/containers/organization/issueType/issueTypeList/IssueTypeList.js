@@ -132,7 +132,9 @@ class IssueTypeList extends Component {
   };
 
   closeRemove = () => {
-    this.setState({ deleteVisible: false, visible: false, id: false, issueType: false });
+    this.setState({
+      deleteVisible: false, visible: false, id: false, issueType: false, 
+    });
   };
 
   handleDelete = () => {

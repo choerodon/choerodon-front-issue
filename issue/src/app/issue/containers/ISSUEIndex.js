@@ -6,6 +6,7 @@ import {
   asyncRouter,
   nomatch,
 } from 'choerodon-front-boot';
+import './main.scss';
 
 const IssueTypeIndex = asyncRouter(() => import('./organization/issueType'));
 const IssueTypeSchemeIndex = asyncRouter(() => import('./organization/issueTypeScheme'));

@@ -90,6 +90,25 @@ class IssueTypeSchemeList extends Component {
         </Tooltip>
         <Tooltip
           placement="bottom"
+          title={<FormattedMessage id="relation" />}
+        >
+          <Button 
+            size="small" 
+            shape="circle" 
+            onClick={
+              () => {
+                const {
+                  name, id, organizationId, type,
+                } = AppState.currentMenuType;
+                const { history } = this.props;
+                history.push(`/issue/issue-type-schemes/ralation/${record.id}?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+              }
+            }>
+            <Icon type="open_in_browser" />
+          </Button>
+        </Tooltip>
+        <Tooltip
+          placement="bottom"
           title={<FormattedMessage id="copy" />}
         >
           <Button size="small" shape="circle" onClick={this.showCopy.bind(this, record.id)}>
@@ -115,7 +134,8 @@ class IssueTypeSchemeList extends Component {
     } = this.state;
     const orgId = AppState.currentMenuType.organizationId;
     IssueTypeSchemeStore.loadSchemeList(
-      orgId, page ? page - 1 : undefined, pageSize, sorter, tableParam);
+      orgId, page ? page - 1 : undefined, pageSize, sorter, tableParam,
+    );
   };
 
   refresh = () => {
@@ -238,8 +258,8 @@ class IssueTypeSchemeList extends Component {
             className="cloopm-table"
           />
         </Content>
-        {IssueTypeSchemeStore.createSchemeShow &&
-        (
+        {IssueTypeSchemeStore.createSchemeShow
+        && (
           <IssueTypeSchemeCreate
             id={id}
             store={IssueTypeSchemeStore}

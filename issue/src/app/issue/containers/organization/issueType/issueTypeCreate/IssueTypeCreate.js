@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Modal, Form, Select, Input, message, IconSelect } from 'choerodon-ui';
+import {
+  Modal, Form, Select, Input, message, IconSelect, 
+} from 'choerodon-ui';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Content, Header, Page, Permission, stores } from 'choerodon-front-boot';
+import {
+  Content, Header, Page, Permission, stores, 
+} from 'choerodon-front-boot';
+import { CompactPicker } from 'react-color';
 import '../../../main.scss';
 import './IssueTypeCreate.scss';
 
@@ -30,6 +35,8 @@ class IssueTypeCreate extends Component {
     super(props);
     this.state = {
       submitting: false,
+      displayColorPicker: false,
+      issueTypeColor: '#3F51B5',
     };
   }
 
@@ -122,11 +129,29 @@ class IssueTypeCreate extends Component {
     }
   };
 
+  handleClickSwatch = () => {
+    this.setState({
+      displayColorPicker: !this.state.displayColorPicker,
+    });
+  };
+
+  handleCloseColorPicker = () => {
+    this.setState({
+      displayColorPicker: false,
+    });
+  }
+
+  handleChangeColorComplete = (color) => {
+    this.setState({
+      issueTypeColor: color.hex,
+    });
+  }
+
   render() {
     const {
       visible, intl, store, id, form,
     } = this.props;
-    const { submitting } = this.state;
+    const { submitting, displayColorPicker, issueTypeColor } = this.state;
     const { getFieldDecorator } = form;
     const name = store.issueType ? store.issueType.name : '';
     const description = store.issueType ? store.issueType.description : '';
@@ -192,6 +217,21 @@ class IssueTypeCreate extends Component {
                 />,
               )}
             </FormItem>
+            <div className="cloopm-issueTypeColor-picker">
+              <div className="cloopm-issueTypeColor-swatch" onClick={this.handleClickSwatch} role="none">
+                <div className="cloopm-issueTypeColor-color" style={{ background: issueTypeColor }} />
+              </div>
+              {
+                displayColorPicker
+                  ? (
+                    <div className="popover">
+                      <div className="cover" onClick={this.handleCloseColorPicker} role="none" />
+                      <CompactPicker color={issueTypeColor} onChange={this.handleChangeColorComplete} />
+                    </div>
+                  )
+                  : null
+              }
+          </div>
           </Form>
         </div>
       </Sidebar>
