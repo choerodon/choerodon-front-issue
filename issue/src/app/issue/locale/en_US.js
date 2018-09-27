@@ -6,6 +6,7 @@ const enUS = {
   cancel: 'Cancel',
   delete: 'Delete',
   edit: 'Edit',
+  relation: 'Ralation',
   copy: 'Copy',
   add: 'Add',
   createSuccess: 'Create Success',

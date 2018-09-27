@@ -7,6 +7,7 @@ const zh_CN = {
   cancel: '取消',
   delete: '删除',
   edit: '编辑',
+  relation: '关联',
   copy: '复制',
   add: '添加',
   required: '该字段是必输的',
@@ -35,6 +36,7 @@ const zh_CN = {
   'issueType.label.name': '名称',
   'issueType.label.des': '描述',
   'issueType.label.icon': '图标',
+  'issueType.label.color': '颜色',
   'issueType.name.check.exist': '问题类型名称已存在。',
   'error.issueType.update': '更新失败，请刷新后重试。',
 
@@ -62,6 +64,27 @@ const zh_CN = {
   'issueTypeScheme.target': '问题类型用于当前方案',
   'issueTypeScheme.origin': '可用的问题类型',
   'issueTypeScheme.tip': '问题类型方案是将一些问题类型组合在一起，并关联给一个项目来使用，还可以指定问题类型在用户界面中显示的顺序。',
+
+  // 关联问题类型方案  
+  'relateIssueTypeScheme.title': '关联问题类型方案',
+  'relateIssueTypeScheme.tip': '选择你需要的项目关联此问题类型方案。已有问题类型方案的项目将从当前使用方案更改为所选方案，部分问题因为设置需要进行合并匹配。',
+
+  // 问题类型合并
+  'relateMerge.title': '问题类型合并',
+  'relateMerge.project': '项目',
+  'relateMerge.currentType': '当前问题类型',
+  'relateMerge.targetType': '目标问题类型',
+  'relateMerge.effectCount': '影响的问题数',
+  'relateMerge.currentTypeStatus': '当前问题类型状态',
+  'relateMerge.targetTypeStatus': '目标问题类型状态',
+  'relateMergeMatchFst.subTitle': '步骤1-确认当前问题类型',
+  'relateMergeMatchFst.des': '项目中存在新方案中没有的问题类型，你需要将这些已有数据的问题移至另一个问题类型。',
+  'relateMergeMatchSed.subTitle': '步骤2-选择目标问题类型',
+  'relateMergeMatchSed.des': '请选择一个此项目中的其他问题类型进行合并，默认为你保留原有问题类型中的字段值，如果你去掉勾选项，原有问题类型的值将会被覆盖。',
+  'relateMergeMatchTrd.subTitle': '步骤3-确认问题类型合并',
+  'relateMergeMatchTrd.des': '你需要合并的当前问题类型是 {currentType} ，合并后的问题类型是 {targetType} ，请再次确认合并的内容。',
+  'relateMergeUnMatch.subTitle': '步骤3-合并问题类型的状态',
+  'relateMergeUnMatch.des': '你需要合并的问题类型中部分状态无法适用于目标问题类型，所以你必须选择一个目标问题类型中可用的状态进行过度。',
 
   //状态机方案
   'stateMachineScheme.title': '状态机方案',

@@ -1,3 +1,19 @@
 .cloopm-issueType-list-tip {
   margin-bottom: 20px;
 }
+.cloopm-issueTypeColor-picker{
+  .cloopm-issueTypeColor-swatch{
+    padding: 3px;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.246);
+    display: inline-block;
+    cursor: pointer;
+  
+    .cloopm-issueTypeColor-color {
+      width: 80px;
+      height: 18px;
+      border-radius: 2px;
+    }
+  }
+}
