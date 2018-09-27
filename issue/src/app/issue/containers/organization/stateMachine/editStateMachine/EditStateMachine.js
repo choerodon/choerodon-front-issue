@@ -271,7 +271,7 @@ class EditStateMachine extends Component {
                 {...formItemLayout}
               >
                 {getFieldDecorator('page', {
-                  initialValue: stateData ? { key: stateData.id } : { key: '0' },
+                  initialValue: stateData ? { key: stateData.id } : [],
                 })(
                   <Select
                     style={{ width: 520 }}
