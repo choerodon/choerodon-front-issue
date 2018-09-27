@@ -71,7 +71,7 @@ class StateMachineSchemeStore {
 
   @computed
   get getStateMachineSchemeList() {
-    return this.stateMachineSchemeList;
+    return this.stateMachineSchemeList.slice();
   }
 
   @action
@@ -81,7 +81,7 @@ class StateMachineSchemeStore {
 
   @computed
   get getStateMachine() {
-    return this.stateMachine;
+    return this.stateMachine.slice();
   }
   @action
   setStateMachine(data) {
@@ -236,7 +236,7 @@ class StateMachineSchemeStore {
           return Promise.reject(data.message);
         } else {
           this.setStateMachineLoading(false);
-          this.setStateMachine(data.viewDTOs);
+          this.setStateMachine(data.viewDTOs || []);
           // this.pagination = {
           //   ...pagination,
           //   total: data.totalElements

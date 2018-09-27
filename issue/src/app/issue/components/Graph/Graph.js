@@ -34,9 +34,7 @@ import {
 } from 'mxgraph-js';
 
 import './Graph.less';
-import Connector from '../../assets/images/arrow.svg';
 import Pointer from '../../assets/images/point.gif';
-// import Grid from '../../assets/images/grid.gif';
 
 const { AppState } = stores;
 const { Option } = Select;
@@ -90,11 +88,11 @@ class Graph extends Component {
     const { renderChanged } = nextProps;
     if (renderChanged) {
       const { graph } = this.editor;
-      const cells = _.filter(graph.model && graph.model.cells, item => item.vertex);
+      const cells = _.filter(graph.model && graph.model.cells, item => item.vertex || item.edge);
       // _.find(cells, item => item.vertex);
       graph.removeCells(cells);
       const parent = graph.getDefaultParent();
-      this.readFromData(graph, parent);
+      this.readFromData(graph, parent, nextProps);
     }
   }
 
@@ -260,7 +258,7 @@ class Graph extends Component {
    * @param graph
    * @param parent
    */
-  readFromData = (graph, parent) => {
+  readFromData = (graph, parent, nextProps) => {
     // const layout = new mxParallelEdgeLayout(graph);
     // const layoutMgr = new mxLayoutManager(graph);
     // layoutMgr.getLayout = (cell) => {
@@ -274,8 +272,7 @@ class Graph extends Component {
     const vertexes = [];
     const highlight = {};
     try {
-      const { data, enable = true } = this.props;
-
+      const { data, enable = true } = nextProps;
       if (data) {
         if (data.vertex && data.vertex.length) {
           data.vertex.forEach((item) => {
@@ -326,7 +323,7 @@ class Graph extends Component {
             ed.status = item.status;
             ed.transferId = id;
             ed.pStyle = style;
-            if (startNodeId !== endNodeId) {
+            if (startNodeId !== endNodeId && targetElement) {
               targetElement.setStyle('strokeColor=#000');
             }
           });
@@ -778,7 +775,7 @@ class Graph extends Component {
       // 初始化图
       const parent = graph.getDefaultParent();
       // this.readFromXML(graph, parent);
-      this.readFromData(graph, parent);
+      this.readFromData(graph, parent, this.props);
 
       // const style = graph.getStylesheet().getDefaultEdgeStyle();
 
@@ -806,8 +803,8 @@ class Graph extends Component {
       // Stops editing on enter or escape keypress
       // new mxRubberband(graph);
 
-      // Enables guides (vodici cary)
-      // mxGraphHandler.prototype.guidesEnabled = true;
+      // 启用对齐线帮助定位
+      mxGraphHandler.prototype.guidesEnabled = true;
 
       // Disable highlight of cells when dragging from toolbar
       graph.setDropEnabled(false);
@@ -823,15 +820,6 @@ class Graph extends Component {
    * @returns {XML}
    */
   render() {
-    const {
-      statusVisible,
-      transitionVisible,
-      statusEditVisible,
-      transitionEditVisible,
-      cardVisible,
-      selectCell,
-    } = this.state;
-    const { getFieldDecorator } = this.props.form;
 
     return (
       <div className="graph">
