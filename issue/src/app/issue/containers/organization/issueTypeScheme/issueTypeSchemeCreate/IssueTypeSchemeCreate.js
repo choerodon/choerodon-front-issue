@@ -11,6 +11,7 @@ import {
 import TransferDrag from '../../../../components/TransferDrag';
 import '../../../main.scss';
 import './IssueTypeSchemeCreate.scss';
+import TypeIcon from '../../../../components/TypeIcon';
 
 
 const { AppState } = stores;
@@ -191,7 +192,7 @@ class IssueTypeSchemeCreate extends Component {
       name = name ? `Copy ${name}` : '';
       titleId = 'issueTypeScheme.copy';
     }
-
+    console.log(`origin: ${origin}`);
     return (
       <Sidebar
         title={<FormattedMessage id={titleId} />}
@@ -202,14 +203,14 @@ class IssueTypeSchemeCreate extends Component {
         cancelText={<FormattedMessage id="cancel" />}
         confirmLoading={submitting}
       >
-        <div className="cloopm-region">
-          <p className="cloopm-issueTypeScheme-list-tip">
+        <div className="issue-region">
+          <p className="issue-issueTypeScheme-list-tip">
             <FormattedMessage id="issueTypeScheme.createDes" />
           </p>
           <Form layout="vertical" className="c7n-sidebar-form">
             <FormItem
               {...formItemLayout}
-              className="cloopm-sidebar-form"
+              className="issue-sidebar-form"
             >
               {getFieldDecorator('name', {
                 rules: [{
@@ -229,7 +230,7 @@ class IssueTypeSchemeCreate extends Component {
             </FormItem>
             <FormItem
               {...formItemLayout}
-              className="cloopm-sidebar-form"
+              className="issue-sidebar-form"
             >
               {getFieldDecorator('description', {
                 initialValue: description,
@@ -242,7 +243,7 @@ class IssueTypeSchemeCreate extends Component {
             </FormItem>
             <FormItem
               {...formItemLayout}
-              className="cloopm-sidebar-form"
+              className="issue-sidebar-form"
             >
               {getFieldDecorator('defaultIssueTypeId', {
                 initialValue: defaultIssueTypeId,
@@ -257,8 +258,14 @@ class IssueTypeSchemeCreate extends Component {
                       value={issueType.id}
                       key={issueType.id}
                     >
-                      <Icon type={issueType.icon} className="cloopm-schemeCreate-icon" />
-                      {issueType.name}
+                      {/* <Icon type={issueType.icon} className="issue-schemeCreate-icon" />
+                      {issueType.name} */}
+                      <TypeIcon
+                        icon={issueType.icon}
+                        bgColor={issueType.colour}
+                        name={issueType.name}
+                        showName={true}
+                      />
                     </Option>
                   ))}
                 </Select>,

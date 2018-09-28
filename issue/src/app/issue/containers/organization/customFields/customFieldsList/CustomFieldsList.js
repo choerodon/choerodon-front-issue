@@ -39,7 +39,7 @@ class CustomFieldsList extends Component {
     dataIndex: 'description',
     key: 'description',
     filters: [],
-    className: 'cloopm-table-ellipsis',
+    className: 'issue-table-ellipsis',
   }, {
     title: <FormattedMessage id="customFields.type" />,
     dataIndex: 'typeName',
@@ -191,7 +191,7 @@ class CustomFieldsList extends Component {
     } = this.state;
 
     return (
-      <Page className="cloopm-region">
+      <Page className="issue-region">
         <Header title={<FormattedMessage id="customFields.title" />}>
           <Button onClick={() => this.showCreate('create')}>
             <i className="icon-add icon" />
@@ -203,7 +203,7 @@ class CustomFieldsList extends Component {
           </Button>
         </Header>
         <Content>
-          <p className="cloopm-customFields-list-tip">
+          <p className="issue-customFields-list-tip">
             <FormattedMessage id="customFields.list.tip" />
           </p>
           <Table
@@ -214,7 +214,7 @@ class CustomFieldsList extends Component {
             pagination={CustomFieldsStore.pageInfo}
             onChange={this.handleTableChange}
             filterBarPlaceholder={intl.formatMessage({ id: 'filter' })}
-            className="cloopm-table"
+            className="issue-table"
           />
         </Content>
         <CustomFieldsCreate
@@ -233,12 +233,12 @@ class CustomFieldsList extends Component {
             </Button>,
           ]}
         >
-          <p className="cloopm-customFields-tip">
+          <p className="issue-customFields-tip">
             <FormattedMessage id="customFields.delete" />
-            <span className="cloopm-customFields-bold">{field.name}</span>
+            <span className="issue-customFields-bold">{field.name}</span>
           </p>
-          <p className="cloopm-customFields-tip">
-            <Icon type="error" className="cloopm-customFields-icon cloopm-error-msg" />
+          <p className="issue-customFields-tip">
+            <Icon type="error" className="issue-customFields-icon issue-error-msg" />
             <FormattedMessage
               id="customFields.delete.inUse"
               values={{
@@ -246,7 +246,7 @@ class CustomFieldsList extends Component {
               }}
             />
           </p>
-          <p className="cloopm-customFields-tip">
+          <p className="issue-customFields-tip">
             <FormattedMessage id="customFields.delete.inUseTip" />
           </p>
         </Modal>

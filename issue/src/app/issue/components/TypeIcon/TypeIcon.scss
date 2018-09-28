@@ -1,0 +1,16 @@
+.typeIcon{
+    display: flex;
+    .icon {
+      display: flex;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 14px;
+      justify-content: center;
+      align-items: center;
+    }
+    .typeIcon-name {
+      margin-left: 8px;
+    }
+}

@@ -114,11 +114,11 @@ class CustomFieldsCreate extends Component {
         cancelText={<FormattedMessage id="cancel" />}
         confirmLoading={submitting}
       >
-        <div className="cloopm-region">
+        <div className="issue-region">
           <Form layout="vertical" onSubmit={this.handleOk} className="c7n-sidebar-form">
             <FormItem
               {...formItemLayout}
-              className="cloopm-sidebar-form"
+              className="issue-sidebar-form"
             >
               {getFieldDecorator('name', {
                 rules: [{
@@ -137,7 +137,7 @@ class CustomFieldsCreate extends Component {
             </FormItem>
             <FormItem
               {...formItemLayout}
-              className="cloopm-sidebar-form"
+              className="issue-sidebar-form"
             >
               {getFieldDecorator('description')(
                 <TextArea
@@ -148,7 +148,7 @@ class CustomFieldsCreate extends Component {
             </FormItem>
             <FormItem
               {...formItemLayout}
-              className="cloopm-sidebar-form"
+              className="issue-sidebar-form"
             >
               {getFieldDecorator('type', {
                 rules: [{
@@ -169,7 +169,7 @@ class CustomFieldsCreate extends Component {
                       key={code}
                       name={intl.formatMessage({ id: `customFields.${code}` })}
                     >
-                      <img src={images[code]} alt="" className="cloopm-field-img" />
+                      <img src={images[code]} alt="" className="issue-field-img" />
                       <span>
                         <FormattedMessage id={`customFields.${code}`} />
                       </span>

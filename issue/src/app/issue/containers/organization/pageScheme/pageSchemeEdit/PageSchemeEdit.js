@@ -21,7 +21,7 @@ const { Sidebar } = Modal;
 const { TextArea } = Input;
 const { Option } = Select;
 
-const prefixCls = 'cloopm-pageScheme';
+const prefixCls = 'issue-pageScheme';
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -91,7 +91,7 @@ class PageSchemeEdit extends Component {
                 <i className="icon icon-delete" />
               </Button>
             </Popconfirm>
-          </Tooltip> : <div className="cloopm-del-space" />
+          </Tooltip> : <div className="issue-del-space" />
         }
       </div>
     ),
@@ -104,11 +104,11 @@ class PageSchemeEdit extends Component {
       relatedData, editIndex, pageList, typeList,
     } = this.state;
     return (
-      <div className="cloopm-region">
-        <Form layout="vertical" className="cloopm-sidebar-form">
+      <div className="issue-region">
+        <Form layout="vertical" className="issue-sidebar-form">
           <FormItem
             {...formItemLayout}
-            className="cloopm-sidebar-form"
+            className="issue-sidebar-form"
           >
             {getFieldDecorator('pageId', {
               rules: [{
@@ -141,7 +141,7 @@ class PageSchemeEdit extends Component {
           </FormItem>
           <FormItem
             {...formItemLayout}
-            className="cloopm-sidebar-form"
+            className="issue-sidebar-form"
           >
             {getFieldDecorator('type', {
               rules: [{
@@ -342,7 +342,7 @@ class PageSchemeEdit extends Component {
     } = menu;
 
     return (
-      <Page className="cloopm-region">
+      <Page className="issue-region">
         <Header
           title={<FormattedMessage id="pageScheme.edit.title" />}
           backPath={`/issue/screen-schemes?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
@@ -352,7 +352,7 @@ class PageSchemeEdit extends Component {
             <FormattedMessage id="pageScheme.create.tip1" />
             <Tips tips={[intl.formatMessage({ id: 'pageScheme.create.tip2' })]} />
           </div>
-          <Form layout="vertical" className="cloopm-sidebar-form">
+          <Form layout="vertical" className="issue-sidebar-form">
             <FormItem
               {...formItemLayout}
             >
@@ -374,7 +374,7 @@ class PageSchemeEdit extends Component {
             </FormItem>
             <FormItem
               {...formItemLayout}
-              className="cloopm-sidebar-form"
+              className="issue-sidebar-form"
             >
               {getFieldDecorator('description', {
                 initialValue: pageScheme ? pageScheme.description : '',
@@ -406,7 +406,7 @@ class PageSchemeEdit extends Component {
 
           <div className={`${prefixCls}-footer`}>
             <Button funcType="raised" type="primary" loading={submitting} onClick={this.handleSubmit}><FormattedMessage id="save" /></Button>
-            <Button funcType="raised" loading={submitting} className="cloopm-btn-raised-cancel" onClick={this.handleCancel}><FormattedMessage id="cancel" /></Button>
+            <Button funcType="raised" loading={submitting} className="issue-btn-raised-cancel" onClick={this.handleCancel}><FormattedMessage id="cancel" /></Button>
           </div>
         </Content>
 

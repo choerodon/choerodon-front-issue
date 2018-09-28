@@ -101,7 +101,7 @@ class IssueTypeScreenSchemesEditTemplate extends Component {
                   <i className="icon icon-delete" />
                 </Button>
               </Tooltip>
-            ) : <div className="cloopm-customFields-space" />
+            ) : <div className="issue-customFields-space" />
           }
         </React.Fragment>
       ),

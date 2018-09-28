@@ -205,7 +205,7 @@ class IssueTypeScreenSchemesList extends Component {
             pagination={IssueTypeScreenSchemesStore.pageInfo}
             onChange={this.handleTableChange}
             filterBarPlaceholder={intl.formatMessage({ id: 'filter' })}
-            className="cloopm-table"
+            className="issue-table"
           />
 
         </Content>
@@ -222,10 +222,10 @@ class IssueTypeScreenSchemesList extends Component {
         >
           <p className="issue-type-page-scheme-tip">
             {intl.formatMessage({ id: 'issueTypeScreenSchemes.delete' })}
-            <span className="cloopm-issueType-bold">{scheme.name}</span>
+            <span className="issue-issueType-bold">{scheme.name}</span>
           </p>
           <p className="issue-type-page-scheme-tip">
-            <Icon type="error" className="issue-type-page-scheme-icon cloopm-error-msg" />
+            <Icon type="error" className="issue-type-page-scheme-icon issue-error-msg" />
             <FormattedMessage
               id="issueTypeScreenSchemes.delete.inUse"
               values={{

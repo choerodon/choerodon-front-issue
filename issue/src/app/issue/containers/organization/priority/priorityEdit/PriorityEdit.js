@@ -154,7 +154,7 @@ class PriorityEdit extends Component {
               )
             }
           </FormItem>
-          <div className="cloopm-color-picker">
+          <div className="issue-color-picker">
             <div className="swatch" onClick={this.handleClickSwatch} role="none">
               <div className="color" style={{ background: priorityColor }} />
             </div>

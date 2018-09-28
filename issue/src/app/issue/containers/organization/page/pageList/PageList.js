@@ -17,7 +17,7 @@ const FormItem = Form.Item;
 const { Sidebar } = Modal;
 const { TextArea } = Input;
 
-const prefixCls = 'cloopm-page';
+const prefixCls = 'issue-page';
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -74,7 +74,7 @@ class PageList extends Component {
     dataIndex: 'stateMachine',
     key: 'stateMachine',
     filters: [],
-    className: 'cloopm-table-ellipsis',
+    className: 'issue-table-ellipsis',
   }, {
     align: 'right',
     key: 'action',
@@ -96,7 +96,7 @@ class PageList extends Component {
             <Button size="small" shape="circle" onClick={this.openRemove.bind(this, record)}>
               <i className="icon icon-delete" />
             </Button>
-          </Tooltip> : <div className="cloopm-del-space" />
+          </Tooltip> : <div className="issue-del-space" />
         }
       </div>
     ),
@@ -105,8 +105,8 @@ class PageList extends Component {
   getCreateForm = () => {
     const { form, intl } = this.props;
     const { getFieldDecorator } = form;
-    return (<div className="cloopm-region">
-      <Form layout="vertical" className="cloopm-sidebar-form">
+    return (<div className="issue-region">
+      <Form layout="vertical" className="issue-sidebar-form">
         <FormItem
           {...formItemLayout}
         >
@@ -128,7 +128,7 @@ class PageList extends Component {
         </FormItem>
         <FormItem
           {...formItemLayout}
-          className="cloopm-sidebar-form"
+          className="issue-sidebar-form"
         >
           {getFieldDecorator('description')(
             <TextArea
@@ -241,7 +241,7 @@ class PageList extends Component {
     };
 
     return (
-      <Page className="cloopm-region">
+      <Page className="issue-region">
         <Header title={<FormattedMessage id="page.title" />}>
           <Button onClick={() => this.showCreate('create')}>
             <i className="icon-add icon" />
@@ -291,7 +291,7 @@ class PageList extends Component {
             pagination={pageInfo}
             onChange={this.handleTableChange}
             filterBarPlaceholder={intl.formatMessage({ id: 'filter' })}
-            className="cloopm-table"
+            className="issue-table"
           />
         </Content>
         <Modal

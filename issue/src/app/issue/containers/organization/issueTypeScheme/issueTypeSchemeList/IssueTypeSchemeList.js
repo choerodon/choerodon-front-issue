@@ -11,6 +11,8 @@ import {
 import '../../../main.scss';
 import './IssueTypeSchemeList.scss';
 import IssueTypeSchemeCreate from '../issueTypeSchemeCreate';
+import TypeIcon from '../../../../components/TypeIcon';
+
 
 const { AppState } = stores;
 
@@ -45,7 +47,7 @@ class IssueTypeSchemeList extends Component {
     dataIndex: 'description',
     key: 'description',
     filters: [],
-    className: 'cloopm-table-ellipsis',
+    className: 'issue-table-ellipsis',
   }, {
     title: <FormattedMessage id="issueTypeScheme.type" />,
     dataIndex: 'type',
@@ -54,9 +56,15 @@ class IssueTypeSchemeList extends Component {
       ? (
         <div>
           {record.issueTypes.map(type => (
-            <div key={type.id} className="cloopm-issueTypeScheme-type">
-              <Icon type={type.icon} className="cloopm-issueTypeScheme-icon" />
-              {type.name}
+            <div key={type.id} className="issue-issueTypeScheme-type">
+              {/* <Icon type={type.icon} className="issue-issueTypeScheme-icon" />
+              {type.name} */}
+              <TypeIcon
+                icon={type.icon}
+                bgColor={type.colour}
+                name={type.name}
+                showName={true}
+              />
             </div>))
           }
         </div>
@@ -70,7 +78,7 @@ class IssueTypeSchemeList extends Component {
     key: 'project',
     render: (text, record) => (record.projects && record.projects.length
       ? (
-        <ul className="cloopm-issueTypeScheme-ul">
+        <ul className="issue-issueTypeScheme-ul">
           {record.projects.map(project => (<li key={project.id}>{project.name}</li>))}
         </ul>
       )
@@ -232,7 +240,7 @@ class IssueTypeSchemeList extends Component {
     } = this.state;
 
     return (
-      <Page className="cloopm-region">
+      <Page className="issue-region">
         <Header title={<FormattedMessage id="issueTypeScheme.title" />}>
           <Button onClick={() => this.showCreate('create')}>
             <i className="icon-add icon" />
@@ -244,7 +252,7 @@ class IssueTypeSchemeList extends Component {
           </Button>
         </Header>
         <Content>
-          <p className="cloopm-issueTypeScheme-list-tip">
+          <p className="issue-issueTypeScheme-list-tip">
             <FormattedMessage id="issueTypeScheme.tip" />
           </p>
           <Table
@@ -255,7 +263,7 @@ class IssueTypeSchemeList extends Component {
             pagination={IssueTypeSchemeStore.pageInfo}
             onChange={this.handleTableChange}
             filterBarPlaceholder={intl.formatMessage({ id: 'filter' })}
-            className="cloopm-table"
+            className="issue-table"
           />
         </Content>
         {IssueTypeSchemeStore.createSchemeShow
@@ -279,28 +287,28 @@ class IssueTypeSchemeList extends Component {
             </Button>,
           ]}
         >
-          <p className="cloopm-issueType-tip">
+          <p className="issue-issueType-tip">
             {intl.formatMessage({ id: 'issueTypeScheme.delete' })}
-            <span className="cloopm-issueType-bold">{scheme.name}</span>
+            <span className="issue-issueType-bold">{scheme.name}</span>
           </p>
           {scheme.projects
             ? (
-              <p className="cloopm-issueType-tip">
-                <span className="cloopm-issueType-bold">超级橘子运维</span>
+              <p className="issue-issueType-tip">
+                <span className="issue-issueType-bold">超级橘子运维</span>
                 {intl.formatMessage({ id: 'issueTypeScheme.delete.inUse' })}
               </p>
             ) : ''
           }
           {scheme.projects
             ? (
-              <p className="cloopm-issueType-tip">
+              <p className="issue-issueType-tip">
                 {intl.formatMessage({ id: 'issueTypeScheme.delete.tip' })}
               </p>
             ) : ''
           }
           {!scheme.projects
             ? (
-              <p className="cloopm-issueType-tip">
+              <p className="issue-issueType-tip">
                 {intl.formatMessage({ id: 'issueTypeScheme.delete.noUse' })}
               </p>
             ) : ''

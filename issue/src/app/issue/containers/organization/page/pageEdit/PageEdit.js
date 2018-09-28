@@ -19,7 +19,7 @@ const FormItem = Form.Item;
 const Sidebar = Modal.Sidebar;
 const TextArea = Input.TextArea;
 
-const prefixCls = 'cloopm-page';
+const prefixCls = 'issue-page';
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -59,7 +59,7 @@ class PageEdit extends Component {
     dataIndex: 'description',
     key: 'description',
     filters: [],
-    className: 'cloopm-table-ellipsis',
+    className: 'issue-table-ellipsis',
   }, {
     title: <FormattedMessage id="page.edit.page" />,
     dataIndex: 'page',
@@ -170,13 +170,13 @@ class PageEdit extends Component {
     } = menu;
 
     return (
-      <Page className="cloopm-region">
+      <Page className="issue-region">
         <Header
           title={<FormattedMessage id="page.edit.title" />}
           backPath={`/issue/screens?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
         />
         <Content>
-          <Form layout="vertical" className="cloopm-sidebar-form">
+          <Form layout="vertical" className="issue-sidebar-form">
             <FormItem
               {...formItemLayout}
             >
@@ -198,7 +198,7 @@ class PageEdit extends Component {
             </FormItem>
             <FormItem
               {...formItemLayout}
-              className="cloopm-sidebar-form"
+              className="issue-sidebar-form"
             >
               {getFieldDecorator('description', {
                 initialValue: page ? page.description : '',
@@ -227,7 +227,7 @@ class PageEdit extends Component {
           />
           <div className={`${prefixCls}-footer`}>
             <Button funcType="raised" type="primary" loading={submitting} onClick={this.handleSubmit}><FormattedMessage id="save" /></Button>
-            <Button funcType="raised" loading={submitting} className="cloopm-btn-raised-cancel" onClick={this.handleCancel}><FormattedMessage id="cancel" /></Button>
+            <Button funcType="raised" loading={submitting} className="issue-btn-raised-cancel" onClick={this.handleCancel}><FormattedMessage id="cancel" /></Button>
           </div>
         </Content>
       </Page>

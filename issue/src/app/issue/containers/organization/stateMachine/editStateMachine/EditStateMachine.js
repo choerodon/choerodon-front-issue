@@ -10,7 +10,7 @@ import StateStore from '../../../../stores/organization/state';
 import '../../../main.scss';
 import './EditStateMachine.scss';
 
-const prefixCls = 'cloopm-state-machine';
+const prefixCls = 'issue-state-machine';
 const { AppState } = stores;
 
 const Sidebar = Modal.Sidebar;
@@ -136,8 +136,8 @@ class EditStateMachine extends Component {
     const { getFieldDecorator } = form;
     if (type === 'state') {
       return (
-        <div className="cloopm-region">
-          <Form layout="vertical" className="cloopm-sidebar-form">
+        <div className="issue-region">
+          <Form layout="vertical" className="issue-sidebar-form">
             <FormItem
               {...formItemLayout}
             >
@@ -172,8 +172,8 @@ class EditStateMachine extends Component {
       );
     } else {
       return (
-        <div className="cloopm-region">
-          <Form layout="vertical" className="cloopm-sidebar-form">
+        <div className="issue-region">
+          <Form layout="vertical" className="issue-sidebar-form">
             <React.Fragment>
               <FormItem
                 {...formItemLayout}
@@ -239,7 +239,7 @@ class EditStateMachine extends Component {
               </FormItem>
               <FormItem
                 {...formItemLayout}
-                className="cloopm-sidebar-form"
+                className="issue-sidebar-form"
               >
                 {getFieldDecorator('name', {
                   rules: [{
@@ -256,7 +256,7 @@ class EditStateMachine extends Component {
               </FormItem>
               <FormItem
                 {...formItemLayout}
-                className="cloopm-sidebar-form"
+                className="issue-sidebar-form"
               >
                 {getFieldDecorator('description', {
                   initialValue: selectedCell && selectedCell.edge ? selectedCell.des : '',
@@ -310,8 +310,8 @@ class EditStateMachine extends Component {
     const { form, intl } = this.props;
     const { getFieldDecorator } = form;
     const { getStageOptionsData } = StateStore;
-    return (<div className="cloopm-region">
-      <Form layout="vertical" className="cloopm-sidebar-form">
+    return (<div className="issue-region">
+      <Form layout="vertical" className="issue-sidebar-form">
         <FormItem
           {...formItemLayout}
         >
@@ -333,7 +333,7 @@ class EditStateMachine extends Component {
         </FormItem>
         <FormItem
           {...formItemLayout}
-          className="cloopm-sidebar-form"
+          className="issue-sidebar-form"
         >
           {getFieldDecorator('description')(
             <TextArea
@@ -371,9 +371,9 @@ class EditStateMachine extends Component {
 
           )}
         </FormItem>
-        <div className="cloopm-state-tips-wrapper">
-          <div className="cloopm-state-tips">帮助识别问题所处的生命周期的某个阶段</div>
-          <div className="cloopm-state-tips">开始处理问题时，从 <span>待处理</span> 到 <span>处理中</span> ，随后，当完成所有工作时，进入到 <span>完成</span> 阶段。</div>
+        <div className="issue-state-tips-wrapper">
+          <div className="issue-state-tips">帮助识别问题所处的生命周期的某个阶段</div>
+          <div className="issue-state-tips">开始处理问题时，从 <span>待处理</span> 到 <span>处理中</span> ，随后，当完成所有工作时，进入到 <span>完成</span> 阶段。</div>
         </div>
       </Form>
     </div>);
@@ -1036,7 +1036,7 @@ class EditStateMachine extends Component {
                 loading={StateStore.getIsLoading}
                 onChange={this.tableChange}
                 filterBar={false}
-                className="cloopm-table"
+                className="issue-table"
               />
             </TabPane>
           </Tabs>

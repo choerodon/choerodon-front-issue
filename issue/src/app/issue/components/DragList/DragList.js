@@ -211,31 +211,31 @@ class DragList extends Component {
 
     return (
       <div>
-        <div className="cloopm-dragList-des">
+        <div className="issue-dragList-des">
           <Tips tips={[tips]} />
         </div>
         <DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
-          <div className="cloopm-dragList-content">
+          <div className="issue-dragList-content">
             <Card
               title={title}
               extra={(
                 <Button
                   onClick={this.addItem}
                   funcType="flat"
-                  className="cloopm-dragList-addBtn"
+                  className="issue-dragList-addBtn"
                 >
                   <i className="icon-add icon" />
                   <FormattedMessage id="add" />
                 </Button>
               )}
               bordered={false}
-              className="cloopm-dragList-card"
+              className="issue-dragList-card"
             >
               <Droppable droppableId="droppable">
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
-                    className="cloopm-issueTypeDrag-drop"
+                    className="issue-issueTypeDrag-drop"
                   >
                     {data && data.map((item, index) => (
                       <Draggable
@@ -257,7 +257,7 @@ class DragList extends Component {
                             {item.id === tempKey || item.tempKey === tempKey
                               ? (
                                 <Fragment>
-                                  <span className="cloopm-dragList-input">
+                                  <span className="issue-dragList-input">
                                     <Input
                                       id="dragList-input"
                                       defaultValue={item.value}
@@ -272,7 +272,7 @@ class DragList extends Component {
                                     size="small"
                                     onClick={() => this.edit(tempKey)}
                                     funcType="raised"
-                                    className="cloopm-dragList-add"
+                                    className="issue-dragList-add"
                                   >
                                     <FormattedMessage id="save" />
                                   </Button>
@@ -287,8 +287,8 @@ class DragList extends Component {
                               )
                               : (
                                 <Fragment>
-                                  <span className="cloopm-dragList-text">{item.value}</span>
-                                  <div className="cloopm-dragList-operate">
+                                  <span className="issue-dragList-text">{item.value}</span>
+                                  <div className="issue-dragList-operate">
                                     <Tooltip
                                       placement="bottom"
                                       title={<FormattedMessage id="edit" />}
@@ -342,8 +342,8 @@ class DragList extends Component {
                     ))}
                     {addItemVisible
                       ? (
-                        <div className="cloopm-dragList-addItem">
-                          <span className="cloopm-dragList-input">
+                        <div className="issue-dragList-addItem">
+                          <span className="issue-dragList-input">
                             <Input
                               id="dragList-input"
                               onChange={this.onInputChange}
@@ -356,7 +356,7 @@ class DragList extends Component {
                             size="small"
                             onClick={this.create}
                             funcType="raised"
-                            className="cloopm-dragList-add"
+                            className="issue-dragList-add"
                             disabled={saveDisabled}
                           >
                             <FormattedMessage id="save" />

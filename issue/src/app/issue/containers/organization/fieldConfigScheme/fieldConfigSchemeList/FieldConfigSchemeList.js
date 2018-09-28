@@ -14,7 +14,7 @@ import './FieldConfigSchemeList.scss';
 const { AppState } = stores;
 const FormItem = Form.Item;
 
-const prefixCls = 'cloopm-fieldConfigScheme';
+const prefixCls = 'issue-fieldConfigScheme';
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -75,7 +75,7 @@ class FieldConfigSchemeList extends Component {
             <Button size="small" shape="circle" onClick={this.openRemove.bind(this, record)}>
               <i className="icon icon-delete" />
             </Button>
-          </Tooltip> : <div className="cloopm-del-space" />
+          </Tooltip> : <div className="issue-del-space" />
         }
       </div>
     ),
@@ -176,7 +176,7 @@ class FieldConfigSchemeList extends Component {
     };
 
     return (
-      <Page className="cloopm-region">
+      <Page className="issue-region">
         <Header title={<FormattedMessage id="fieldConfigScheme.title" />}>
           <Button onClick={() => this.showCreate('create')}>
             <i className="icon-add icon" />
@@ -199,7 +199,7 @@ class FieldConfigSchemeList extends Component {
             pagination={pageInfo}
             onChange={this.handleTableChange}
             filterBarPlaceholder={intl.formatMessage({ id: 'filter' })}
-            className="cloopm-table"
+            className="issue-table"
           />
         </Content>
         <Modal
