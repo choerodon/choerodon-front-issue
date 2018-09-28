@@ -12,7 +12,7 @@ const Sidebar = Modal.Sidebar;
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
 const Option = Select.Option;
-const prefixCls = 'cloopm-state-machine';
+const prefixCls = 'issue-state-machine';
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -55,7 +55,7 @@ class StateMachineList extends Component {
     title: <FormattedMessage id="stateMachine.related" />,
     dataIndex: 'stateMachineSchemeDTOs',
     key: 'stateMachineSchemeDTOs',
-    className: 'cloopm-table-ellipsis',
+    className: 'issue-table-ellipsis',
     render: (text, record) => {
       const map = [];
       if (text && text.length) {
@@ -85,7 +85,7 @@ class StateMachineList extends Component {
           <Button shape="circle" size="small" onClick={this.confirmDelete.bind(this, record)}>
             <i className="icon icon-delete" />
           </Button>
-        </Tooltip> : <div className="cloopm-del-space" />
+        </Tooltip> : <div className="issue-del-space" />
         }
       </div>
     ),
@@ -251,8 +251,8 @@ class StateMachineList extends Component {
     const menu = AppState.currentMenuType;
     const { type, id: projectId, organizationId: orgId } = menu;
     const formContent = (
-      <div className="cloopm-region">
-        <Form layout="vertical" className="cloopm-sidebar-form">
+      <div className="issue-region">
+        <Form layout="vertical" className="issue-sidebar-form">
           <FormItem
             {...formItemLayout}
           >
@@ -274,7 +274,7 @@ class StateMachineList extends Component {
           </FormItem>
           <FormItem
             {...formItemLayout}
-            className="cloopm-sidebar-form"
+            className="issue-sidebar-form"
           >
             {getFieldDecorator('description', {
               initialValue: singleData ? singleData.name : '',
@@ -316,7 +316,7 @@ class StateMachineList extends Component {
             loading={StateMachineStore.getIsLoading}
             pagination={pageInfo}
             onChange={this.tableChange}
-            className="cloopm-table"
+            className="issue-table"
           />
         </Content>
         {this.state.show && <Sidebar

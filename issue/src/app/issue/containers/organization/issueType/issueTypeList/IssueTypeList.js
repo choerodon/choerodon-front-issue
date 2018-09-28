@@ -11,6 +11,7 @@ import {
 import '../../../main.scss';
 import './IssueTypeList.scss';
 import IssueTypeCreate from '../issueTypeCreate';
+import TypeIcon from '../../../../components/TypeIcon';
 
 const { AppState } = stores;
 
@@ -36,24 +37,34 @@ class IssueTypeList extends Component {
     key: 'name',
     filters: [],
     render: (text, record) => (
-      <div>
-        <Icon type={record.icon || 'help'} className="cloopm-issueTypeList-icon" />
-        {record.name}
-      </div>
+      // <div>
+      //   <Icon 
+      //     type={record.icon} 
+      //     className="issue-issueTypeList-icon"
+      //     style={{ color: `${record.colour}` }}
+      //   />
+      //   {record.name}
+      // </div>
+      <TypeIcon
+        icon={record.icon}
+        bgColor={record.colour}
+        name={record.name}
+        showName={true}
+      />
     ),
   }, {
     title: <FormattedMessage id="issueType.des" />,
     dataIndex: 'description',
     key: 'description',
     filters: [],
-    className: 'cloopm-table-ellipsis',
+    className: 'issue-table-ellipsis',
   }, {
     title: <FormattedMessage id="issueType.scheme" />,
     dataIndex: 'scheme',
     key: 'scheme',
     render: (text, record) => (record.scheme && record.scheme.length
       ? (
-        <ul className="cloopm-issueType-ul">
+        <ul className="issue-issueType-ul">
           {record.scheme.map(scheme => (<li key={scheme.id}>{scheme.name}</li>))}
         </ul>
       )
@@ -184,7 +195,7 @@ class IssueTypeList extends Component {
     } = this.state;
 
     return (
-      <Page className="cloopm-region">
+      <Page className="issue-region">
         <Header title={<FormattedMessage id="issueType.title" />}>
           <Button onClick={() => this.showCreate('create')}>
             <i className="icon-add icon" />
@@ -204,7 +215,7 @@ class IssueTypeList extends Component {
             pagination={IssueTypeStore.pageInfo}
             onChange={this.handleTableChange}
             filterBarPlaceholder={intl.formatMessage({ id: 'filter' })}
-            className="cloopm-table"
+            className="issue-table"
           />
         </Content>
         {IssueTypeStore.createTypeShow && (
@@ -227,17 +238,17 @@ class IssueTypeList extends Component {
             </Button>,
           ]}
         >
-          <p className="cloopm-issueType-tip">
+          <p className="issue-issueType-tip">
             {intl.formatMessage({ id: 'issueType.delete' })}
-            <span className="cloopm-issueType-bold">{issueType.name}</span>
+            <span className="issue-issueType-bold">{issueType.name}</span>
           </p>
-          <p className="cloopm-issueType-tip">
+          <p className="issue-issueType-tip">
             {intl.formatMessage({ id: 'issueType.delete.confirm' })}
           </p>
-          <p className="cloopm-issueType-tip">
+          <p className="issue-issueType-tip">
             {intl.formatMessage({ id: 'issueType.delete.noUse' })}
           </p>
-          <p className="cloopm-issueType-tip">
+          <p className="issue-issueType-tip">
             {intl.formatMessage({ id: 'issueType.delete.noUseTip' })}
           </p>
         </Modal>
@@ -249,15 +260,15 @@ class IssueTypeList extends Component {
             <Button key="back" onClick={this.closeRemove}>{<FormattedMessage id={'cancel'} />}</Button>,
           ]}
         >
-          <p className="cloopm-issueType-tip">
+          <p className="issue-issueType-tip">
             {intl.formatMessage({ id: 'issueType.delete' })}
-            <span className="cloopm-issueType-bold">{issueType.name}</span>
+            <span className="issue-issueType-bold">{issueType.name}</span>
           </p>
-          <p className="cloopm-issueType-tip">
-            <Icon type="error" className="cloopm-issueTypeList-icon cloopm-error-msg" />
+          <p className="issue-issueType-tip">
+            <Icon type="error" className="issue-issueTypeList-icon issue-error-msg" />
             {intl.formatMessage({ id: 'issueType.delete.forbidden' })}
           </p>
-          <p className="cloopm-issueType-tip">
+          <p className="issue-issueType-tip">
             <FormattedMessage
               id="issueType.delete.inUse"
               values={{
@@ -265,7 +276,7 @@ class IssueTypeList extends Component {
               }}
             />
           </p>
-          <p className="cloopm-issueType-tip">
+          <p className="issue-issueType-tip">
             {intl.formatMessage({ id: 'issueType.delete.inUseTip' })}
           </p>
         </Modal>

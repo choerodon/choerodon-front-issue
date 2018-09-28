@@ -21,7 +21,7 @@ const Sidebar = Modal.Sidebar;
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { AppState } = stores;
-const prefixCls = 'cloopm-stateMachineScheme';
+const prefixCls = 'issue-stateMachineScheme';
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -211,7 +211,7 @@ class EditStateMachineScheme extends Component {
     return (
       <Fragment>
         <Form>
-          <FormItem {...formItemLayout} className="cloopm-sidebar-form">
+          <FormItem {...formItemLayout} className="issue-sidebar-form">
             {getFieldDecorator('stateMachine', {
               initialValue: allStateMachine[0].id,
             })(
@@ -261,7 +261,7 @@ class EditStateMachineScheme extends Component {
         key: 'connectIssueType',
         render: record => (
           <Fragment>
-            <Icon type={record.icon} className="cloopm-scheme-icon" />
+            <Icon type={record.icon} className="issue-scheme-icon" />
             {record.name}
           </Fragment>
         ),
@@ -308,7 +308,7 @@ class EditStateMachineScheme extends Component {
             rowKey={record => record.id}
             rowSelection={rowSelection}
             filterBar={false}
-            className="cloopm-table"
+            className="issue-table"
             rowClassName={`${prefixCls}-table-col`}
           />
         </FormItem>
@@ -321,7 +321,7 @@ class EditStateMachineScheme extends Component {
       title: <FormattedMessage id="stateMachineScheme.stateMachine" />,
       // dataIndex: "stateMachine",
       key: 'stateMachine',
-      className: 'cloopm-table-ellipsis',
+      className: 'issue-table-ellipsis',
       render: record => (
         record.stateMachineDTO.length !== 0 && (
           <Fragment>{record.stateMachineDTO.name}</Fragment>
@@ -337,7 +337,7 @@ class EditStateMachineScheme extends Component {
           {record.issueTypeDTOs.length !== 0 && record.issueTypeDTOs
             .map(type => (
               <div key={type.id}>
-                <Icon type={type.icon} className="cloopm-scheme-icon" />
+                <Icon type={type.icon} className="issue-scheme-icon" />
                 &nbsp;
                 {type.name}
               </div>
@@ -420,7 +420,7 @@ class EditStateMachineScheme extends Component {
             dataSource={getStateMachine}
             rowKey={record => record.id
             }
-            className="cloopm-table"
+            className="issue-table"
             rowClassName={`${prefixCls}-table-col`}
           />
           <Modal

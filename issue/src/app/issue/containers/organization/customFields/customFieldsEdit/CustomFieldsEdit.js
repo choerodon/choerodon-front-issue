@@ -331,7 +331,7 @@ class CustomFieldsEdit extends Component {
             <Form layout="vertical" onSubmit={this.handleOk} className="c7n-sidebar-form">
               <FormItem
                 {...formItemLayout}
-                className="cloopm-sidebar-form"
+                className="issue-sidebar-form"
               >
                 {getFieldDecorator('name', {
                   rules: [{
@@ -351,7 +351,7 @@ class CustomFieldsEdit extends Component {
               </FormItem>
               <FormItem
                 {...formItemLayout}
-                className="cloopm-sidebar-form"
+                className="issue-sidebar-form"
               >
                 {getFieldDecorator('description', {
                   initialValue: field.description,
@@ -364,7 +364,7 @@ class CustomFieldsEdit extends Component {
               </FormItem>
               <FormItem
                 {...formItemLayout}
-                className="cloopm-sidebar-form"
+                className="issue-sidebar-form"
               >
                 {getFieldDecorator('type', {
                   initialValue: intl.formatMessage({ id: `customFields.${field.type}` }),
@@ -381,7 +381,7 @@ class CustomFieldsEdit extends Component {
                     <Fragment>
                       <FormItem
                         {...formItemLayout}
-                        className="cloopm-sidebar-form"
+                        className="issue-sidebar-form"
                       >
                         {getFieldDecorator('defaultValue', {
                           initialValue: defaultValue || [],
@@ -427,7 +427,7 @@ class CustomFieldsEdit extends Component {
                     <Fragment>
                       <FormItem
                         {...formItemLayout}
-                        className="cloopm-sidebar-form"
+                        className="issue-sidebar-form"
                       >
                         {getFieldDecorator('defaultValue', {
                           initialValue: defaultValue || [],
@@ -473,7 +473,7 @@ class CustomFieldsEdit extends Component {
                     <Fragment>
                       <FormItem
                         {...formItemLayout}
-                        className="cloopm-sidebar-form"
+                        className="issue-sidebar-form"
                       >
                         {getFieldDecorator('defaultValue', {
                           initialValue: defaultValue || [],
@@ -505,7 +505,7 @@ class CustomFieldsEdit extends Component {
                     <Fragment>
                       <FormItem
                         {...formItemLayout}
-                        className="cloopm-sidebar-form"
+                        className="issue-sidebar-form"
                       >
                         {getFieldDecorator('defaultValue', {
                           initialValue: defaultValue || null,
@@ -521,7 +521,7 @@ class CustomFieldsEdit extends Component {
                       </FormItem>
                       <FormItem
                         {...formItemLayout}
-                        className="cloopm-sidebar-form"
+                        className="issue-sidebar-form"
                       >
                         {getFieldDecorator('check', {
                           valuePropName: 'checked',
@@ -541,7 +541,7 @@ class CustomFieldsEdit extends Component {
                     <Fragment>
                       <FormItem
                         {...formItemLayout}
-                        className="cloopm-sidebar-form"
+                        className="issue-sidebar-form"
                       >
                         {getFieldDecorator('defaultValue', {
                           initialValue: defaultValue || null,
@@ -558,7 +558,7 @@ class CustomFieldsEdit extends Component {
                       </FormItem>
                       <FormItem
                         {...formItemLayout}
-                        className="cloopm-sidebar-form"
+                        className="issue-sidebar-form"
                       >
                         {getFieldDecorator('check', {
                           valuePropName: 'checked',
@@ -578,7 +578,7 @@ class CustomFieldsEdit extends Component {
                     <Fragment>
                       <FormItem
                         {...formItemLayout}
-                        className="cloopm-sidebar-form"
+                        className="issue-sidebar-form"
                       >
                         {getFieldDecorator('check', {
                           valuePropName: 'checked',
@@ -591,7 +591,7 @@ class CustomFieldsEdit extends Component {
                       </FormItem>
                       <FormItem
                         {...formItemLayout}
-                        className="cloopm-sidebar-form"
+                        className="issue-sidebar-form"
                       >
                         {getFieldDecorator('defaultValue', {
                           initialValue: defaultValue || 0,
@@ -610,7 +610,7 @@ class CustomFieldsEdit extends Component {
                   ? (
                     <FormItem
                       {...formItemLayout}
-                      className="cloopm-sidebar-form"
+                      className="issue-sidebar-form"
                     >
                       {getFieldDecorator('defaultValue', {
                         initialValue: defaultValue || '',
@@ -627,7 +627,7 @@ class CustomFieldsEdit extends Component {
                   ? (
                     <FormItem
                       {...formItemLayout}
-                      className="cloopm-sidebar-form"
+                      className="issue-sidebar-form"
                     >
                       {getFieldDecorator('defaultValue', {
                         initialValue: defaultValue || '',
@@ -644,7 +644,7 @@ class CustomFieldsEdit extends Component {
                   ? (
                     <FormItem
                       {...formItemLayout}
-                      className="cloopm-sidebar-form"
+                      className="issue-sidebar-form"
                     >
                       {getFieldDecorator('defaultValue', {
                         rules: [{
@@ -665,7 +665,7 @@ class CustomFieldsEdit extends Component {
                   ? (
                     <FormItem
                       {...formItemLayout}
-                      className="cloopm-sidebar-form"
+                      className="issue-sidebar-form"
                     >
                       {getFieldDecorator('defaultValue', {
                         initialValue: defaultValue || [],
@@ -684,7 +684,7 @@ class CustomFieldsEdit extends Component {
               type="primary"
               funcType="raised"
               onClick={this.saveEdit}
-              className="cloopm-save-btn"
+              className="issue-save-btn"
               loading={submitting}
             >
               <FormattedMessage id="save" />

@@ -99,7 +99,7 @@ class AssociateFieldToScreens extends Component {
           backPath={`/issue/custom-fields?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`}
         />
         <Content>
-          <p className="cloopm-associate-tip">
+          <p className="issue-associate-tip">
             <FormattedMessage id="customFields.associate.tip" />
           </p>
           <Table
@@ -110,14 +110,14 @@ class AssociateFieldToScreens extends Component {
             rowKey={record => record.id}
             filterBarPlaceholder={intl.formatMessage({ id: 'filter' })}
             pagination={false}
-            className="cloopm-table cloopm-associate-table"
+            className="issue-table issue-associate-table"
             onChange={this.handleTableChange}
           />
           <Button
             type="primary"
             funcType="raised"
             onClick={this.associateFieldToScreens}
-            className="cloopm-associate-btn"
+            className="issue-associate-btn"
           >
             <FormattedMessage id="save" />
           </Button>

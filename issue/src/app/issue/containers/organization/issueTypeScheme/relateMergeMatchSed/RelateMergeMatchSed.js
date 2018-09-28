@@ -36,7 +36,7 @@ class RelateMergeMatchSed extends Component {
 
   render() {
     return (
-        <Page className="cloopm-region">
+        <Page className="issue-region">
             <Header 
                 title={<FormattedMessage id="relateMerge.title"/>}
                 backPath={`/issue/issue-type-schemes/relateMergeMatchFst?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`}

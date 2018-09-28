@@ -3,7 +3,7 @@ import React from 'react';
 import './Tips.scss';
 
 const Tip = ({ tips }) => (
-  <div className="cloopm-tips">
+  <div className="issue-tips">
     {
       tips.map((tip, index) => {
         const tipSnippits = tip.split(' ');

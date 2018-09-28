@@ -10,7 +10,7 @@ import StateStore from '../../../../stores/organization/state';
 import '../../../main.scss';
 import './EditConfigSelect.scss';
 
-const prefixCls = 'cloopm-state-machine-config-select';
+const prefixCls = 'issue-state-machine-config-select';
 const { AppState } = stores;
 
 const Sidebar = Modal.Sidebar;
@@ -161,14 +161,14 @@ class EditConfigSelect extends Component {
             loading={StateMachineStore.getIsLoading}
             pagination={false}
             onChange={this.tableChange}
-            className="cloopm-table"
+            className="issue-table"
             rowSelection={rowSelection}
           />
           <div className={`${prefixCls}-toolbar`}>
             <Button onClick={() => this.handleSubmit('condition')} type="primary" funcType="raised" loading={loading}>
               <FormattedMessage id="add" />
             </Button>
-            <Button className="cloopm-btn-raised-cancel" onClick={() => this.handleCancel()} funcType="raised">
+            <Button className="issue-btn-raised-cancel" onClick={() => this.handleCancel()} funcType="raised">
               <FormattedMessage id="cancel" />
             </Button>
           </div>

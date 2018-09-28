@@ -1,4 +1,4 @@
-.cloopm-region article,
+.issue-region article,
 aside,
 blockquote,
 body,
@@ -40,15 +40,15 @@ ul {
   padding: 0;
 }
 
-.cloopm-sidebar-form {
+.issue-sidebar-form {
   max-width: 520px;
 }
 
-.cloopm-region p + p {
+.issue-region p + p {
   margin-bottom: 0;
 }
 
-.cloopm-delete-content {
+.issue-delete-content {
   margin-top: 8px;
   & span {
     font-size: 14px;
@@ -58,27 +58,27 @@ ul {
   }
 }
 
-.cloopm-error-msg {
+.issue-error-msg {
   color: red;
 }
 
 // 列表字段限制宽度
-.cloopm-table-ellipsis {
+.issue-table-ellipsis {
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.cloopm-table tr td {
+.issue-table tr td {
   vertical-align: text-top;
 }
 
-.cloopm-btn-raised-cancel {
+.issue-btn-raised-cancel {
   color: #3f51b5;
 }
 
-.cloopm-del-space {
+.issue-del-space {
   width: 24px;
   display: inline-block;
 }

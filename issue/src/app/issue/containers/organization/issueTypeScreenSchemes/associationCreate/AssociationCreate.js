@@ -87,7 +87,7 @@ class AssociationCreate extends Component {
         onOk={this.handleCreatingOk}
         onCancel={this.handleCreatingCancel}
       >
-        <Form className="cloopm-association-form">
+        <Form className="issue-association-form">
           <FormItem
             {...formItemLayout}
           >
@@ -106,7 +106,7 @@ class AssociationCreate extends Component {
                   {
                     issueTypes.map(item => (
                       <Option value={item.id} key={item.id}>
-                        <Icon type={item.icon} className="cloopm-association-icon" />
+                        <Icon type={item.icon} className="issue-association-icon" />
                         {item.name}
                       </Option>
                     ))

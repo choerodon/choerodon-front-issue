@@ -1,4 +1,4 @@
-.cloopm-dragList {
+.issue-dragList {
   &-content {
     background: #ECECEC;
     padding: 20px;
@@ -44,18 +44,18 @@
   }
 }
 
-.cloopm-issueTypeDrag-drop {
+.issue-issueTypeDrag-drop {
   min-height: 170px;
   height: 100%;
 }
 
-.cloopm-issueTypeDrag-drag {
+.issue-issueTypeDrag-drag {
   height: 20px;
   margin-right: 10px;
   vertical-align: top;
 }
 
-.cloopm-issueTypeDrag-icon {
+.issue-issueTypeDrag-icon {
   margin-right: 10px;
   vertical-align: top;
 }

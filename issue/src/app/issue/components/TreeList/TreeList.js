@@ -263,7 +263,7 @@ class TreeList extends Component {
           key="create"
           title={(
             <Fragment>
-              <span className="cloopm-dragList-input">
+              <span className="issue-dragList-input">
                 <Input
                   id="treeList-input"
                   onChange={this.onInputChange}
@@ -277,7 +277,7 @@ class TreeList extends Component {
                 size="small"
                 onClick={this.create}
                 funcType="raised"
-                className="cloopm-dragList-add"
+                className="issue-dragList-add"
               >
                 <FormattedMessage id="save" />
               </Button>
@@ -303,7 +303,7 @@ class TreeList extends Component {
     if (String(tempKey) === String(item.id) || String(tempKey) === item.tempKey) {
       return (
         <Fragment>
-          <span className="cloopm-dragList-input">
+          <span className="issue-dragList-input">
             <Input
               id="treeList-input"
               defaultValue={item.value}
@@ -318,7 +318,7 @@ class TreeList extends Component {
             size="small"
             onClick={() => this.edit(tempKey)}
             funcType="raised"
-            className="cloopm-dragList-add"
+            className="issue-dragList-add"
           >
             <FormattedMessage id="save" />
           </Button>
@@ -334,8 +334,8 @@ class TreeList extends Component {
     } else if (item.isEnable === '0' || String(selecteId) === String(item.id) || String(selecteId) === item.tempKey) {
       return (
         <Fragment>
-          <span className="cloopm-dragList-text">{item.value}</span>
-          <div className="cloopm-dragList-operate">
+          <span className="issue-dragList-text">{item.value}</span>
+          <div className="issue-dragList-operate">
             <Tooltip
               placement="bottom"
               title={<FormattedMessage id="edit" />}
@@ -383,7 +383,7 @@ class TreeList extends Component {
         </Fragment>
       );
     } else {
-      return (<span className="cloopm-dragList-text">{item.value}</span>);
+      return (<span className="issue-dragList-text">{item.value}</span>);
     }
   };
 
@@ -419,24 +419,24 @@ class TreeList extends Component {
 
     return (
       <div>
-        <div className="cloopm-treeList-des">
+        <div className="issue-treeList-des">
           <Tips tips={[tips]} />
         </div>
-        <div className="cloopm-treeList-content">
+        <div className="issue-treeList-content">
           <Card
             title={title}
             extra={(
               <Button
                 onClick={this.addItem}
                 funcType="flat"
-                className="cloopm-treeList-addBtn"
+                className="issue-treeList-addBtn"
               >
                 <i className="icon-add icon" />
                 <FormattedMessage id="add" />
               </Button>
             )}
             bordered={false}
-            className="cloopm-dragList-card"
+            className="issue-dragList-card"
           >
             <Tree
               selectedKeys={addItemVisible ? ['create'] : selectedKeys}

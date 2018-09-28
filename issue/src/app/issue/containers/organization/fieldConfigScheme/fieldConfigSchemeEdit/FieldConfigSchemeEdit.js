@@ -20,7 +20,7 @@ const { Sidebar } = Modal;
 const { TextArea } = Input;
 const { Option } = Select;
 
-const prefixCls = 'cloopm-fieldConfigScheme';
+const prefixCls = 'issue-fieldConfigScheme';
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -59,7 +59,7 @@ class FieldConfigSchemeEdit extends Component {
     filters: [],
     render: (test, record) => (
       <span>
-        <Icon type={record.issueTypeIcon} className="cloopm-fieldConfigScheme-icon" />
+        <Icon type={record.issueTypeIcon} className="issue-fieldConfigScheme-icon" />
         {record.issueTypeName}
       </span>
     ),
@@ -91,7 +91,7 @@ class FieldConfigSchemeEdit extends Component {
                 <i className="icon icon-delete" />
               </Button>
             </Popconfirm>
-          </Tooltip> : <div className="cloopm-del-space" />
+          </Tooltip> : <div className="issue-del-space" />
         }
       </div>
     ),
@@ -104,11 +104,11 @@ class FieldConfigSchemeEdit extends Component {
       relatedData, editIndex, issueTypeList, fieldConfig,
     } = this.state;
     return (
-      <div className="cloopm-region">
-        <Form layout="vertical" className="cloopm-sidebar-form">
+      <div className="issue-region">
+        <Form layout="vertical" className="issue-sidebar-form">
           <FormItem
             {...formItemLayout}
-            className="cloopm-sidebar-form"
+            className="issue-sidebar-form"
           >
             {getFieldDecorator('issueTypeId', {
               rules: [{
@@ -129,7 +129,7 @@ class FieldConfigSchemeEdit extends Component {
                     value={code.id}
                     key={code.id}
                   >
-                    <Icon type={code.icon} className="cloopm-fieldConfigScheme-icon" />
+                    <Icon type={code.icon} className="issue-fieldConfigScheme-icon" />
                     {code.name}
                   </Option>
                 ))}
@@ -138,7 +138,7 @@ class FieldConfigSchemeEdit extends Component {
           </FormItem>
           <FormItem
             {...formItemLayout}
-            className="cloopm-sidebar-form"
+            className="issue-sidebar-form"
           >
             {getFieldDecorator('fieldConfigId', {
               rules: [{
@@ -332,7 +332,7 @@ class FieldConfigSchemeEdit extends Component {
     } = menu;
 
     return (
-      <Page className="cloopm-region">
+      <Page className="issue-region">
         <Header
           title={<FormattedMessage id="fieldConfigScheme.edit.title" />}
           backPath={`/issue/field-configuration-schemes?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
@@ -342,7 +342,7 @@ class FieldConfigSchemeEdit extends Component {
             <FormattedMessage id="fieldConfigScheme.create.tip1" />
 
           </div>
-          <Form layout="vertical" className="cloopm-sidebar-form">
+          <Form layout="vertical" className="issue-sidebar-form">
             <FormItem
               {...formItemLayout}
             >
@@ -364,7 +364,7 @@ class FieldConfigSchemeEdit extends Component {
             </FormItem>
             <FormItem
               {...formItemLayout}
-              className="cloopm-sidebar-form"
+              className="issue-sidebar-form"
             >
               {getFieldDecorator('description', {
                 initialValue: fieldConfigScheme ? fieldConfigScheme.description : '',
@@ -396,7 +396,7 @@ class FieldConfigSchemeEdit extends Component {
 
           <div className={`${prefixCls}-footer`}>
             <Button funcType="raised" type="primary" loading={submitting} onClick={this.handleSubmit}><FormattedMessage id="save" /></Button>
-            <Button funcType="raised" loading={submitting} className="cloopm-btn-raised-cancel" onClick={this.handleCancel}><FormattedMessage id="cancel" /></Button>
+            <Button funcType="raised" loading={submitting} className="issue-btn-raised-cancel" onClick={this.handleCancel}><FormattedMessage id="cancel" /></Button>
           </div>
         </Content>
 

@@ -10,7 +10,7 @@ import StateStore from '../../../../stores/organization/state';
 import '../../../main.scss';
 import './EditConfig.scss';
 
-const prefixCls = 'cloopm-state-machine-config';
+const prefixCls = 'issue-state-machine-config';
 const { AppState } = stores;
 
 const Sidebar = Modal.Sidebar;

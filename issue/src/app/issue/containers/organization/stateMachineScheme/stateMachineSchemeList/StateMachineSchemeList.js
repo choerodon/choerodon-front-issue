@@ -24,7 +24,7 @@ import '../../../main.scss';
 import './StateMachineSchemeList.scss';
 
 const { AppState } = stores;
-const prefixCls = 'cloopm-stateMachineScheme';
+const prefixCls = 'issue-stateMachineScheme';
 const Sidebar = Modal.Sidebar;
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -69,7 +69,7 @@ class StateMachineSchemeList extends Component {
       title: <FormattedMessage id="stateMachineScheme.des" />,
       dataIndex: 'description',
       key: 'description',
-      className: 'cloopm-table-ellipsis',
+      className: 'issue-table-ellipsis',
       filters: [],
     },
     {
@@ -131,7 +131,7 @@ class StateMachineSchemeList extends Component {
               <Button size="small" shape="circle" onClick={this.handleDelete.bind(this, record.id, record.name)}>
                 <i className="icon icon-delete" />
               </Button>
-            </Tooltip> : <div className="cloopm-del-space" />
+            </Tooltip> : <div className="issue-del-space" />
           }
         </Fragment>
       ),
@@ -253,8 +253,8 @@ class StateMachineSchemeList extends Component {
     const menu = AppState.currentMenuType;
     const { type, id: projectId, organizationId: orgId } = menu;
     const formContent = (
-      <div className="cloopm-region">
-        <Form layout="vertical" className="cloopm-sidebar-form">
+      <div className="issue-region">
+        <Form layout="vertical" className="issue-sidebar-form">
           {this.state.type === 'create' && (
             <FormItem {...formItemLayout}>
               {getFieldDecorator('name', {
@@ -277,7 +277,7 @@ class StateMachineSchemeList extends Component {
               )}
             </FormItem>
           )}
-          <FormItem {...formItemLayout} className="cloopm-sidebar-form">
+          <FormItem {...formItemLayout} className="issue-sidebar-form">
             {getFieldDecorator("description")(
               <TextArea
                 placeholder={intl.formatMessage({
@@ -314,7 +314,7 @@ class StateMachineSchemeList extends Component {
             pagination={pagination}
             onChange={this.tableChange}
             loading={getIsLoading}
-            className="cloopm-table"
+            className="issue-table"
           />
         </Content>
         <Modal

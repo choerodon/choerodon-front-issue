@@ -20,7 +20,7 @@ const FormItem = Form.Item;
 const Sidebar = Modal.Sidebar;
 const TextArea = Input.TextArea;
 
-const prefixCls = 'cloopm-fieldConfiguration';
+const prefixCls = 'issue-fieldConfiguration';
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -61,7 +61,7 @@ class FieldConfigurationEdit extends Component {
     dataIndex: 'fieldDescription',
     key: 'fieldDescription',
     filters: [],
-    className: 'cloopm-table-ellipsis',
+    className: 'issue-table-ellipsis',
   }, {
     title: <FormattedMessage id="fieldConfiguration.edit.page" />,
     dataIndex: 'pageDTOList',
@@ -182,7 +182,7 @@ class FieldConfigurationEdit extends Component {
     } = menu;
 
     return (
-      <Page className="cloopm-region">
+      <Page className="issue-region">
         <Header
           title={<FormattedMessage id="fieldConfiguration.edit.title" />}
           backPath={`/issue/field-configurations?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
@@ -210,7 +210,7 @@ class FieldConfigurationEdit extends Component {
             pagination={false}
             onChange={this.handleTableChange}
             filterBarPlaceholder={intl.formatMessage({ id: 'filter' })}
-            className="cloopm-table"
+            className="issue-table"
           />
         </Content>
       </Page>

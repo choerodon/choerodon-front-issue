@@ -31,7 +31,7 @@ class RelateIssueTypeScheme extends Component {
 
   render() {
     return (
-        <Page className="cloopm-region">
+        <Page className="issue-region">
             <Header 
                 title={<FormattedMessage id="relateIssueTypeScheme.title"/>}
                 backPath={`/issue/issue-type-schemes?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`}

@@ -21,7 +21,7 @@ const { Sidebar } = Modal;
 const { TextArea } = Input;
 const { Option } = Select;
 
-const prefixCls = 'cloopm-pageScheme';
+const prefixCls = 'issue-pageScheme';
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -87,7 +87,7 @@ class PageSchemeCreate extends Component {
                 <i className="icon icon-delete" />
               </Button>
             </Popconfirm>
-          </Tooltip> : <div className="cloopm-del-space" />
+          </Tooltip> : <div className="issue-del-space" />
         }
       </div>
     ),
@@ -100,11 +100,11 @@ class PageSchemeCreate extends Component {
       pages, pageList, typeList, editIndex, relatedData,
     } = this.state;
     return (
-      <div className="cloopm-region">
-        <Form layout="vertical" className="cloopm-sidebar-form">
+      <div className="issue-region">
+        <Form layout="vertical" className="issue-sidebar-form">
           <FormItem
             {...formItemLayout}
-            className="cloopm-sidebar-form"
+            className="issue-sidebar-form"
           >
             {getFieldDecorator('pageId', {
               rules: [{
@@ -137,7 +137,7 @@ class PageSchemeCreate extends Component {
           </FormItem>
           <FormItem
             {...formItemLayout}
-            className="cloopm-sidebar-form"
+            className="issue-sidebar-form"
           >
             {getFieldDecorator('type', {
               rules: [{
@@ -361,7 +361,7 @@ class PageSchemeCreate extends Component {
     } = menu;
 
     return (
-      <Page className="cloopm-region">
+      <Page className="issue-region">
         <Header
           title={<FormattedMessage id="pageScheme.create.title" />}
           backPath={`/issue/screen-schemes?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
@@ -371,7 +371,7 @@ class PageSchemeCreate extends Component {
             <FormattedMessage id="pageScheme.create.tip1" />
             <Tips tips={[intl.formatMessage({ id: 'pageScheme.create.tip2' })]} />
           </div>
-          <Form layout="vertical" className="cloopm-sidebar-form">
+          <Form layout="vertical" className="issue-sidebar-form">
             <FormItem
               {...formItemLayout}
             >
@@ -392,7 +392,7 @@ class PageSchemeCreate extends Component {
             </FormItem>
             <FormItem
               {...formItemLayout}
-              className="cloopm-sidebar-form"
+              className="issue-sidebar-form"
             >
               {getFieldDecorator('description')(
                 <TextArea
@@ -422,7 +422,7 @@ class PageSchemeCreate extends Component {
 
           <div className={`${prefixCls}-footer`}>
             <Button funcType="raised" type="primary" loading={submitting} onClick={this.handleSubmit}><FormattedMessage id="save" /></Button>
-            <Button funcType="raised" loading={submitting} className="cloopm-btn-raised-cancel" onClick={this.handleCancel}><FormattedMessage id="cancel" /></Button>
+            <Button funcType="raised" loading={submitting} className="issue-btn-raised-cancel" onClick={this.handleCancel}><FormattedMessage id="cancel" /></Button>
           </div>
         </Content>
 
@@ -448,11 +448,11 @@ class PageSchemeCreate extends Component {
             </Button>,
           ]}
         >
-          <p className="cloopm-customFields-tip">
+          <p className="issue-customFields-tip">
             <FormattedMessage id="customFields.delete" />
-            <span className="cloopm-customFields-bold">{field.name}</span>
+            <span className="issue-customFields-bold">{field.name}</span>
           </p>
-          <p className="cloopm-customFields-tip">
+          <p className="issue-customFields-tip">
             <FormattedMessage
               id="customFields.delete.inUse"
               values={{
@@ -460,7 +460,7 @@ class PageSchemeCreate extends Component {
               }}
             />
           </p>
-          <p className="cloopm-customFields-tip">
+          <p className="issue-customFields-tip">
             <FormattedMessage id="pageScheme.create.delete.inUseTip" />
           </p>
         </Modal> */}

@@ -17,7 +17,7 @@ const FormItem = Form.Item;
 const Sidebar = Modal.Sidebar;
 const TextArea = Input.TextArea;
 
-const prefixCls = 'cloopm-fieldConfiguration';
+const prefixCls = 'issue-fieldConfiguration';
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -57,7 +57,7 @@ class FieldConfigurationList extends Component {
     dataIndex: 'description',
     key: 'description',
     filters: [],
-    className: 'cloopm-table-ellipsis',
+    className: 'issue-table-ellipsis',
   }, {
     title: <FormattedMessage id="fieldConfiguration.scheme" />,
     dataIndex: 'fieldConfigSchemeDTOS',
@@ -96,7 +96,7 @@ class FieldConfigurationList extends Component {
             <Button size="small" shape="circle" onClick={this.openRemove.bind(this, record)}>
               <i className="icon icon-delete" />
             </Button>
-          </Tooltip> : <div className="cloopm-del-space" />
+          </Tooltip> : <div className="issue-del-space" />
         }
       </div>
     ),
@@ -106,8 +106,8 @@ class FieldConfigurationList extends Component {
     const { form, intl } = this.props;
     const { getFieldDecorator } = form;
     return (
-      <div className="cloopm-region">
-        <Form layout="vertical" className="cloopm-sidebar-form">
+      <div className="issue-region">
+        <Form layout="vertical" className="issue-sidebar-form">
           <FormItem
             {...formItemLayout}
           >
@@ -129,7 +129,7 @@ class FieldConfigurationList extends Component {
           </FormItem>
           <FormItem
             {...formItemLayout}
-            className="cloopm-sidebar-form"
+            className="issue-sidebar-form"
           >
             {getFieldDecorator('description')(
               <TextArea
@@ -279,7 +279,7 @@ class FieldConfigurationList extends Component {
     };
 
     return (
-      <Page className="cloopm-region">
+      <Page className="issue-region">
         <Header title={<FormattedMessage id="fieldConfiguration.title" />}>
           <Button onClick={() => this.showCreate('create')}>
             <i className="icon-add icon" />
@@ -303,7 +303,7 @@ class FieldConfigurationList extends Component {
             pagination={pageInfo}
             onChange={this.handleTableChange}
             filterBarPlaceholder={intl.formatMessage({ id: 'filter' })}
-            className="cloopm-table"
+            className="issue-table"
           />
         </Content>
         {this.state.show && <Sidebar

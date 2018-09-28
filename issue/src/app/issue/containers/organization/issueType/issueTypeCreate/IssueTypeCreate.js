@@ -8,6 +8,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import {
   Content, Header, Page, Permission, stores, 
 } from 'choerodon-front-boot';
+import _ from 'lodash';
 import { CompactPicker } from 'react-color';
 import '../../../main.scss';
 import './IssueTypeCreate.scss';
@@ -33,6 +34,7 @@ class IssueTypeCreate extends Component {
   constructor(props) {
     const menu = AppState.currentMenuType;
     super(props);
+    
     this.state = {
       submitting: false,
       displayColorPicker: false,
@@ -42,6 +44,10 @@ class IssueTypeCreate extends Component {
 
   componentDidMount() {
     this.loadIssueType();
+    const { id, store } = this.props;
+    this.setState({
+      issueTypeColor: _.find(store.issueTypes, item => item.id === id) ? _.find(store.issueTypes, item => item.id === id).colour : '#3F51B5',
+    });
   }
 
   loadIssueType = () => {
@@ -60,12 +66,14 @@ class IssueTypeCreate extends Component {
   };
 
   handleSubmit = () => {
-    const { store, id, intl } = this.props;
+    const { store, id, intl } = this.props; 
+    const { issueTypeColor } = this.state;
     const orgId = AppState.currentMenuType.organizationId;
     const objectVersionNumber = store.issueType ? store.issueType.objectVersionNumber : 0;
     this.props.form.validateFieldsAndScroll((err, data) => {
       if (!err) {
         const postData = data;
+        postData.colour = issueTypeColor;
         postData.organizationId = orgId;
         postData.objectVersionNumber = objectVersionNumber;
         this.setState({
@@ -167,14 +175,14 @@ class IssueTypeCreate extends Component {
         cancelText={<FormattedMessage id="cancel" />}
         confirmLoading={submitting}
       >
-        <div className="cloopm-region">
-          <p className="cloopm-issueType-list-tip">
+        <div className="issue-region">
+          <p className="issue-issueType-list-tip">
             <FormattedMessage id="issueType.createDes" />
           </p>
           <Form layout="vertical" onSubmit={this.handleOk} className="c7n-sidebar-form">
             <FormItem
               {...formItemLayout}
-              className="cloopm-sidebar-form"
+              className="issue-sidebar-form"
             >
               {getFieldDecorator('name', {
                 rules: [{
@@ -194,7 +202,7 @@ class IssueTypeCreate extends Component {
             </FormItem>
             <FormItem
               {...formItemLayout}
-              className="cloopm-sidebar-form"
+              className="issue-sidebar-form"
             >
               {getFieldDecorator('description', {
                 initialValue: description,
@@ -207,7 +215,7 @@ class IssueTypeCreate extends Component {
             </FormItem>
             <FormItem
               {...formItemLayout}
-              className="cloopm-sidebar-form"
+              className="issue-sidebar-form"
             >
               {getFieldDecorator('icon', {
                 initialValue: icon || 'help',
@@ -217,9 +225,9 @@ class IssueTypeCreate extends Component {
                 />,
               )}
             </FormItem>
-            <div className="cloopm-issueTypeColor-picker">
-              <div className="cloopm-issueTypeColor-swatch" onClick={this.handleClickSwatch} role="none">
-                <div className="cloopm-issueTypeColor-color" style={{ background: issueTypeColor }} />
+            <div className="issue-issueTypeColor-picker">
+              <div className="issue-issueTypeColor-swatch" onClick={this.handleClickSwatch} role="none">
+                <div className="issue-issueTypeColor-color" style={{ background: issueTypeColor }} />
               </div>
               {
                 displayColorPicker

@@ -114,7 +114,7 @@ class PriorityCreate extends Component {
         onOk={this.handleCreatingOk}
         onCancel={this.handleCreatingCancel}
       >
-        <Form className="cloopm-form">
+        <Form className="issue-form">
           <FormItem
             label="name"
           >
@@ -156,9 +156,9 @@ class PriorityCreate extends Component {
               )
             }
           </FormItem>
-          <div className="cloopm-color-picker">
-            <div className="cloopm-priority-swatch" onClick={this.handleClickSwatch} role="none">
-              <div className="cloopm-priority-color" style={{ background: priorityColor }} />
+          <div className="issue-color-picker">
+            <div className="issue-priority-swatch" onClick={this.handleClickSwatch} role="none">
+              <div className="issue-priority-color" style={{ background: priorityColor }} />
             </div>
             {
               displayColorPicker

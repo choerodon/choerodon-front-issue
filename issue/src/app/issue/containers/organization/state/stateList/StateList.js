@@ -23,7 +23,7 @@ const formItemLayout = {
     sm: { span: 26 },
   },
 };
-const prefixCls = 'cloopm-state';
+const prefixCls = 'issue-state';
 
 const stageOptions = {
   0: {
@@ -78,7 +78,7 @@ class StateList extends Component {
     dataIndex: 'description',
     key: 'description',
     filters: [],
-    className: 'cloopm-table-ellipsis',
+    className: 'issue-table-ellipsis',
   }, {
     title: <FormattedMessage id="state.stage" />,
     dataIndex: 'type',
@@ -118,7 +118,7 @@ class StateList extends Component {
             <Button shape="circle" size="small" onClick={this.confirmDelete.bind(this, record)}>
               <i className="icon icon-delete" />
             </Button>
-          </Tooltip> : <div className="cloopm-del-space" />
+          </Tooltip> : <div className="issue-del-space" />
         }
       </div>
     ),
@@ -288,8 +288,8 @@ class StateList extends Component {
     const menu = AppState.currentMenuType;
     const { type, id: projectId, organizationId: orgId } = menu;
     const formContent = (
-      <div className="cloopm-region">
-        <Form layout="vertical" className="cloopm-sidebar-form">
+      <div className="issue-region">
+        <Form layout="vertical" className="issue-sidebar-form">
           <FormItem
             {...formItemLayout}
           >
@@ -313,7 +313,7 @@ class StateList extends Component {
           </FormItem>
           <FormItem
             {...formItemLayout}
-            className="cloopm-sidebar-form"
+            className="issue-sidebar-form"
           >
             {getFieldDecorator('description', {
               initialValue: editState ? editState.description : '',
@@ -354,9 +354,9 @@ class StateList extends Component {
 
             )}
           </FormItem>
-          <div className="cloopm-state-tips-wrapper">
-            <div className="cloopm-state-tips"><FormattedMessage id="state.tips" /></div>
-            <div className="cloopm-state-tips">
+          <div className="issue-state-tips-wrapper">
+            <div className="issue-state-tips"><FormattedMessage id="state.tips" /></div>
+            <div className="issue-state-tips">
               <Tips tips={[intl.formatMessage({ id: 'state.tips2' })]} />
             </div>
           </div>
@@ -389,7 +389,7 @@ class StateList extends Component {
             loading={StateStore.getIsLoading}
             pagination={pageInfo}
             onChange={this.tableChange}
-            className="cloopm-table"
+            className="issue-table"
           />
         </Content>
         {this.state.show && <Sidebar

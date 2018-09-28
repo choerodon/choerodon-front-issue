@@ -6,9 +6,9 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import Tips from '../Tips';
 import './TransferDrag.scss';
 import drag from '../../assets/images/drag.png';
+import TypeIcon from '../TypeIcon';
 
 class TransferDrag extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -24,6 +24,7 @@ class TransferDrag extends Component {
       });
     }
   }
+
   /**
    * 拖动完成时触发
    * @param result
@@ -58,7 +59,7 @@ class TransferDrag extends Component {
         source,
         destination,
       );
-      if(res.left.length) {
+      if (res.left.length) {
         this.setState({
           validator: true,
         });
@@ -133,20 +134,20 @@ class TransferDrag extends Component {
 
     return (
       <div>
-        <div className="cloopm-issueTypeDrag-des">
+        <div className="issue-issueTypeDrag-des">
           <Tips tips={[tips]} />
         </div>
         <DragDropContext onDragEnd={this.onDragEnd} onDragStart={data => this.onDragStart(data)}>
-          <div className={`cloopm-issueTypeDrag-content ${validator !== true ? 'cloopm-transferDrag-error' : ''}`}>
+          <div className={`issue-issueTypeDrag-content ${validator !== true ? 'issue-transferDrag-error' : ''}`}>
             <Card
               title={<FormattedMessage id={originTitle} />}
               bordered={false}
-              className="cloopm-issueTypeDrag-card"
+              className="issue-issueTypeDrag-card"
             >
               <Droppable droppableId="left">
                 {(provided, snapshot) => (
                   <div
-                    className="cloopm-issueTypeDrag-drop"
+                    className="issue-issueTypeDrag-drop"
                     ref={provided.innerRef}
                   >
                     {target && target.map((item, index) => (
@@ -166,9 +167,36 @@ class TransferDrag extends Component {
                             )}
                           >
                             {renderChildren ? renderChildren(item) : <React.Fragment>
-                              <img src={drag} className="cloopm-issueTypeDrag-drag" alt="" />
-                              {item.icon && <Icon type={item.icon} className="cloopm-issueTypeDrag-icon" />}
-                              {textField ? item[textField] : item.name}
+                              <img src={drag} className="issue-issueTypeDrag-drag" alt="" />
+                              {/* {item.icon && <Icon type={item.icon} className="issue-issueTypeDrag-icon" />}
+                              {textField ? item[textField] : item.name} */}
+                               {/* {
+                                item.icon && (
+                                  <TypeIcon
+                                    style={{ marginTop: -20, marginLeft: 20 }}
+                                    icon={item.icon}
+                                    bgColor={item.colour}
+                                    name={`${textField ? item[textField] : item.name}`}
+                                    showName={true}
+                                  />
+                                )
+                              } */}
+                               {
+                                item.icon && (
+                                  <TypeIcon
+                                    style={{ marginTop: -20, marginLeft: 20 }}
+                                    icon={item.icon}
+                                    bgColor={item.colour}
+                                    // name={`${textField ? item[textField] : item.name}`}
+                                    showName={false}
+                                  />
+                                )
+                              }
+                              <div
+                                style={ item.icon ? { marginTop: -20, marginLeft: 48 } : { marginTop: -20, marginLeft: 20 }}
+                              >
+                                {textField ? item[textField] : item.name}
+                              </div>
                             </React.Fragment>
                             }
                           </div>
@@ -183,13 +211,13 @@ class TransferDrag extends Component {
             <Card
               title={<FormattedMessage id={targetTitle} />}
               bordered={false}
-              className="cloopm-issueTypeDrag-card"
+              className="issue-issueTypeDrag-card"
             >
               <Droppable droppableId="right">
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
-                    className="cloopm-issueTypeDrag-drop"
+                    className="issue-issueTypeDrag-drop"
                   >
                     {origin && origin.map((item, index) => (
                       <Draggable
@@ -208,9 +236,25 @@ class TransferDrag extends Component {
                             )}
                           >
                             {renderChildren ? renderChildren(item) : <React.Fragment>
-                              <img src={drag} className="cloopm-issueTypeDrag-drag" alt="" />
-                              {item.icon && <Icon type={item.icon} className="cloopm-issueTypeDrag-icon" />}
-                              {textField ? item[textField] : item.name}
+                              <img src={drag} className="issue-issueTypeDrag-drag" alt="" />
+                              {/* {item.icon && <Icon type={item.icon} className="issue-issueTypeDrag-icon" />}
+                              {textField ? item[textField] : item.name} */}
+                              {
+                                item.icon && (
+                                  <TypeIcon
+                                    style={{ marginTop: -20, marginLeft: 20 }}
+                                    icon={item.icon}
+                                    bgColor={item.colour}
+                                    // name={`${textField ? item[textField] : item.name}`}
+                                    showName={false}
+                                  />
+                                )
+                              }
+                              <div
+                                style={ item.icon ? { marginTop: -20, marginLeft: 48 } : { marginTop: -20, marginLeft: 20 }}
+                              >
+                                {textField ? item[textField] : item.name}
+                              </div>
                             </React.Fragment>
                             }
 
@@ -225,7 +269,7 @@ class TransferDrag extends Component {
             </Card>
           </div>
         </DragDropContext>
-        {!validator && <p className="cloopm-transferDrag-error-tip"><FormattedMessage id={errorMessage || 'required'} /></p>}
+        {!validator && <p className="issue-transferDrag-error-tip"><FormattedMessage id={errorMessage || 'required'} /></p>}
       </div>
     );
   }
