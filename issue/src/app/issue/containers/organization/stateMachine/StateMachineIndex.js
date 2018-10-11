@@ -13,7 +13,7 @@ const EditConfigSelect = asyncRouter(() => import('./editConfigSelect'), () => i
 const StateMachineIndex = ({ match }) => (
   <Switch>
     <Route exact path={match.url} component={StateMachineList} />
-    <Route exact path={`${match.url}/edit/:id`} component={EditStateMachine} />
+    <Route exact path={`${match.url}/edit/:id/:status`} component={EditStateMachine} />
     <Route exact path={`${match.url}/:machineId/editconfig/:id`} component={EditConfig} />
     <Route exact path={`${match.url}/:machineId/editconfig/:id/state/:stateId`} component={EditConfig} />
     <Route exact path={`${match.url}/:machineId/editconfig/select/:type/:id`} component={EditConfigSelect} />

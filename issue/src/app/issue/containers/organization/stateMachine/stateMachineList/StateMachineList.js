@@ -76,7 +76,7 @@ class StateMachineList extends Component {
     render: (test, record) => (
       <div>
         <Tooltip placement="top" title={<FormattedMessage id="edit" />}>
-          <Button shape="circle" size="small" onClick={this.handleEdit.bind(this, record.id)}>
+          <Button shape="circle" size="small" onClick={this.handleEdit.bind(this, record.id, record.status)}>
             <i className="icon icon-mode_edit" />
           </Button>
         </Tooltip>
@@ -229,10 +229,10 @@ class StateMachineList extends Component {
     });
   };
 
-  handleEdit = (stateMachineId) => {
+  handleEdit = (stateMachineId, status) => {
     const { StateMachineStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/issue/state-machines/edit/${stateMachineId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/state-machines/edit/${stateMachineId}/${status}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   }
 
   render() {
