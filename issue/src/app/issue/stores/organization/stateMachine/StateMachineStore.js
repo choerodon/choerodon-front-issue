@@ -37,8 +37,7 @@ class StateMachineStore {
     });
   }
 
-
-  loadStateMachineById = (orgId, stateId) => axios.get(`/statemachine/v1/organizations/${orgId}/state_machine/${stateId}`).then((data) => {
+  loadStateMachineDeployById = (orgId, stateId) => axios.get(`/state/v1/organizations/1/state_machines/with_config_deploy/${stateId}`).then((data) => {
     const res = this.handleProptError(data);
     if (data) {
       this.setStateMachine(data);
@@ -46,46 +45,55 @@ class StateMachineStore {
     return res;
   });
 
-  createStateMachine = (orgId, map) => axios.post(`/statemachine/v1/organizations/${orgId}/state_machine`, JSON.stringify(map));
+  loadStateMachineDraftById = (orgId, stateId) => axios.get(`/state/v1/organizations/1/state_machines/with_config_draft/${stateId}`).then((data) => {
+    const res = this.handleProptError(data);
+    if (data) {
+      this.setStateMachine(data);
+    }
+    return res;
+  });
 
-  deleteStateMachine = (orgId, stateId) => axios.delete(`/issue/v1/organizations/${orgId}/state_machine/${stateId}`)
+  createStateMachine = (orgId, map) => axios.post(`/state/v1/organizations/${orgId}/state_machines`, JSON.stringify(map));
+
+  deleteStateMachine = (orgId, stateId) => axios.delete(`/issue/v1/organizations/${orgId}/state_machines/${stateId}`)
     .then(data => this.handleProptError(data));
 
-  updateStateMachine = (orgId, stateId, map) => axios.put(`/statemachine/v1/organizations/${orgId}/state_machine/${stateId}`, JSON.stringify(map));
+  updateStateMachine = (orgId, stateId, map) => axios.put(`/state/v1/organizations/${orgId}/state_machines/${stateId}`, JSON.stringify(map));
 
   // 编辑状态机时添加状态
-  addStateMachineNode = (orgId, map) => axios.post(`/statemachine/v1/organizations/${orgId}/state_machine_node`, JSON.stringify(map));
+  addStateMachineNode = (orgId, map) => axios.post(`/state/v1/organizations/${orgId}/state_machine_nodes`, JSON.stringify(map));
 
-  updateStateMachineNode = (orgId, nodeId, map) => axios.put(`/statemachine/v1/organizations/${orgId}/state_machine_node/${nodeId}`, JSON.stringify(map));
+  updateStateMachineNode = (orgId, nodeId, map) => axios.put(`/state/v1/organizations/${orgId}/state_machine_nodes/${nodeId}`, JSON.stringify(map));
 
-  deleteStateMachineNode = (orgId, nodeId) => axios.delete(`/statemachine/v1/organizations/${orgId}/state_machine_node/${nodeId}`)
+  deleteStateMachineNode = (orgId, nodeId) => axios.delete(`/state/v1/organizations/${orgId}/state_machine_nodes/${nodeId}`)
 
-  addStateMachineTransfer = (orgId, map) => axios.post(`statemachine/v1/organizations/${orgId}/state_machine_transf`, JSON.stringify(map));
+  // 编辑状态机时添加转换
+  addStateMachineTransfer = (orgId, map) => axios.post(`state/v1/organizations/${orgId}/state_machine_transforms`, JSON.stringify(map));
 
-  updateStateMachineTransfer = (orgId, nodeId, map) => axios.put(`/statemachine/v1/organizations/${orgId}/state_machine_transf/${nodeId}`, JSON.stringify(map));
+  updateStateMachineTransfer = (orgId, nodeId, map) => axios.put(`/state/v1/organizations/${orgId}/state_machine_transforms/${nodeId}`, JSON.stringify(map));
 
-  deleteStateMachineTransfer = (orgId, nodeId) => axios.delete(`/statemachine/v1/organizations/${orgId}/state_machine_transf/${nodeId}`);
+  deleteStateMachineTransfer = (orgId, nodeId) => axios.delete(`/state/v1/organizations/${orgId}/state_machine_transforms/${nodeId}`);
 
-  getTransferById = (orgId, id) => axios.get(`/statemachine/v1/organizations/1${orgId}/state_machine_transf/getById/${id}`).then(data => this.handleProptError(data));
+  getTransferById = (orgId, id) => axios.get(`/state/v1/organizations/1${orgId}/state_machine_transf/getById/${id}`).then(data => this.handleProptError(data));
 
-  getStateById = (orgId, id) => axios.get(`/statemachine/v1/organizations/${orgId}/state_machine_node/getById/${id}`).then(data => this.handleProptError(data));
+  getStateById = (orgId, id) => axios.get(`/state/v1/organizations/${orgId}/state_machine_node/getById/${id}`).then(data => this.handleProptError(data));
 
   loadTransferConfigList = (orgId, id, type) => {
     this.setIsLoading(true);
-    return axios.get(`/statemachine/v1/organizations/${orgId}/state_machine_config/queryConfig/${id}?type=${type}`)
+    return axios.get(`/state/v1/organizations/${orgId}/state_machine_configs/queryConfig/${id}?type=${type}`)
       .then((data) => {
         this.setIsLoading(false);
         return this.handleProptError(data);
       });
   }
 
-  addConfig = (orgId, stateMachineId, map) => axios.post(`/statemachine/v1/organizations/${orgId}/state_machine_config/${stateMachineId}`, JSON.stringify(map))
+  addConfig = (orgId, stateMachineId, map) => axios.post(`/state/v1/organizations/${orgId}/state_machine_configs/${stateMachineId}`, JSON.stringify(map))
     .then(data => this.handleProptError(data));
 
-  deleteConfig = (orgId, id) => axios.delete(`/statemachine/v1/organizations/${orgId}/state_machine_config/${id}`)
+  deleteConfig = (orgId, id) => axios.delete(`/state/v1/organizations/${orgId}/state_machine_configs/${id}`)
     .then(item => this.handleProptError(item));
 
-  publishStateMachine = (orgId, id) => axios.get(`/statemachine/v1/organizations/${orgId}/state_machine/deploy/${id}`)
+  publishStateMachine = (orgId, id) => axios.get(`/state/v1/organizations/${orgId}/state_machines/deploy/${id}`)
     .then(data => this.handleProptError(data));
 
   handleProptError = (error) => {

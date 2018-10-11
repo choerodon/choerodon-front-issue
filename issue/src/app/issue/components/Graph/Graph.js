@@ -185,10 +185,11 @@ class Graph extends Component {
     graph.getModel().beginUpdate();
     let cell;
     try {
-      cell = graph.insertVertex(parent, values.id, values.stateDTO.name, 150, 0, 100, 50, 'shape=rectangle;');
-      cell.stateId = values.stateId;
-      cell.status = values.status;
-      cell.des = values.stateDTO && values.stateDTO.description;
+      cell = graph.insertVertex(parent, values.id, values.statusDTO && values.statusDTO.name, 150, 0, 100, 50, 'shape=rectangle;');
+      cell.stateId = values.statusId;
+      cell.nodeId = values.id;
+      cell.status = values.type;
+      cell.des = values.statusDTO && values.statusDTO.description;
     } catch (e) {
       window.console.log(e);
     } finally {
@@ -208,8 +209,8 @@ class Graph extends Component {
     const { style, changedEdges } = this.state;
     const graphModel = graph.getModel();
     if (sourceId && targetId) {
-      source = graphModel.getCell(sourceId);
-      target = graphModel.getCell(targetId);
+      source = graphModel.getCell(`n${sourceId}`);
+      target = graphModel.getCell(`n${targetId}`);
     }
     const { maxId } = this.state;
     const parent = graph.getDefaultParent();
@@ -219,7 +220,7 @@ class Graph extends Component {
       cell = graph.insertEdge(parent, `t${values.id}`, values.name, source, target, `${focusStyle}${style || ''}`);
       this.setState({ maxId: maxId + 1 });
       cell.des = values.description;
-      cell.status = values.status;
+      cell.status = values.type;
       cell.transferId = values.id;
       cell.pStyle = style;
       changedEdges.push(cell);
@@ -281,17 +282,19 @@ class Graph extends Component {
               positionY: y,
               width,
               height,
-              stateId,
+              statusId,
               id,
-              status,
+              type: status,
             } = item;
+
             const vet = graph.insertVertex(
-              parent, id,
-              (item.stateDTO && item.stateDTO.name) || '',
+              parent, `n${id}`,
+              (item.statusDTO && item.statusDTO.name) || '',
               x, y, width, height,
-              status === '1' ? 'shape=ellipse;' : 'shape=rectangle;strokeColor=red;',
+              status === 'node_start' ? 'shape=ellipse;' : 'shape=rectangle;strokeColor=red;',
             );
-            if (status === '1') {
+
+            if (status === 'node_start') {
               vet.setConnectable(false);
             } else if (!enable) {
               const styleEdge = graph.getStylesheet().getDefaultEdgeStyle();
@@ -299,9 +302,13 @@ class Graph extends Component {
               vet.setConnectable(false);
             }
             vertexes[id] = vet;
-            vet.stateId = stateId;
+            vet.stateId = statusId;
+            vet.nodeId = id;
             vet.status = status;
-            vet.des = item.stateDTO && item.stateDTO.description;
+            vet.des = item.statusDTO && item.statusDTO.description;
+            this.setState({
+              vertexes,
+            });
           });
         }
         if (data.edge && data.edge.length) {
@@ -320,7 +327,7 @@ class Graph extends Component {
             const doc2 = mxUtils.createXmlDocument();
             const ed = graph.insertEdge(parent, `t${id}`, name || 'open', sourceElement, targetElement, `${edgeStyle}${style || ''}`);
             ed.des = item.description;
-            ed.status = item.status;
+            ed.status = item.type;
             ed.transferId = id;
             ed.pStyle = style;
             if (startNodeId !== endNodeId && targetElement) {

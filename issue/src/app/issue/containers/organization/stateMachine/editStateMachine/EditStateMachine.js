@@ -35,11 +35,12 @@ class EditStateMachine extends Component {
   constructor(props) {
     const menu = AppState.currentMenuType;
     super(props);
-    const { id } = this.props.match.params;
+    const { id, status } = this.props.match.params;
     this.state = {
       page: 0,
       pageSize: 10,
       id,
+      status,
       projectId: menu.id,
       organizationId: menu.organizationId,
       openRemove: false,
@@ -49,7 +50,7 @@ class EditStateMachine extends Component {
       stateList: [],
       source: false,
       target: false,
-      enable: true,
+      enable: status !== 'state_machine_avtive',
       loading: false,
     };
     this.graph = null;
@@ -64,8 +65,8 @@ class EditStateMachine extends Component {
     return (
       [{
         title: <FormattedMessage id="stateMachine.state" />,
-        dataIndex: 'stateDTO',
-        key: 'stateDTO',
+        dataIndex: 'statusDTO',
+        key: 'statusDTO',
         width: 300,
         render: text => text && (
           <div className={`${prefixCls}-text-node`}>{text.name}</div>
@@ -83,7 +84,7 @@ class EditStateMachine extends Component {
                   {`${item.name}  >>>`} {
                     nodeData && nodeData.map(node => node.id === item.endNodeId && (
                       <div className={`${prefixCls}-text-node`} key={`${item.id}-${node.id}`}>
-                        {node.stateDTO && node.stateDTO.name}
+                        {node.statusDTO && node.statusDTO.name}
                       </div>
                     ))
                   }
@@ -194,12 +195,12 @@ class EditStateMachine extends Component {
                   >
                     {nodeData &&
                       nodeData.length > 0 &&
-                      nodeData.map(dto => dto.stateDTO && (
+                      nodeData.map(dto => dto.statusDTO && (
                         <Option
-                          value={dto.stateDTO.id.toString()}
-                          key={dto.stateDTO.toString()}
+                          value={dto.statusDTO.id.toString()}
+                          key={dto.statusDTO.toString()}
                         >
-                          <span id={dto.id} name={dto.stateDTO.name} style={{ display: 'inline-block', width: '100%' }}>{dto.stateDTO.name}</span>
+                          <span id={dto.id} name={dto.statusDTO.name} style={{ display: 'inline-block', width: '100%' }}>{dto.statusDTO.name}</span>
                         </Option>
                       ))}
                   </Select>,
@@ -225,12 +226,12 @@ class EditStateMachine extends Component {
                   >
                     {nodeData &&
                       nodeData.length > 0 &&
-                      nodeData.map(dto => dto.stateDTO && (
+                      nodeData.map(dto => dto.statusDTO && (
                         <Option
-                          value={dto.stateDTO.id.toString()}
-                          key={dto.stateDTO.toString()}
+                          value={dto.statusDTO.id.toString()}
+                          key={dto.statusDTO.toString()}
                         >
-                          <span id={dto.stateDTO.id} name={dto.stateDTO.name} style={{ display: 'inline-block', width: '100%' }}>{dto.stateDTO.name}</span>
+                          <span id={dto.statusDTO.id} name={dto.statusDTO.name} style={{ display: 'inline-block', width: '100%' }}>{dto.statusDTO.name}</span>
                         </Option>
                       ))}
                   </Select>,
@@ -283,13 +284,13 @@ class EditStateMachine extends Component {
                     {nodeData &&
                       nodeData.length > 0 &&
                       nodeData.map((dto) => {
-                        if (dto.stateDTO) {
+                        if (dto.statusDTO) {
                           return (
                             <Option
-                              value={dto.stateDTO.id.toString()}
-                              key={dto.stateDTO.toString()}
+                              value={dto.statusDTO.id.toString()}
+                              key={dto.statusDTO.toString()}
                             >
-                              <span id={dto.stateDTO.id} name={dto.stateDTO.name} style={{ display: 'inline-block', width: '100%' }}>{dto.stateDTO.name}</span>
+                              <span id={dto.statusDTO.id} name={dto.statusDTO.name} style={{ display: 'inline-block', width: '100%' }}>{dto.statusDTO.name}</span>
                             </Option>
                           );
                         }
@@ -392,21 +393,38 @@ class EditStateMachine extends Component {
 
   loadStateMachine = () => {
     const { StateMachineStore } = this.props;
-    const { organizationId, id } = this.state;
-    StateMachineStore.loadStateMachineById(organizationId, id)
-      .then((data) => {
-        if (data && data.failed) {
-          Choerodon.prompt(data.message);
-        } else {
-          const nodeData = data.nodeDTOs;
-          const transferData = data.transfDTOs;
-          this.setState({
-            stateMachineData: data,
-            transferData,
-            nodeData,
-          });
-        }
-      });
+    const { organizationId, id, status } = this.state;
+    if (status === 'state_machine_create') {
+      StateMachineStore.loadStateMachineDraftById(organizationId, id)
+        .then((data) => {
+          if (data && data.failed) {
+            Choerodon.prompt(data.message);
+          } else {
+            const nodeData = data.nodeDTOs;
+            const transferData = data.transformDTOs;
+            this.setState({
+              stateMachineData: data,
+              transferData,
+              nodeData,
+            });
+          }
+        });
+    } else {
+      StateMachineStore.loadStateMachineDeployById(organizationId, id)
+        .then((data) => {
+          if (data && data.failed) {
+            Choerodon.prompt(data.message);
+          } else {
+            const nodeData = data.nodeDTOs;
+            const transferData = data.transformDTOs;
+            this.setState({
+              stateMachineData: data,
+              transferData,
+              nodeData,
+            });
+          }
+        });
+    }
   }
 
   refresh = () => {
@@ -421,7 +439,7 @@ class EditStateMachine extends Component {
       } else {
         const stateList = _.differenceWith(data,
           nodeData,
-          (dataItem, nodeItem) => nodeItem.stateDTO && dataItem.id === nodeItem.stateDTO.id);
+          (dataItem, nodeItem) => nodeItem.statusDTO && dataItem.id === nodeItem.statusDTO.id);
         this.setState({
           stateList,
         });
@@ -436,7 +454,7 @@ class EditStateMachine extends Component {
       height: 50,
       positionX: 150,
       positionY: 0,
-      stateId: data.state.key,
+      statusId: data.state.key,
       stateMachineId: stateMachineData.id,
       width: 100,
     };
@@ -448,7 +466,7 @@ class EditStateMachine extends Component {
         if (nodeData && nodeData.failed) {
           Choerodon.prompt(nodeData.message);
         } else if (nodeData && nodeData.length) {
-          const cell = _.find(nodeData, item => item.stateId === data.state.key);
+          const cell = _.find(nodeData, item => item.statusId === data.state.key);
           if (cell) {
             this.graph.createStatus(cell);
           }
@@ -526,7 +544,7 @@ class EditStateMachine extends Component {
   handleOnMove = (cell) => {
     const { nodeData } = this.state;
     if (nodeData && nodeData.length) {
-      const node = _.find(nodeData, item => item.id.toString() === cell.id.toString());
+      const node = _.find(nodeData, item => item.id.toString() === cell.nodeId.toString());
       if (node) {
         const data = {
           ...node,
@@ -583,7 +601,7 @@ class EditStateMachine extends Component {
   }
 
   handleCellClick = (cell) => {
-    if ((cell && cell.stateId !== 0) || !cell) {
+    if ((cell && cell.statusId !== 0) || !cell) {
       this.setState({
         selectedCell: cell,
       });
@@ -621,12 +639,12 @@ class EditStateMachine extends Component {
             const { nodeData } = this.state;
             if (nodeData && nodeData.length) {
               // GET NODE DATA
-              const node = _.find(nodeData, item => item.id.toString() === selectedCell.id.toString());
+              const node = _.find(nodeData, item => item.id.toString() === selectedCell.nodeId.toString());
               if (node) {
                 // UPDATE STATEID OF NODE DATA
                 const param = {
                   ...node,
-                  stateId: data.state.key,
+                  statusId: data.state.key,
                 };
                 this.updateStateMachineNode(param)
                   .then((nodes) => {
@@ -634,7 +652,7 @@ class EditStateMachine extends Component {
                       Choerodon.prompt(nodes.message);
                     } else {
                       selectedCell.setValue(name);
-                      selectedCell.stateId = data.state.key;
+                      selectedCell.statusId = data.state.key;
                       this.graph.refresh();
                       this.setState({
                         selectedCell,
@@ -650,9 +668,8 @@ class EditStateMachine extends Component {
         } else if (type === 'transfer') {
           if (state === 'add') {
             const { nodeData } = this.state;
-
-            const source = _.find(nodeData, item => item.stateId.toString() === data.startNodeId);
-            const target = _.find(nodeData, item => item.stateId.toString() === data.endNodeId);
+            const source = _.find(nodeData, item => item.statusId.toString() === data.startNodeId);
+            const target = _.find(nodeData, item => item.statusId.toString() === data.endNodeId);
             const param = {
               ...data,
               startNodeId: source.id,
@@ -711,7 +728,7 @@ class EditStateMachine extends Component {
       loading: true,
     });
     if (cell.vertex) {
-      StateMachineStore.deleteStateMachineNode(organizationId, cell.id).then((data) => {
+      StateMachineStore.deleteStateMachineNode(organizationId, cell.nodeId).then((data) => {
         this.setState({
           loading: false,
         });
@@ -895,7 +912,7 @@ class EditStateMachine extends Component {
       transferData,
     } = this.state;
     const dataSource = nodeData && nodeData.slice();
-    _.remove(dataSource, item => item.stateId === 0);
+    _.remove(dataSource, item => item.statusId === 0);
     const { getFieldDecorator } = this.props.form;
     const serviceData = StateMachineStore.getAllData;
     const { singleData, getStageOptionsData } = StateMachineStore;
@@ -938,7 +955,7 @@ class EditStateMachine extends Component {
               ><FormattedMessage id="stateMachine.config" /></Button>
               <Popconfirm title={<FormattedMessage id="pageScheme.related.deleteTip" />} onConfirm={() => this.removeCell(this.state.selectedCell)}>
                 <Button
-                  disabled={selectedCell && selectedCell.status !== '0'}
+                  disabled={selectedCell && selectedCell.status !== 'transform_custom'}
                   className="graph-card-btn"
                   funcType="raised"
                 >
@@ -951,7 +968,7 @@ class EditStateMachine extends Component {
           : (
             <Popconfirm title={<FormattedMessage id="pageScheme.related.deleteTip" />} onConfirm={() => this.removeCell(this.state.selectedCell)}>
               <Button
-                disabled={selectedCell && selectedCell.status !== '0'}
+                disabled={selectedCell && selectedCell.status !== 'node_custom'}
                 className="graph-card-btn"
                 funcType="raised"
               >
