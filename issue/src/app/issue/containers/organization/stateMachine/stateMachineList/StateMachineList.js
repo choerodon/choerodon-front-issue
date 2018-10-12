@@ -232,7 +232,7 @@ class StateMachineList extends Component {
   handleEdit = (stateMachineId, status) => {
     const { StateMachineStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/issue/state-machines/edit/${stateMachineId}/${status}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/state-machines/edit/${stateMachineId}/${status === 'state_machine_create' ? status : 'state_machine_active'}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   }
 
   render() {

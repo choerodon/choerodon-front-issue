@@ -67,8 +67,8 @@ class EditConfig extends Component {
     return (
       [{
         title: <FormattedMessage id="stateMachine.state" />,
-        dataIndex: 'stateDTO',
-        key: 'stateDTO',
+        dataIndex: 'statusDTO',
+        key: 'statusDTO',
         width: 300,
         render: text => text && (
           <div className={`${prefixCls}-text-node`}>{text.name}</div>
@@ -86,7 +86,7 @@ class EditConfig extends Component {
                   {`${item.name}  >>>`} {
                     nodeData && nodeData.map(node => node.id === item.endNodeId && (
                       <div className={`${prefixCls}-text-node`} key={`${item.id}-${node.id}`}>
-                        {node.stateDTO && node.stateDTO.name}
+                        {node.statusDTO && node.statusDTO.name}
                       </div>
                     ))
                   }
@@ -146,7 +146,6 @@ class EditConfig extends Component {
 
   renderTransfer = (data) => {
     const figure = [];
-    const range = {};
     const { canvas } = this;
     const { width, height } = canvas.getBoundingClientRect();
     const { startNodeDTO, name, endNodeDTO } = data;
@@ -158,6 +157,11 @@ class EditConfig extends Component {
     let lineWidth = 400;
     let recX = 50;
     let recY = 70;
+    const range = {
+      x: recX,
+      y: recY,
+      h: recHeight,
+    };
     if (width > 1000) {
       recX = (width * devicePixelRatio - recWidth * 4 - lineWidth * 2) / 2;
     } else {
@@ -173,7 +177,7 @@ class EditConfig extends Component {
       ctx.fillStyle = '#ffffff';
       ctx.font = '25px Georgia';
       ctx.textAlign = 'center';
-      ctx.fillText(startNodeDTO.stateDTO && startNodeDTO.stateDTO.name ? startNodeDTO.stateDTO.name : '', recX + recWidth / 2, recY + recHeight / 2 + 5);
+      ctx.fillText(startNodeDTO.statusDTO && startNodeDTO.statusDTO.name ? startNodeDTO.statusDTO.name : '', recX + recWidth / 2, recY + recHeight / 2 + 5);
       ctx.stroke();
       figure.push({
         x: recX,
@@ -186,55 +190,59 @@ class EditConfig extends Component {
       range.y = recY;
       range.h = recHeight;
     }
+
+    const newX = startNodeDTO ? recWidth + lineWidth : 0;
     ctx.beginPath();
     ctx.fillStyle = '#D8D8D8';
-    ctx.fillRect(recX + recWidth + lineWidth, recY + recHeight / 4, recWidth * 2, recHeight / 2);
+    ctx.fillRect(recX + newX, recY + recHeight / 4, recWidth * 2, recHeight / 2);
     ctx.fillStyle = '#000000a6';
     ctx.font = '25px Georgia';
     ctx.textAlign = 'center';
-    ctx.fillText(data.name || 'sss', recX + recWidth + lineWidth + recWidth, recY + recHeight / 2 + 8);
+    ctx.fillText(data.name || 'sss', recX + newX + recWidth, recY + recHeight / 2 + 8);
     ctx.stroke();
 
-    ctx.beginPath();
-    ctx.strokeStyle = '#ccc';
-    ctx.moveTo(recX + recWidth, recY + recHeight - recHeight / 2);
-    ctx.lineTo(recX + recWidth + lineWidth, recY + recHeight - recHeight / 2);
+    if (startNodeDTO) {
+      ctx.beginPath();
+      ctx.strokeStyle = '#ccc';
+      ctx.moveTo(recX + recWidth, recY + recHeight - recHeight / 2);
+      ctx.lineTo(recX + recWidth + lineWidth, recY + recHeight - recHeight / 2);
 
-    ctx.moveTo(recX + recWidth + lineWidth - 10, recY + recHeight - recHeight / 2 - 5);
-    ctx.lineTo(recX + recWidth + lineWidth, recY + recHeight - recHeight / 2);
+      ctx.moveTo(recX + recWidth + lineWidth - 10, recY + recHeight - recHeight / 2 - 5);
+      ctx.lineTo(recX + recWidth + lineWidth, recY + recHeight - recHeight / 2);
 
-    ctx.moveTo(recX + recWidth + lineWidth - 10, recY + recHeight - recHeight / 2 + 5);
-    ctx.lineTo(recX + recWidth + lineWidth, recY + recHeight - recHeight / 2);
-    ctx.stroke();
+      ctx.moveTo(recX + recWidth + lineWidth - 10, recY + recHeight - recHeight / 2 + 5);
+      ctx.lineTo(recX + recWidth + lineWidth, recY + recHeight - recHeight / 2);
+      ctx.stroke();
+    }
 
     if (endNodeDTO) {
       ctx.beginPath();
       ctx.fillStyle = '#4D90FE';
-      ctx.fillRect(recX + recWidth + lineWidth + recWidth * 2 + lineWidth, recY, recWidth, recHeight);
+      ctx.fillRect(recX + newX + recWidth * 2 + lineWidth, recY, recWidth, recHeight);
       ctx.fillStyle = '#ffffff';
       ctx.font = '25px Georgia';
       ctx.textAlign = 'center';
-      ctx.fillText(endNodeDTO.stateDTO && endNodeDTO.stateDTO.name ? endNodeDTO.stateDTO.name : '', recX + recWidth + lineWidth + recWidth * 2 + lineWidth + recWidth / 2, recY + recHeight / 2 + 5);
+      ctx.fillText(endNodeDTO.statusDTO && endNodeDTO.statusDTO.name ? endNodeDTO.statusDTO.name : '', recX + newX + recWidth * 2 + lineWidth + recWidth / 2, recY + recHeight / 2 + 5);
       ctx.stroke();
       figure.push({
-        x: recX + recWidth + lineWidth + recWidth * 2 + lineWidth,
+        x: recX + newX + recWidth * 2 + lineWidth,
         y: recY,
         w: recWidth,
         h: recHeight,
         id: endNodeDTO.id,
       });
-      range.w = recX + recWidth + lineWidth + recWidth * 2 + lineWidth + recWidth;
+      range.w = recX + newX + recWidth * 2 + lineWidth + recWidth;
 
       ctx.beginPath();
       ctx.strokeStyle = '#ccc';
-      ctx.moveTo(recX + recWidth + lineWidth + recWidth * 2, recY + recHeight - recHeight / 2);
-      ctx.lineTo(recX + recWidth + lineWidth + recWidth * 2 + lineWidth, recY + recHeight - recHeight / 2);
+      ctx.moveTo(recX + newX + recWidth * 2, recY + recHeight - recHeight / 2);
+      ctx.lineTo(recX + newX + recWidth * 2 + lineWidth, recY + recHeight - recHeight / 2);
 
-      ctx.moveTo(recX + recWidth + lineWidth + recWidth * 2 + lineWidth - 10, recY + recHeight - recHeight / 2 - 5);
-      ctx.lineTo(recX + recWidth + lineWidth + recWidth * 2 + lineWidth, recY + recHeight - recHeight / 2);
+      ctx.moveTo(recX + newX + recWidth * 2 + lineWidth - 10, recY + recHeight - recHeight / 2 - 5);
+      ctx.lineTo(recX + newX + recWidth * 2 + lineWidth, recY + recHeight - recHeight / 2);
 
-      ctx.moveTo(recX + recWidth + lineWidth + recWidth * 2 + lineWidth - 10, recY + recHeight - recHeight / 2 + 5);
-      ctx.lineTo(recX + recWidth + lineWidth + recWidth * 2 + lineWidth, recY + recHeight - recHeight / 2);
+      ctx.moveTo(recX + newX + recWidth * 2 + lineWidth - 10, recY + recHeight - recHeight / 2 + 5);
+      ctx.lineTo(recX + newX + recWidth * 2 + lineWidth, recY + recHeight - recHeight / 2);
       ctx.stroke();
     }
     this.setState({
@@ -271,7 +279,7 @@ class EditConfig extends Component {
     const figure = [];
     const { canvas } = this;
     const { width, height } = canvas.getBoundingClientRect();
-    const { intoTransf, stateDTO, outTransf } = data;
+    const { intoTransform, statusDTO, outTransform } = data;
     const devicePixelRatio = window.devicePixelRatio;
     canvas.setAttribute('width', width * devicePixelRatio);
 
@@ -295,12 +303,12 @@ class EditConfig extends Component {
     const ctx = canvas.getContext('2d');
     const intoFigure = [];
     let y = recY + recHeight / 4;
-    if (intoTransf.length !== 1) {
+    if (intoTransform.length !== 1) {
       y = recY;
     }
-    let canvasH = intoTransf && intoTransf.length ? intoTransf.length : 0;
-    if (outTransf && outTransf.length > canvasH) {
-      canvasH = outTransf.length;
+    let canvasH = intoTransform && intoTransform.length ? intoTransform.length : 0;
+    if (outTransform && outTransform.length > canvasH) {
+      canvasH = outTransform.length;
     }
     canvasH = (canvasH * (recHeight / 2 + 10) + recY * 2) / devicePixelRatio;
     if (canvasH > 120) {
@@ -309,8 +317,8 @@ class EditConfig extends Component {
     } else {
       canvas.setAttribute('height', height * devicePixelRatio);
     }
-    if (intoTransf && intoTransf.length) {
-      intoTransf.forEach((item, index) => {
+    if (intoTransform && intoTransform.length) {
+      intoTransform.forEach((item, index) => {
         ctx.beginPath();
         ctx.fillStyle = '#D8D8D8';
         ctx.fillRect(recX, y + index * (recHeight / 2 + 20), recWidth * 2, recHeight / 2);
@@ -334,67 +342,71 @@ class EditConfig extends Component {
     }
 
     let stateY = recY;
-    if (intoFigure.length !== 1) {
+    if (intoFigure.length && intoFigure.length !== 1) {
       stateY = recY + (intoFigure[intoFigure.length - 1].y - intoFigure[0].y - recHeight / 2) / 2;
     }
+    const newX = intoTransform && intoTransform.length ? recX + range.w + lineWidth : recX;
     // 状态节点渲染
     ctx.beginPath();
     ctx.fillStyle = '#FFB100';
-    ctx.fillRect(recX + range.w + lineWidth, stateY, recWidth, recHeight);
+    ctx.fillRect(newX, stateY, recWidth, recHeight);
     ctx.fillStyle = '#ffffff';
     ctx.font = '25px Georgia';
     ctx.textAlign = 'center';
-    ctx.fillText(data.stateDTO && data.stateDTO.name ? data.stateDTO.name : 'sss', recX + range.w + lineWidth + recWidth / 2, stateY + recHeight / 2 + 5);
+    ctx.fillText(data.statusDTO && data.statusDTO.name ? data.statusDTO.name : 'sss', newX + recWidth / 2, stateY + recHeight / 2 + 5);
     ctx.stroke();
 
 
-    ctx.beginPath();
-    ctx.strokeStyle = '#ccc';
-    let equal = false;
-    intoFigure.forEach((item) => {
-      const x = item.x + item.w;
-      const y = item.y + item.h / 2;
+    if (intoTransform && intoTransform.length) {
+      ctx.beginPath();
+      ctx.strokeStyle = '#ccc';
+      let equal = false;
+      intoFigure.forEach((item) => {
+        const x = item.x + item.w;
+        const y = item.y + item.h / 2;
 
-      ctx.moveTo(x, y);
-      if (y === stateY + recHeight / 2) {
-        equal = true;
-        ctx.lineTo(recX + recWidth * 2 + lineWidth, y);
+        ctx.moveTo(x, y);
+        if (y === stateY + recHeight / 2) {
+          equal = true;
+          ctx.lineTo(recX + recWidth * 2 + lineWidth, y);
 
-        ctx.moveTo(recX + recWidth * 2 + lineWidth - 10, y - 5);
-        ctx.lineTo(recX + recWidth * 2 + lineWidth, y);
-        ctx.moveTo(recX + recWidth * 2 + lineWidth - 10, y + 5);
-        ctx.lineTo(recX + recWidth * 2 + lineWidth, y);
-      } else {
-        ctx.lineTo(x + lineWidth / 2, y);
+          ctx.moveTo(recX + recWidth * 2 + lineWidth - 10, y - 5);
+          ctx.lineTo(recX + recWidth * 2 + lineWidth, y);
+          ctx.moveTo(recX + recWidth * 2 + lineWidth - 10, y + 5);
+          ctx.lineTo(recX + recWidth * 2 + lineWidth, y);
+        } else {
+          ctx.lineTo(x + lineWidth / 2, y);
 
-        // 垂直连接线
-        ctx.moveTo(x + lineWidth / 2, y);
-        ctx.lineTo(x + lineWidth / 2, stateY + recHeight / 2);
+          // 垂直连接线
+          ctx.moveTo(x + lineWidth / 2, y);
+          ctx.lineTo(x + lineWidth / 2, stateY + recHeight / 2);
+        }
+      });
+      if (!equal) {
+        ctx.moveTo(recX + range.w + lineWidth - lineWidth / 2, stateY + recHeight / 2);
+        ctx.lineTo(recX + range.w + lineWidth, stateY + recHeight / 2);
+
+        // 箭头
+        ctx.moveTo(recX + range.w + lineWidth - 10, stateY + recHeight / 2 - 5);
+        ctx.lineTo(recX + range.w + lineWidth, stateY + recHeight / 2);
+        ctx.moveTo(recX + range.w + lineWidth - 10, stateY + recHeight / 2 + 5);
+        ctx.lineTo(recX + range.w + lineWidth, stateY + recHeight / 2);
       }
-    });
-    if (!equal) {
-      ctx.moveTo(recX + range.w + lineWidth - lineWidth / 2, stateY + recHeight / 2);
-      ctx.lineTo(recX + range.w + lineWidth, stateY + recHeight / 2);
-
-      // 箭头
-      ctx.moveTo(recX + range.w + lineWidth - 10, stateY + recHeight / 2 - 5);
-      ctx.lineTo(recX + range.w + lineWidth, stateY + recHeight / 2);
-      ctx.moveTo(recX + range.w + lineWidth - 10, stateY + recHeight / 2 + 5);
-      ctx.lineTo(recX + range.w + lineWidth, stateY + recHeight / 2);
+      ctx.stroke();
     }
-    ctx.stroke();
 
-    range.w = range.w + lineWidth + recWidth;
+
+    range.w = intoTransform && intoTransform.length ? range.w + lineWidth + recWidth : recWidth;
 
     const outFigure = [];
-    if (outTransf && outTransf.length) {
+    if (outTransform && outTransform.length) {
       const x = recX + range.w + lineWidth;
       y = stateY + recHeight / 4;
-      if (outTransf.length !== 1) {
+      if (outTransform.length !== 1) {
         y = recY;
       }
 
-      outTransf.forEach((item, index) => {
+      outTransform.forEach((item, index) => {
         ctx.beginPath();
         ctx.fillStyle = '#D8D8D8';
         ctx.fillRect(x, y + index * (recHeight / 2 + 20), recWidth * 2, recHeight / 2);
@@ -464,7 +476,7 @@ class EditConfig extends Component {
     const { organizationId, id, machineId } = this.state;
     const { StateMachineStore } = this.props;
 
-    StateMachineStore.loadStateMachineById(organizationId, machineId).then((data) => {
+    StateMachineStore.loadStateMachineDraftById(organizationId, machineId).then((data) => {
       this.setState({
         loading: false,
       });
@@ -533,7 +545,7 @@ class EditConfig extends Component {
                 // UPDATE STATEID OF NODE DATA
                 const param = {
                   ...node,
-                  stateId: data.state.key,
+                  statusId: data.state.key,
                 };
                 this.updateStateMachineNode(param)
                   .then((nodes) => {
@@ -558,8 +570,8 @@ class EditConfig extends Component {
           if (state === 'add') {
             const { nodeData } = this.state;
 
-            const source = _.find(nodeData, item => item.stateId.toString() === data.startNodeId);
-            const target = _.find(nodeData, item => item.stateId.toString() === data.endNodeId);
+            const source = _.find(nodeData, item => item.statusId.toString() === data.startNodeId);
+            const target = _.find(nodeData, item => item.statusId.toString() === data.endNodeId);
             const param = {
               ...data,
               startNodeId: source.id,
@@ -697,6 +709,17 @@ class EditConfig extends Component {
     }
   }
 
+  changeTab = (key) => {
+    const { StateMachineStore } = this.props;
+    StateMachineStore.setConfigType(key);
+  }
+
+  handleConditoinChange = (e) => {
+    const { StateMachineStore } = this.props;
+    const { organizationId, id } = this.state;
+    StateMachineStore.updateCondition(organizationId, id, e.target.value);
+  }
+
   render() {
     const { StateMachineStore, intl } = this.props;
     const {
@@ -720,7 +743,7 @@ class EditConfig extends Component {
       <Page>
         <Header
           title={<FormattedMessage id="stateMachine.config" />}
-          backPath={stateId ? `/issue/state-machines/${machineId}/editconfig/${transferId}?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}` : `/issue/state-machines/edit/${machineId}?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
+          backPath={stateId ? `/issue/state-machines/${machineId}/editconfig/${transferId}?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}` : `/issue/state-machines/edit/${machineId}/${stateMachineData.status}?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
         >
           <Button
             onClick={this.refresh}
@@ -748,7 +771,7 @@ class EditConfig extends Component {
               <div className={`${prefixCls}-header-name`}>
                 {stateId ? <FormattedMessage id="stateMachine.state" /> : <FormattedMessage id="stateMachine.transfer" />}
                 :
-              {stateId ? targetData.stateDTO && targetData.stateDTO.name : targetData.name}
+              {stateId ? targetData.statusDTO && targetData.statusDTO.name : targetData.name}
                 {stateMachineData && stateMachineData.status === '2' && <span className={`${prefixCls}-header-name-state`}>草稿</span>}
               </div>
               <div className={`${prefixCls}-header-stateMachine`}>
@@ -770,8 +793,8 @@ class EditConfig extends Component {
             </div>
             {
               !stateId && (
-                <Tabs defaultActiveKey="condition">
-                  <TabPane tab={<FormattedMessage id="stateMachine.condition" />} key="condition">
+                <Tabs onChange={this.changeTab} defaultActiveKey={StateMachineStore.getConfigType} activeKey={StateMachineStore.getConfigType}>
+                  <TabPane tab={<FormattedMessage id="stateMachine.condition" />} key="config_condition">
                     <div className={`${prefixCls}-condition-des`}>
                       <FormattedMessage id="stateMachine.condition.des" />
                     </div>
@@ -782,24 +805,24 @@ class EditConfig extends Component {
                     {
                       !stateId && targetData.conditions && targetData.conditions.length ? (
                         <div>
-                          <RadioGroup name="radiogroup" defaultValue="all">
-                            <Radio value="all">满足下列所有条件</Radio>
-                            <Radio value="one">满足下列条件之一</Radio>
+                          <RadioGroup onChange={this.handleConditoinChange} name="radiogroup" defaultValue={targetData.conditionStrategy}>
+                            <Radio value="condition_all">满足下列所有条件</Radio>
+                            <Radio value="condition_one">满足下列条件之一</Radio>
                           </RadioGroup>
                           <Spin spinning={loading}>
                             <Card
                               style={{ marginTop: 16 }}
                               type="inner"
                               title={(
-                                <Button onClick={() => this.handleEdit('condition')} funcType="flat" icon="add">
-                                  <FormattedMessage id="stateMachine.condition.add" />
+                                <Button onClick={() => this.handleEdit('config_condition')} funcType="flat" icon="add">
+                                  <FormattedMessage id="stateMachine.config_condition.add" />
                                 </Button>
                               )}
                             >
                               {
                                 targetData.conditions.map(item => (
                                   <div key={item.id} className={`${prefixCls}-tab-list`}>
-                                    {item.description || ''}
+                                    {item.codeDescription || ''}
                                     <Popconfirm title={<FormattedMessage id="pageScheme.related.deleteTip" />} onConfirm={() => this.onDelete(item.id)}>
                                       <Button className="action" shape="circle" size={'small'}>
                                         <span className="icon icon-delete" />
@@ -813,14 +836,14 @@ class EditConfig extends Component {
                         </div>
                       )
                         : (
-                          <Button onClick={() => this.handleEdit('condition')} type="primary" funcType="raised">
-                            <FormattedMessage id="stateMachine.condition.add" />
+                          <Button onClick={() => this.handleEdit('config_condition')} type="primary" funcType="raised">
+                            <FormattedMessage id="stateMachine.config_condition.add" />
                           </Button>
                         )
                     }
 
                   </TabPane>
-                  <TabPane tab={<FormattedMessage id="stateMachine.verification" />} key="verification">
+                  <TabPane tab={<FormattedMessage id="stateMachine.verification" />} key="config_validator">
                     <div className={`${prefixCls}-condition-des`}>
                       <FormattedMessage id="stateMachine.verification.des" />
                     </div>
@@ -835,15 +858,15 @@ class EditConfig extends Component {
                             style={{ marginTop: 16 }}
                             type="inner"
                             title={(
-                              <Button onClick={() => this.handleEdit('validator')} funcType="flat" icon="add">
-                                <FormattedMessage id="stateMachine.validator.add" />
+                              <Button onClick={() => this.handleEdit('config_validator')} funcType="flat" icon="add">
+                                <FormattedMessage id="stateMachine.config_validator.add" />
                               </Button>
                             )}
                           >
                             {
                               targetData.validators.map(item => (
                                 <div key={item.id} className={`${prefixCls}-tab-list`}>
-                                  {item.description || ''}
+                                  {item.codeDescription || ''}
                                   <Popconfirm title={<FormattedMessage id="pageScheme.related.deleteTip" />} onConfirm={() => this.onDelete(item.id)}>
                                     <Button className="action" shape="circle" size={'small'}>
                                       <span className="icon icon-delete" />
@@ -856,8 +879,8 @@ class EditConfig extends Component {
                         </Spin>
                       )
                         : (
-                          <Button onClick={() => this.handleEdit('validator')} type="primary" funcType="raised">
-                            <FormattedMessage id="stateMachine.validator.add" />
+                          <Button onClick={() => this.handleEdit('config_validator')} type="primary" funcType="raised">
+                            <FormattedMessage id="stateMachine.config_validator.add" />
                           </Button>
                         )
                     }
@@ -879,15 +902,15 @@ class EditConfig extends Component {
                             type="inner"
 
                             title={(
-                              <Button onClick={() => this.handleEdit('postposition')} funcType="flat" icon="add">
-                                <FormattedMessage id="stateMachine.postposition.add" />
+                              <Button onClick={() => this.handleEdit('config_postposition')} funcType="flat" icon="add">
+                                <FormattedMessage id="stateMachine.config_postposition.add" />
                               </Button>
                             )}
                           >
                             {
                               targetData.postpositions.map(item => (
                                 <div key={item.id} className={`${prefixCls}-tab-list`}>
-                                  {item.description || ''}
+                                  {item.codeDescription || ''}
                                   <Popconfirm title={<FormattedMessage id="pageScheme.related.deleteTip" />} onConfirm={() => this.onDelete(item.id)}>
                                     <Button className="action" shape="circle" size={'small'}>
                                       <span className="icon icon-delete" />
@@ -900,8 +923,8 @@ class EditConfig extends Component {
                         </Spin>
                       )
                         : (
-                          <Button onClick={() => this.handleEdit('postposition')} type="primary" funcType="raised">
-                            <FormattedMessage id="stateMachine.postposition.add" />
+                          <Button onClick={() => this.handleEdit('config_postposition')} type="primary" funcType="raised">
+                            <FormattedMessage id="stateMachine.config_postposition.add" />
                           </Button>
                         )
                     }
