@@ -98,7 +98,7 @@ class EditConfigSelect extends Component {
         code: submitData.code,
         type: submitData.type,
         stateMachineId: machineId,
-        transfId: id,
+        transformId: id,
       };
       this.setState({
         loading: true,

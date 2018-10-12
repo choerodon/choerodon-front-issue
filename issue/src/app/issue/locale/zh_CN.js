@@ -65,7 +65,7 @@ const zh_CN = {
   'issueTypeScheme.origin': '可用的问题类型',
   'issueTypeScheme.tip': '问题类型方案是将一些问题类型组合在一起，并关联给一个项目来使用，还可以指定问题类型在用户界面中显示的顺序。',
 
-  // 关联问题类型方案  
+  // 关联问题类型方案
   'relateIssueTypeScheme.title': '关联问题类型方案',
   'relateIssueTypeScheme.tip': '选择你需要的项目关联此问题类型方案。已有问题类型方案的项目将从当前使用方案更改为所选方案，部分问题因为设置需要进行合并匹配。',
 
@@ -341,12 +341,16 @@ const zh_CN = {
   'stateMachine.condition.des': '条件可以控制哪些用户在什么情况下能够执行一个转换。如果条件不满足，则用户在查看问题的界面上将看不到转换按钮。',
   'stateMachine.condition.guide': '不知道从哪里开始？',
   'stateMachine.condition.link': '从这开始',
-  'stateMachine.condition.add': '添加条件',
+  'stateMachine.config_condition.add': '添加条件',
   'stateMachine.verification.des': '状态机验证器将在转换执行之前检查用户的输入是否有效。例如：校验可以保证在转换的页面上用户输入的值是否满足某些标准。如果校验不满足 ，转换的后处理功能将不被执行，并且这个问题将不会进行到转换的目标状态。',
-  'stateMachine.validator.add': '添加验证器',
+  'stateMachine.config_validator.add': '添加验证器',
   'stateMachine.processor.des': '在一个转换被执行之后，系统会立即执行一些操作（因此称之为后处理功能），例如：更新一个问题的字段，生成一个问题的 修改记录。',
-  'stateMachine.postposition.add': '添加后处理功能',
+  'stateMachine.config_postposition.add': '添加后处理功能',
   'stateMachine.config.name': '名称',
   'stateMachine.config.des': '描述',
+
+  'stateMachine.edit.draft.tip': '注意：此状态机正在被使用。你正在编辑 状态机草稿 ，如果修改后的草稿需要生效，请点击 发布 。删除草稿 后草稿备份为现在正在使用的状态机。',
+  'stateMachine.edit.deploy.tip': '注意：此状态机正在被使用。如果你需要修改，请点击 编辑 。',
+  'stateMachine.edit.avtive': '查看状态机',
 };
 export default zh_CN;

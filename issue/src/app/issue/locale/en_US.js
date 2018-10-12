@@ -313,12 +313,16 @@ const enUS = {
   'stateMachine.condition.des': 'Conditions can control which users can perform a conversion under what circumstances.If the condition is not met, the user will not see the transition button on the interface where the problem is viewed.',
   'stateMachine.condition.guide': 'Don\'t know where to start?',
   'stateMachine.condition.link': 'Starting from here',
-  'stateMachine.condition.add': 'Add Condition',
+  'stateMachine.config_condition.add': 'Add Condition',
   'stateMachine.verification.des': 'The state machine verifier will check if the user\'s input is valid before the conversion is performed.For example: Verification ensures that the values ​​entered by the user on the converted page meet certain criteria.If the check is not satisfied, the post-processing function of the conversion will not be executed, and the problem will not proceed to the target state of the conversion.',
-  'stateMachine.validator.add': 'Add Verification',
+  'stateMachine.config_validator.add': 'Add Verification',
   'stateMachine.processor.des': 'After a conversion is performed, the system performs some operations immediately (hence the post-processing function), for example: updating a problem\'s fields and generating a modified record of the problem.',
-  'stateMachine.postposition.add': 'Add Processor',
+  'stateMachine.config_postposition.add': 'Add Processor',
   'stateMachine.config.name': 'Name',
   'stateMachine.config.des': 'Description',
+
+  'stateMachine.edit.draft.tip': 'Note: This state machine is being used.You are editing a draft state machine. If the revised draft needs to take effect, click Publish.After deleting the draft, the draft is backed up to the state machine that is currently in use.',
+  'stateMachine.edit.deploy.tip': 'Note: This state machine is being used.If you need to make changes, click Edit.',
+  'stateMachine.edit.avtive': 'View State Machine',
 };
 export default enUS;

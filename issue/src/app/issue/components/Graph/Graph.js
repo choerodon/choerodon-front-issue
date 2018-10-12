@@ -185,7 +185,7 @@ class Graph extends Component {
     graph.getModel().beginUpdate();
     let cell;
     try {
-      cell = graph.insertVertex(parent, values.id, values.statusDTO && values.statusDTO.name, 150, 0, 100, 50, 'shape=rectangle;');
+      cell = graph.insertVertex(parent, `n${values.id}`, values.statusDTO && values.statusDTO.name, 150, 0, 100, 50, 'shape=rectangle;');
       cell.stateId = values.statusId;
       cell.nodeId = values.id;
       cell.status = values.type;
@@ -512,7 +512,9 @@ class Graph extends Component {
       const container = this.graphContainer;
 
       // 背景
-      container.style.background = 'url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZTBlMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=")';
+      if (enable) {
+        container.style.background = 'url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZTBlMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=")';
+      }
 
       // Disables floating connections (only use with no connect image)
       if (graph.connectionHandler.connectImage == null) {
@@ -691,6 +693,9 @@ class Graph extends Component {
         if (clickFlag) {
           clickFlag = clearTimeout(clickFlag);
         }
+        if (cell && cell.status === 'node_start') {
+          return;
+        }
         if (cell && cell.edge === true) {
           // 双击连线
           if (cellDblClick && enable) {
@@ -818,7 +823,6 @@ class Graph extends Component {
 
       // Enables snapping waypoints to terminals
       mxEdgeHandler.prototype.snapToTerminals = true;
-
     }
   };
 

@@ -7,13 +7,22 @@ class StateMachineStore {
 
   @observable isLoading = false;
   @observable stateMachine = {};
+  @observable configType = 'config_condition';
 
   @computed get getIsLoading() {
     return this.isLoading;
   }
 
+  @computed get getConfigType() {
+    return this.configType;
+  }
+
   @computed get getStateMachine() {
     return this.stateMachine;
+  }
+
+  @action setConfigType(type) {
+    this.configType = type;
   }
 
   @action setIsLoading(loading) {
@@ -55,7 +64,7 @@ class StateMachineStore {
 
   createStateMachine = (orgId, map) => axios.post(`/state/v1/organizations/${orgId}/state_machines`, JSON.stringify(map));
 
-  deleteStateMachine = (orgId, stateId) => axios.delete(`/issue/v1/organizations/${orgId}/state_machines/${stateId}`)
+  deleteStateMachine = (orgId, stateId) => axios.delete(`/issue/v1/organizations/${orgId}/state_machine/${stateId}`)
     .then(data => this.handleProptError(data));
 
   updateStateMachine = (orgId, stateId, map) => axios.put(`/state/v1/organizations/${orgId}/state_machines/${stateId}`, JSON.stringify(map));
@@ -74,26 +83,32 @@ class StateMachineStore {
 
   deleteStateMachineTransfer = (orgId, nodeId) => axios.delete(`/state/v1/organizations/${orgId}/state_machine_transforms/${nodeId}`);
 
-  getTransferById = (orgId, id) => axios.get(`/state/v1/organizations/1${orgId}/state_machine_transf/getById/${id}`).then(data => this.handleProptError(data));
+  getTransferById = (orgId, id) => axios.get(`/state/v1/organizations/${orgId}/state_machine_transforms/${id}`).then(data => this.handleProptError(data));
 
-  getStateById = (orgId, id) => axios.get(`/state/v1/organizations/${orgId}/state_machine_node/getById/${id}`).then(data => this.handleProptError(data));
+  getStateById = (orgId, id) => axios.get(`/state/v1/organizations/${orgId}/state_machine_nodes/${id}`).then(data => this.handleProptError(data));
 
   loadTransferConfigList = (orgId, id, type) => {
     this.setIsLoading(true);
-    return axios.get(`/state/v1/organizations/${orgId}/state_machine_configs/queryConfig/${id}?type=${type}`)
+    return axios.get(`/state/v1/organizations/${orgId}/config_codes/${id}?type=${type}`)
       .then((data) => {
         this.setIsLoading(false);
         return this.handleProptError(data);
       });
   }
 
-  addConfig = (orgId, stateMachineId, map) => axios.post(`/state/v1/organizations/${orgId}/state_machine_configs/${stateMachineId}`, JSON.stringify(map))
+  addConfig = (orgId, stateMachineId, map) => axios.post(`/state/v1/organizations/${orgId}/state_machine_configs/${stateMachineId}?transform_id=${map.transformId}`, JSON.stringify(map))
     .then(data => this.handleProptError(data));
 
   deleteConfig = (orgId, id) => axios.delete(`/state/v1/organizations/${orgId}/state_machine_configs/${id}`)
     .then(item => this.handleProptError(item));
 
   publishStateMachine = (orgId, id) => axios.get(`/state/v1/organizations/${orgId}/state_machines/deploy/${id}`)
+    .then(data => this.handleProptError(data));
+
+  deleteDraft = (orgId, id) => axios.delete(`/state/v1/organizations/${orgId}/state_machines/delete_draft/${id}`)
+    .then(data => this.handleProptError(data));
+
+  updateCondition = (orgId, id, type) => axios.get(`/state/v1/organizations/${orgId}/state_machine_transforms/update_condition_strategy/${id}?condition_strategy=${type}`)
     .then(data => this.handleProptError(data));
 
   handleProptError = (error) => {

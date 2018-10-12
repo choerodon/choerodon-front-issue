@@ -50,7 +50,7 @@ class EditStateMachine extends Component {
       stateList: [],
       source: false,
       target: false,
-      enable: status !== 'state_machine_avtive',
+      enable: status !== 'state_machine_active',
       loading: false,
     };
     this.graph = null;
@@ -61,39 +61,40 @@ class EditStateMachine extends Component {
   }
 
   getColumn = () => {
-    const { transferData, nodeData } = this.state;
-    return (
-      [{
-        title: <FormattedMessage id="stateMachine.state" />,
-        dataIndex: 'statusDTO',
-        key: 'statusDTO',
-        width: 300,
-        render: text => text && (
-          <div className={`${prefixCls}-text-node`}>{text.name}</div>
-        ),
-      }, {
-        title: <FormattedMessage id="stateMachine.transfer" />,
-        dataIndex: 'id',
-        key: 'id',
-        render: (id) => {
-          const { nodeTransfer = {} } = this.state;
-          return (
-            <React.Fragment>
-              {transferData && transferData.map(item => item.startNodeId === id && (
-                <div className={`${prefixCls}-text-transfer-item`} key={item.id}>
-                  {`${item.name}  >>>`} {
-                    nodeData && nodeData.map(node => node.id === item.endNodeId && (
-                      <div className={`${prefixCls}-text-node`} key={`${item.id}-${node.id}`}>
-                        {node.statusDTO && node.statusDTO.name}
-                      </div>
-                    ))
-                  }
-                </div>
-              ))}
-            </React.Fragment>
-          );
-        },
-      }, {
+    const { transferData, nodeData, enable } = this.state;
+    const column = [{
+      title: <FormattedMessage id="stateMachine.state" />,
+      dataIndex: 'statusDTO',
+      key: 'statusDTO',
+      width: 300,
+      render: text => text && (
+        <div className={`${prefixCls}-text-node`}>{text.name}</div>
+      ),
+    }, {
+      title: <FormattedMessage id="stateMachine.transfer" />,
+      dataIndex: 'id',
+      key: 'id',
+      render: (id) => {
+        const { nodeTransfer = {} } = this.state;
+        return (
+          <React.Fragment>
+            {transferData && transferData.map(item => item.startNodeId === id && (
+              <div className={`${prefixCls}-text-transfer-item`} key={item.id}>
+                {`${item.name}  >>>`} {
+                  nodeData && nodeData.map(node => node.id === item.endNodeId && (
+                    <div className={`${prefixCls}-text-node`} key={`${item.id}-${node.id}`}>
+                      {node.statusDTO && node.statusDTO.name}
+                    </div>
+                  ))
+                }
+              </div>
+            ))}
+          </React.Fragment>
+        );
+      },
+    }];
+    if (enable) {
+      column.push({
         align: 'right',
         width: 104,
         key: 'action',
@@ -116,8 +117,9 @@ class EditStateMachine extends Component {
             </Permission>
           </div>
         ),
-      }]
-    );
+      })
+    }
+    return column;
   }
 
   getFormContent = () => {
@@ -394,7 +396,7 @@ class EditStateMachine extends Component {
   loadStateMachine = () => {
     const { StateMachineStore } = this.props;
     const { organizationId, id, status } = this.state;
-    if (status === 'state_machine_create') {
+    if (status !== 'state_machine_active') {
       StateMachineStore.loadStateMachineDraftById(organizationId, id)
         .then((data) => {
           if (data && data.failed) {
@@ -854,17 +856,34 @@ class EditStateMachine extends Component {
     history.push(`/issue/state-machines/${stateMachineData.id}/editconfig/${configId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   }
 
+  handleDeploy = () => {
+    const { StateMachineStore, intl, history } = this.props;
+    const { name, id, organizationId } = AppState.currentMenuType;
+    const { id: stateMachineId } = this.state;
+    history.push(`/issue/state-machines/edit/${stateMachineId}/state_machine_draft?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+  }
+
+  handleDeleteDraft = () => {
+    const { StateMachineStore, intl, history } = this.props;
+    const { name, id, organizationId } = AppState.currentMenuType;
+    const { id: stateMachineId } = this.state;
+    StateMachineStore.deleteDraft(organizationId, stateMachineId)
+      .then((data) => {
+        if (data) {
+          history.push(`/issue/state-machines/edit/${stateMachineId}/state_machine_active?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+        }
+      });
+  }
+
   handlePublish = () => {
     const { stateMachineData } = this.state;
-    const { StateMachineStore } = this.props;
+    const { StateMachineStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
 
     StateMachineStore.publishStateMachine(organizationId, stateMachineData.id).then((data) => {
       if (data) {
-        this.setState({
-          stateMachineData: data,
-        });
-        Choerodon.prompt('发布成功');
+        Choerodon.prompt('Success');
+        history.push(`/issue/state-machines/edit/${stateMachineData.id}/state_machine_active?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
       }
     });
   }
@@ -910,6 +929,7 @@ class EditStateMachine extends Component {
       nodeData,
       loading,
       transferData,
+      status,
     } = this.state;
     const dataSource = nodeData && nodeData.slice();
     _.remove(dataSource, item => item.statusId === 0);
@@ -986,8 +1006,8 @@ class EditStateMachine extends Component {
     return (
       <Page>
         <Header
-          title={<FormattedMessage id="stateMachine.edit" />}
-          backPath={`/issue/state-machines?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
+          title={<FormattedMessage id={status === 'state_machine_active' ? 'stateMachine.edit.avtive' : 'stateMachine.edit'} />}
+          backPath={`/issue/${status === 'state_machine_draft' ? `state-machines/edit/${stateMachineData.id}/state_machine_active` : 'state-machines'}?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
         >
           <Button
             onClick={this.refresh}
@@ -999,24 +1019,35 @@ class EditStateMachine extends Component {
         </Header>
         <Content>
           <div className={`${prefixCls}-header`}>
-            {stateMachineData && stateMachineData.status === '1' && (
-              <Button onClick={() => this.setState({ enable: true })}>wwww</Button>
-            )}
-            {stateMachineData && (stateMachineData.status === '0' || stateMachineData.status === '2') && (
+            {status && status === 'state_machine_active' && (
               <div className={`${prefixCls}-header-tip`}>
                 <span className="icon icon-warning" />
                 <div className={`${prefixCls}-header-tip-text`}>
-                  注意：此状态机正在被使用。你正在编辑 状态机草稿 ，如果修改后的草稿需要生效，请点击 发布 。删除草稿 后草稿备份为现在正在使用的状态机。
+                  <FormattedMessage id="stateMachine.edit.deploy.tip" />
                 </div>
                 <div className={`${prefixCls}-header-tip-action`}>
-                  <Button onClick={this.handlePublish} type="primary" funcType="raised" >发布</Button>
-                  <Button funcType="raised" className="delete" >删除状态</Button>
+                  <Button onClick={() => this.handleDeploy()} type="primary" funcType="raised">编辑</Button>
+                </div>
+              </div>
+              // <Button onClick={() => this.setState({ enable: true })}>wwww</Button>
+            )}
+            {status && (status === 'state_machine_draft' || status === 'state_machine_create') && (
+              <div className={`${prefixCls}-header-tip`}>
+                <span className="icon icon-warning" />
+                <div className={`${prefixCls}-header-tip-text`}>
+                  <FormattedMessage id="stateMachine.edit.draft.tip" />
+                </div>
+                <div className={`${prefixCls}-header-tip-action`}>
+                  <Button onClick={this.handlePublish} type="primary" funcType="raised">发布</Button>
+                  {
+                    status === 'state_machine_draft' && <Button onClick={this.handleDeleteDraft} funcType="raised" className="delete">删除草稿</Button>
+                  }
                 </div>
               </div>
             )}
             <div className={`${prefixCls}-header-name`}>
               {stateMachineData.name}
-              {stateMachineData && stateMachineData.status === '2' && <span>草稿</span>}
+              {status && status === 'state_machine_draft' && <span>草稿</span>}
             </div>
             <div className={`${prefixCls}-header-des`}>{stateMachineData.description}</div>
           </div>
@@ -1027,9 +1058,9 @@ class EditStateMachine extends Component {
                   <Graph
                     setRef={this.setGraphRef}
                     onLink={this.handleOnTransfer}
-                    header={graphHeader}
+                    header={status !== 'state_machine_active' && graphHeader}
                     cellDblClick={this.handleDbClick}
-                    extra={selectedCell && graphExtra}
+                    extra={selectedCell && status !== 'state_machine_active' && graphExtra}
                     cellClick={this.handleCellClick}
                     data={nodeData && { vertex: nodeData, edge: transferData }}
                     onMove={this.handleOnMove}
