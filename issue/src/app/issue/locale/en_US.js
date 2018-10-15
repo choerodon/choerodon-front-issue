@@ -324,5 +324,6 @@ const enUS = {
   'stateMachine.edit.draft.tip': 'Note: This state machine is being used.You are editing a draft state machine. If the revised draft needs to take effect, click Publish.After deleting the draft, the draft is backed up to the state machine that is currently in use.',
   'stateMachine.edit.deploy.tip': 'Note: This state machine is being used.If you need to make changes, click Edit.',
   'stateMachine.edit.avtive': 'View State Machine',
+  'stateMachine.draft.delete': 'Delete Draft',
 };
 export default enUS;

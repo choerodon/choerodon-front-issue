@@ -352,5 +352,6 @@ const zh_CN = {
   'stateMachine.edit.draft.tip': '注意：此状态机正在被使用。你正在编辑 状态机草稿 ，如果修改后的草稿需要生效，请点击 发布 。删除草稿 后草稿备份为现在正在使用的状态机。',
   'stateMachine.edit.deploy.tip': '注意：此状态机正在被使用。如果你需要修改，请点击 编辑 。',
   'stateMachine.edit.avtive': '查看状态机',
+  'stateMachine.draft.delete': '删除草稿',
 };
 export default zh_CN;
