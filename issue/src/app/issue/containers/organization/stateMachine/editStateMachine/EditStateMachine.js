@@ -794,6 +794,7 @@ class EditStateMachine extends Component {
       deleteList: null,
       deleteVisible: false,
       deleteId: null,
+      deleteDraftVisible: false,
     });
   }
   handleDeleteTransfer = () => {
@@ -861,6 +862,12 @@ class EditStateMachine extends Component {
     const { name, id, organizationId } = AppState.currentMenuType;
     const { id: stateMachineId } = this.state;
     history.push(`/issue/state-machines/edit/${stateMachineId}/state_machine_draft?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+  }
+
+  showDeleteDraft = () => {
+    this.setState({
+      deleteDraftVisible: true,
+    });
   }
 
   handleDeleteDraft = () => {
@@ -1026,7 +1033,7 @@ class EditStateMachine extends Component {
                   <FormattedMessage id="stateMachine.edit.deploy.tip" />
                 </div>
                 <div className={`${prefixCls}-header-tip-action`}>
-                  <Button onClick={() => this.handleDeploy()} type="primary" funcType="raised">编辑</Button>
+                  <Button onClick={() => this.handleDeploy()} type="primary" funcType="raised"><FormattedMessage id="edit" /></Button>
                 </div>
               </div>
               // <Button onClick={() => this.setState({ enable: true })}>wwww</Button>
@@ -1040,7 +1047,7 @@ class EditStateMachine extends Component {
                 <div className={`${prefixCls}-header-tip-action`}>
                   <Button onClick={this.handlePublish} type="primary" funcType="raised">发布</Button>
                   {
-                    status === 'state_machine_draft' && <Button onClick={this.handleDeleteDraft} funcType="raised" className="delete">删除草稿</Button>
+                    status === 'state_machine_draft' && <Button onClick={this.showDeleteDraft} funcType="raised" className="delete">删除草稿</Button>
                   }
                 </div>
               </div>
@@ -1128,6 +1135,23 @@ class EditStateMachine extends Component {
             >
               {this.state.deleteList && this.state.deleteList.length && this.state.deleteList.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
             </Select>
+          </Modal>
+        )}
+        {this.state.deleteDraftVisible && (
+          <Modal
+            title={<FormattedMessage id="stateMachine.draft.delete" />}
+            visible={this.state.deleteDraftVisible}
+            onOk={this.handleDeleteDraft}
+            onCancel={this.handleCancel}
+          >
+            <p className={`${prefixCls}-del-content`}>
+              <FormattedMessage id="stateMachine.draft.delete" />
+              <span>:</span>
+              <span className={`${prefixCls}-del-content-name`}>{stateMachineData.name}</span>
+            </p>
+            <p className={`${prefixCls}-del-tip`}>
+              <FormattedMessage id="state.delete.tip" />
+            </p>
           </Modal>
         )}
       </Page>
