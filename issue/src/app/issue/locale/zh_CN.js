@@ -353,5 +353,8 @@ const zh_CN = {
   'stateMachine.edit.deploy.tip': '注意：此状态机正在被使用。如果你需要修改，请点击 编辑 。',
   'stateMachine.edit.avtive': '查看状态机',
   'stateMachine.draft.delete': '删除草稿',
+  'stateMachine.node.all': '让所有的状态转换到这里',
+  'stateMachine.node.name.start': '开始',
+  'stateMachine.node.name.all': '全部',
 };
 export default zh_CN;

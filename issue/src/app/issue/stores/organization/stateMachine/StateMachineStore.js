@@ -111,6 +111,12 @@ class StateMachineStore {
   updateCondition = (orgId, id, type) => axios.get(`/state/v1/organizations/${orgId}/state_machine_transforms/update_condition_strategy/${id}?condition_strategy=${type}`)
     .then(data => this.handleProptError(data));
 
+  linkAllToNode = (orgId, id, stateMachineId) => axios.post(`/state/v1/organizations/${orgId}/state_machine_transforms/create_type_all?end_node_id=${id}&state_machine_id=${stateMachineId}`)
+    .then(data => this.handleProptError(data));
+
+  deleteAllToNode = (orgId, id) => axios.delete(`/state/v1/organizations/${orgId}/state_machine_transforms/delete_type_all/${id}`)
+    .then(data => this.handleProptError(data));
+
   handleProptError = (error) => {
     if (error && error.failed) {
       Choerodon.prompt(error.message);

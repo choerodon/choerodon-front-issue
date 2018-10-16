@@ -186,7 +186,7 @@ class EditStateMachine extends Component {
                     required: true,
                     message: intl.formatMessage({ id: 'required' }),
                   }],
-                  initialValue: source ? source.stateId.toString() : '',
+                  initialValue: source ? source.stateId || source.stateId === 0 ? source.stateId.toString() : 'all' : '',
                 })(
                   <Select
                     style={{ width: 520 }}
@@ -195,6 +195,27 @@ class EditStateMachine extends Component {
                     size="default"
                     disabled={source !== false}
                   >
+                    {
+                      source.stateId === 0 && (
+                        <Option
+                          value="0"
+                          key="0"
+                        >
+                          <span style={{ display: 'inline-block', width: '100%' }}><FormattedMessage id="stateMachine.node.name.start" /></span>
+                        </Option>
+                      )
+
+                    }
+                    {
+                      source && !source.stateId && (
+                        <Option
+                          value="all"
+                          key="all"
+                        >
+                          <span style={{ display: 'inline-block', width: '100%' }}><FormattedMessage id="stateMachine.node.name.all" /></span>
+                        </Option>
+                      )
+                    }
                     {nodeData &&
                       nodeData.length > 0 &&
                       nodeData.map(dto => dto.statusDTO && (
@@ -730,11 +751,17 @@ class EditStateMachine extends Component {
       loading: true,
     });
     if (cell.vertex) {
+
       StateMachineStore.deleteStateMachineNode(organizationId, cell.nodeId).then((data) => {
         this.setState({
           loading: false,
         });
         if (data && !data.failed) {
+          if (cell.allStatusTransformId) {
+            const cells = [];
+            cells.push(this.graph.getCell(`all${cell.allStatusTransformId}`));
+            this.graph.removeCells(cells);
+          }
           this.graph.removeCells();
           this.setState({
             nodeData: data,
@@ -895,6 +922,30 @@ class EditStateMachine extends Component {
     });
   }
 
+  handleAllChange = (e) => {
+    const { StateMachineStore } = this.props;
+    const { organizationId, selectedCell, stateMachineData, transferData } = this.state;
+    if (e.target.checked) {
+      StateMachineStore.linkAllToNode(organizationId, selectedCell.nodeId, stateMachineData.id)
+        .then((item) => {
+          transferData.push(item);
+          selectedCell.allStatusTransformId = item.id;
+          this.graph.createTransition(item, item.startNodeId, item.endNodeId);
+          this.setState({
+            transferData,
+          });
+        });
+    } else {
+      StateMachineStore.deleteAllToNode(organizationId, selectedCell.allStatusTransformId)
+        .then(() => {
+          const cells = [];
+          cells.push(this.graph.getCell(`all${selectedCell.allStatusTransformId}`));
+          cells.push(this.graph.getCell(`t${selectedCell.allStatusTransformId}`));
+          this.graph.removeCells(cells);
+        });
+    }
+  }
+
   handlecreateSubmit = () => {
     const { organizationId } = this.state;
 
@@ -993,15 +1044,20 @@ class EditStateMachine extends Component {
           </React.Fragment>
         )
           : (
-            <Popconfirm title={<FormattedMessage id="pageScheme.related.deleteTip" />} onConfirm={() => this.removeCell(this.state.selectedCell)}>
-              <Button
-                disabled={selectedCell && selectedCell.status !== 'node_custom'}
-                className="graph-card-btn"
-                funcType="raised"
-              >
-                <FormattedMessage id={`stateMachine.${selectedCell && selectedCell.vertex ? 'state' : 'transfer'}.delete`} />
-              </Button>
-            </Popconfirm>
+            <React.Fragment>
+              <div className="graph-card-all">
+                <Checkbox defaultChecked={selectedCell && selectedCell.allStatusTransformId} onChange={this.handleAllChange}><FormattedMessage id="stateMachine.node.all" /></Checkbox>
+              </div>
+              <Popconfirm title={<FormattedMessage id="pageScheme.related.deleteTip" />} onConfirm={() => this.removeCell(this.state.selectedCell)}>
+                <Button
+                  disabled={selectedCell && selectedCell.status !== 'node_custom'}
+                  className="graph-card-btn"
+                  funcType="raised"
+                >
+                  <FormattedMessage id={`stateMachine.${selectedCell && selectedCell.vertex ? 'state' : 'transfer'}.delete`} />
+                </Button>
+              </Popconfirm>
+            </React.Fragment>
           )}
       </div>);
 
@@ -1067,7 +1123,7 @@ class EditStateMachine extends Component {
                     onLink={this.handleOnTransfer}
                     header={status !== 'state_machine_active' && graphHeader}
                     cellDblClick={this.handleDbClick}
-                    extra={selectedCell && status !== 'state_machine_active' && graphExtra}
+                    extra={selectedCell && selectedCell.status !== 'node_start' && selectedCell.status !== 'node_all' && status !== 'state_machine_active' && graphExtra}
                     cellClick={this.handleCellClick}
                     data={nodeData && { vertex: nodeData, edge: transferData }}
                     onMove={this.handleOnMove}

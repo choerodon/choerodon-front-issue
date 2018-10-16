@@ -325,5 +325,8 @@ const enUS = {
   'stateMachine.edit.deploy.tip': 'Note: This state machine is being used.If you need to make changes, click Edit.',
   'stateMachine.edit.avtive': 'View State Machine',
   'stateMachine.draft.delete': 'Delete Draft',
+  'stateMachine.node.all': 'Let all the states change here',
+  'stateMachine.node.name.start': 'Start',
+  'stateMachine.node.name.all': 'All',
 };
 export default enUS;
