@@ -208,8 +208,10 @@ class Graph extends Component {
     let { source, target } = this.state;
     const { style, changedEdges } = this.state;
     const graphModel = graph.getModel();
-    if (sourceId && targetId) {
+    if (sourceId) {
       source = graphModel.getCell(`n${sourceId}`);
+    }
+    if (targetId) {
       target = graphModel.getCell(`n${targetId}`);
     }
     const { maxId } = this.state;
@@ -217,12 +219,25 @@ class Graph extends Component {
     let cell;
     graph.getModel().beginUpdate();
     try {
-      cell = graph.insertEdge(parent, `t${values.id}`, values.name, source, target, `${focusStyle}${style || ''}`);
+      if (values.type === 'transform_all') {
+        source = graph.insertVertex(
+          parent, `all${values.id}`,
+          'all',
+          target.geometry.x + target.geometry.width + 100, target.geometry.y + target.geometry.height / 2 - 10, 40, 20,
+          'fillColor=#000;fontColor=#fff;',
+        );
+        source.status = 'node_all';
+        source.setConnectable(false);
+        cell = graph.insertEdge(parent, `t${values.id}`, values.name, source, target, `${focusStyle}${style || ''}`);
+      } else {
+        cell = graph.insertEdge(parent, `t${values.id}`, values.name, source, target, `${focusStyle}${style || ''}`);
+      }
       this.setState({ maxId: maxId + 1 });
       cell.des = values.description;
       cell.status = values.type;
       cell.transferId = values.id;
       cell.pStyle = style;
+      cell.allStatusTransformId = values.allStatusTransformId;
       changedEdges.push(cell);
       this.setState({
         changedEdges,
@@ -305,6 +320,7 @@ class Graph extends Component {
             vet.stateId = statusId;
             vet.nodeId = id;
             vet.status = status;
+            vet.allStatusTransformId = item.allStatusTransformId;
             vet.des = item.statusDTO && item.statusDTO.description;
             this.setState({
               vertexes,
@@ -320,12 +336,28 @@ class Graph extends Component {
               id,
               name,
               style,
+              type,
             } = item;
             const sourceElement = vertexes[startNodeId];
             const targetElement = vertexes[endNodeId];
 
             const doc2 = mxUtils.createXmlDocument();
-            const ed = graph.insertEdge(parent, `t${id}`, name || 'open', sourceElement, targetElement, `${edgeStyle}${style || ''}`);
+            let ed;
+            if (type === 'transform_all') {
+              const endNode = vertexes[endNodeId];
+              const all = graph.insertVertex(
+                parent, `all${id}`,
+                'all',
+                endNode.geometry.x + endNode.geometry.width + 100, endNode.geometry.y + endNode.geometry.height / 2 - 10, 40, 20,
+                'fillColor=#000;fontColor=#fff;',
+              );
+              all.status = 'node_all';
+              all.setConnectable(false);
+              ed = graph.insertEdge(parent, `t${id}`, name || 'open', all, targetElement, `${edgeStyle}${style || ''}`);
+            } else {
+              ed = graph.insertEdge(parent, `t${id}`, name || 'open', sourceElement, targetElement, `${edgeStyle}${style || ''}`);
+            }
+            // const ed = graph.insertEdge(parent, `t${id}`, name || 'open', sourceElement, targetElement, `${edgeStyle}${style || ''}`);
             ed.des = item.description;
             ed.status = item.type;
             ed.transferId = id;
