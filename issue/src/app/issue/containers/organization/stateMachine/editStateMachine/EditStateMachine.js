@@ -78,7 +78,7 @@ class EditStateMachine extends Component {
         const { nodeTransfer = {} } = this.state;
         return (
           <React.Fragment>
-            {transferData && transferData.map(item => item.startNodeId === id && (
+            {transferData && transferData.map(item => (item.startNodeId === id || item.type === 'transform_all') && (
               <div className={`${prefixCls}-text-transfer-item`} key={item.id}>
                 {`${item.name}  >>>`} {
                   nodeData && nodeData.map(node => node.id === item.endNodeId && (
