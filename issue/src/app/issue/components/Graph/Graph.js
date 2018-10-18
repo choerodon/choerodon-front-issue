@@ -344,7 +344,6 @@ class Graph extends Component {
             const doc2 = mxUtils.createXmlDocument();
             let ed;
             if (type === 'transform_all') {
-              console.log(endNodeId, vertexes);
               const endNode = vertexes[endNodeId];
               const all = graph.insertVertex(
                 parent, `all${id}`,
