@@ -627,6 +627,7 @@ class EditStateMachine extends Component {
     if ((cell && cell.statusId !== 0) || !cell) {
       this.setState({
         selectedCell: cell,
+        allChecked: cell.allStatusTransformId,
       });
     }
   }
@@ -925,6 +926,9 @@ class EditStateMachine extends Component {
   handleAllChange = (e) => {
     const { StateMachineStore } = this.props;
     const { organizationId, selectedCell, stateMachineData, transferData } = this.state;
+    this.setState({
+      allChecked: e.target.checked,
+    });
     if (e.target.checked) {
       StateMachineStore.linkAllToNode(organizationId, selectedCell.nodeId, stateMachineData.id)
         .then((item) => {
@@ -941,6 +945,7 @@ class EditStateMachine extends Component {
           const cells = [];
           cells.push(this.graph.getCell(`all${selectedCell.allStatusTransformId}`));
           cells.push(this.graph.getCell(`t${selectedCell.allStatusTransformId}`));
+          selectedCell.allStatusTransformId = null;
           this.graph.removeCells(cells);
         });
     }
@@ -1046,7 +1051,7 @@ class EditStateMachine extends Component {
           : (
             <React.Fragment>
               <div className="graph-card-all">
-                <Checkbox defaultChecked={selectedCell && selectedCell.allStatusTransformId} onChange={this.handleAllChange}><FormattedMessage id="stateMachine.node.all" /></Checkbox>
+                <Checkbox checked={this.state.allChecked} onChange={this.handleAllChange}><FormattedMessage id="stateMachine.node.all" /></Checkbox>
               </div>
               <Popconfirm title={<FormattedMessage id="pageScheme.related.deleteTip" />} onConfirm={() => this.removeCell(this.state.selectedCell)}>
                 <Button

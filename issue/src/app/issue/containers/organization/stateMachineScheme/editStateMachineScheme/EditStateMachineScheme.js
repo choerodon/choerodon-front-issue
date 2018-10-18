@@ -16,6 +16,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import Graph from '../../../../components/Graph';
 import './EditStateMachineScheme.scss';
 import '../../../main.scss';
+import StateMachineStore from '../../../../stores/organization/stateMachine';
 
 const Sidebar = Modal.Sidebar;
 const FormItem = Form.Item;
@@ -56,8 +57,11 @@ class EditStateMachineScheme extends Component {
       organizationId,
       schemeId,
     );
-    StateMachineSchemeStore.loadAllStateMachine(organizationId);
-    StateMachineSchemeStore.loadGraphData(organizationId, stateMachine);
+    StateMachineSchemeStore.loadAllStateMachine(organizationId)
+      .then(() => {
+        this.loadGraphData();
+      });
+    // StateMachineSchemeStore.loadGraphData(organizationId, stateMachine);
   }
 
   loadAllData = () => {
@@ -116,15 +120,41 @@ class EditStateMachineScheme extends Component {
     StateMachineSchemeStore.setSelectedIssueTypeId(StateMachineSchemeStore.getSelectedIssueTypeId);
   };
 
-  handleSelectChange = (value) => {
-    this.setState({
-      stateMachine: value,
-    });
-    const { organizationId } = AppState.currentMenuType;
+  setGraphData = (res) => {
     const { StateMachineSchemeStore } = this.props;
-    const { stateMachine } = this.state;
+    StateMachineSchemeStore.setNodeData(res.nodeDTOs);
+    StateMachineSchemeStore.setTransferData(res.transformDTOs);
+  }
 
-    StateMachineSchemeStore.loadGraphData(organizationId, stateMachine);
+  loadGraphData = (item) => {
+    const { StateMachineSchemeStore } = this.props;
+    const { organizationId } = AppState.currentMenuType;
+    const stateMachine = item || StateMachineSchemeStore.getAllStateMachine.slice()[0];
+    if (stateMachine.status === 'state_machine_create') {
+      StateMachineStore.loadStateMachineDraftById(organizationId, stateMachine.id)
+        .then((data) => {
+          StateMachineSchemeStore.setGraphLoading(false);
+          this.setGraphData(data);
+        });
+    } else {
+      StateMachineStore.loadStateMachineDeployById(organizationId, stateMachine.id)
+        .then((data) => {
+          StateMachineSchemeStore.setGraphLoading(false);
+          this.setGraphData(data);
+        });
+    }
+  }
+
+  handleSelectChange = (value) => {
+    const { StateMachineSchemeStore } = this.props;
+
+    const allStateMachine = StateMachineSchemeStore.getAllStateMachine;
+    const { stateMachine } = this.state;
+    const item = allStateMachine[value];
+    this.setState({
+      stateMachine: item.id,
+    });
+    this.loadGraphData(item);
   };
 
   handleRowSelectChange = (selectedRowKeys, selectedRows) => {
@@ -213,7 +243,7 @@ class EditStateMachineScheme extends Component {
         <Form>
           <FormItem {...formItemLayout} className="issue-sidebar-form">
             {getFieldDecorator('stateMachine', {
-              initialValue: allStateMachine[0].id,
+              initialValue: 0,
             })(
               <Select
                 label={intl.formatMessage({
@@ -222,10 +252,10 @@ class EditStateMachineScheme extends Component {
                 onChange={val => this.handleSelectChange(val)}
               >
                 {allStateMachine &&
-                  allStateMachine.map(stateMachineItem => (
+                  allStateMachine.map((stateMachineItem, index) => (
                     <Option
                       key={stateMachineItem.id}
-                      value={stateMachineItem.id}
+                      value={index}
                     >
                       {stateMachineItem.name}
                     </Option>
