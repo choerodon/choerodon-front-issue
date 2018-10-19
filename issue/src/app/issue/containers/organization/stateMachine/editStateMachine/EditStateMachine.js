@@ -627,7 +627,7 @@ class EditStateMachine extends Component {
     if ((cell && cell.statusId !== 0) || !cell) {
       this.setState({
         selectedCell: cell,
-        allChecked: cell.allStatusTransformId,
+        allChecked: cell && cell.allStatusTransformId,
       });
     }
   }
@@ -762,11 +762,13 @@ class EditStateMachine extends Component {
             const cells = [];
             cells.push(this.graph.getCell(`all${cell.allStatusTransformId}`));
             this.graph.removeCells(cells);
+            _.remove(transferData, item => item.id === cell.allStatusTransformId);
           }
           this.graph.removeCells();
           this.setState({
             nodeData: data,
             selectedCell: null,
+            transferData,
           });
         }
       });
