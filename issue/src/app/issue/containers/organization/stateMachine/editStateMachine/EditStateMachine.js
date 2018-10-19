@@ -809,9 +809,10 @@ class EditStateMachine extends Component {
   textTransferAdd = (id) => {
     const { nodeData } = this.state;
     const source = _.find(nodeData, item => item.id === id);
+
     if (source) {
       this.setState({
-        source,
+        source: this.graph.getCell(`n${source.id}`),
         target: false,
       }, () => {
         this.showSideBar('transfer', 'add');
@@ -947,7 +948,11 @@ class EditStateMachine extends Component {
           const cells = [];
           cells.push(this.graph.getCell(`all${selectedCell.allStatusTransformId}`));
           cells.push(this.graph.getCell(`t${selectedCell.allStatusTransformId}`));
+          _.remove(transferData, item => item.id === selectedCell.allStatusTransformId);
           selectedCell.allStatusTransformId = null;
+          this.setState({
+            transferData,
+          });
           this.graph.removeCells(cells);
         });
     }
