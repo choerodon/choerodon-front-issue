@@ -627,7 +627,7 @@ class EditStateMachine extends Component {
     if ((cell && cell.statusId !== 0) || !cell) {
       this.setState({
         selectedCell: cell,
-        allChecked: cell.allStatusTransformId,
+        allChecked: cell && cell.allStatusTransformId,
       });
     }
   }
@@ -762,11 +762,13 @@ class EditStateMachine extends Component {
             const cells = [];
             cells.push(this.graph.getCell(`all${cell.allStatusTransformId}`));
             this.graph.removeCells(cells);
+            _.remove(transferData, item => item.id === cell.allStatusTransformId);
           }
           this.graph.removeCells();
           this.setState({
             nodeData: data,
             selectedCell: null,
+            transferData,
           });
         }
       });
@@ -1139,11 +1141,13 @@ class EditStateMachine extends Component {
               )}
             </TabPane>
             <TabPane tab={<FormattedMessage id="stateMachine.tab.text" />} key="text">
-              <div className={`${prefixCls}-tab-action-btn`}>
-                <Button onClick={() => this.toolbarAdd('state')} funcType="flat" icon="add">
-                  <FormattedMessage id="stateMachine.state.add" />
-                </Button>
-              </div>
+              {status !== 'state_machine_active' && (
+                <div className={`${prefixCls}-tab-action-btn`}>
+                  <Button onClick={() => this.toolbarAdd('state')} funcType="flat" icon="add">
+                    <FormattedMessage id="stateMachine.state.add" />
+                  </Button>
+                </div>)
+              }
               <Table
                 dataSource={dataSource}
                 columns={this.getColumn()}
