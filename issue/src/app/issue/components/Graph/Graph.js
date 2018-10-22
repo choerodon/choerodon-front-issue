@@ -185,7 +185,7 @@ class Graph extends Component {
     graph.getModel().beginUpdate();
     let cell;
     try {
-      cell = graph.insertVertex(parent, `n${values.id}`, values.statusDTO && values.statusDTO.name, 150, 0, 100, 50, 'shape=rectangle;');
+      cell = graph.insertVertex(parent, `n${values.id}`, values.statusDTO && values.statusDTO.name, 150, 0, 100, 50, 'strokeColor=red');
       cell.stateId = values.statusId;
       cell.nodeId = values.id;
       cell.status = values.type;
@@ -352,6 +352,7 @@ class Graph extends Component {
                 'fillColor=#000;fontColor=#fff;',
               );
               all.status = 'node_all';
+              // all.setEnabled(false);
               all.setConnectable(false);
               ed = graph.insertEdge(parent, `t${id}`, name || 'open', all, targetElement, `${edgeStyle}${style || ''}`);
             } else {
@@ -629,7 +630,8 @@ class Graph extends Component {
             targetPoint = this.constraintHandler.currentConstraint;
           }
           const style = `exitX=${sourcePoint.point.x};exitY=${sourcePoint.point.y};exitPerimeter=1;entryX=${targetPoint.point.x};entryY=${targetPoint.point.y};entryPerimeter=1;`;
-          if (onLink && source.stateId) {
+          if (onLink && (source.stateId || source.stateId === 0)) {
+            target.setStyle('strokeColor=#000');
             onLink(source, target, style);
           }
           that.setState({

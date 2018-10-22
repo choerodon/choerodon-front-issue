@@ -745,13 +745,43 @@ class EditStateMachine extends Component {
     this.showSideBar('transfer', 'add');
   }
 
+  changeStyle = (cell, transferData, node) => {
+    let change = true;
+    if (cell && transferData.length) {
+      transferData.forEach((item) => {
+        if (item.endNodeId === cell.nodeId) {
+          if (!node || (node.nodeId !== item.startNodeId)) {
+            change = false;
+          }
+        }
+      });
+    }
+    return change;
+  }
+
   removeCell = (cell) => {
     const { StateMachineStore } = this.props;
-    const { selectedCell, organizationId, transferData } = this.state;
+    const { selectedCell, organizationId, transferData, nodeData } = this.state;
     this.setState({
       loading: true,
     });
     if (cell.vertex) {
+      const targetLink = [];
+      transferData.forEach((item) => {
+        if (item.startNodeId === cell.nodeId) {
+          targetLink.push(item);
+        }
+      });
+      const targetData = [];
+      if (targetLink.length) {
+        nodeData.forEach((item) => {
+          targetLink.forEach((link) => {
+            if (link.endNodeId === item.id) {
+              targetData.push(item);
+            }
+          });
+        });
+      }
 
       StateMachineStore.deleteStateMachineNode(organizationId, cell.nodeId).then((data) => {
         this.setState({
@@ -764,6 +794,17 @@ class EditStateMachine extends Component {
             this.graph.removeCells(cells);
             _.remove(transferData, item => item.id === cell.allStatusTransformId);
           }
+          if (targetData.length) {
+            const targetNode = [];
+            targetData.forEach((item) => {
+              const node = this.graph.getCell(`n${item.id}`);
+              const change = this.changeStyle(node, transferData);
+              if (this.changeStyle(node, transferData, cell)) {
+                node.setStyle('strokeColor=red');
+                this.graph.refresh();
+              }
+            });
+          }
           this.graph.removeCells();
           this.setState({
             nodeData: data,
@@ -773,6 +814,7 @@ class EditStateMachine extends Component {
         }
       });
     } else {
+      const targetNode = cell.target;
       StateMachineStore.deleteStateMachineTransfer(organizationId, cell.transferId)
         .then((data) => {
           this.setState({
@@ -783,6 +825,10 @@ class EditStateMachine extends Component {
               this.graph.removeCells([cell], true);
             } else {
               this.graph.removeCells();
+            }
+            if (this.changeStyle(targetNode, transferData, cell.source)) {
+              targetNode.setStyle('strokeColor=red');
+              this.graph.refresh();
             }
             _.remove(transferData,
               item => item.id.toString() === cell.transferId.toString());
