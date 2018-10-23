@@ -46,7 +46,7 @@ class StateMachineStore {
     });
   }
 
-  loadStateMachineDeployById = (orgId, stateId) => axios.get(`/state/v1/organizations/1/state_machines/with_config_deploy/${stateId}`).then((data) => {
+  loadStateMachineDeployById = (orgId, stateId) => axios.get(`/state/v1/organizations/${orgId}/state_machines/with_config_deploy/${stateId}`).then((data) => {
     const res = this.handleProptError(data);
     if (data) {
       this.setStateMachine(data);
@@ -54,7 +54,7 @@ class StateMachineStore {
     return res;
   });
 
-  loadStateMachineDraftById = (orgId, stateId) => axios.get(`/state/v1/organizations/1/state_machines/with_config_draft/${stateId}`).then((data) => {
+  loadStateMachineDraftById = (orgId, stateId) => axios.get(`/state/v1/organizations/${orgId}/state_machines/with_config_draft/${stateId}`).then((data) => {
     const res = this.handleProptError(data);
     if (data) {
       this.setStateMachine(data);
