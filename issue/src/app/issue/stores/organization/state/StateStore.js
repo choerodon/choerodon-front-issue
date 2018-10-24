@@ -10,20 +10,20 @@ class StateStore {
 
   @action setStageOptionsData() {
     this.stageOptionsData = [{
-      id: 'status_todo',
+      id: 'todo',
       code: 'todo',
       name: '待处理',
     }, {
-      id: 'status_doing',
-      code: 'status_doing',
+      id: 'doing',
+      code: 'doing',
       name: '处理中',
     }, {
-      id: 'status_done',
-      code: 'status_done',
+      id: 'done',
+      code: 'done',
       name: '完成',
     }, {
-      id: 'status_none',
-      code: 'status_none',
+      id: 'none',
+      code: 'none',
       name: '无阶段',
     }];
   }

@@ -13,7 +13,7 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "choerodon-front-boot": "^0.8.1",
+    "choerodon-front-boot": "^0.9.0",
     "immutability-helper": "^2.7.1",
     "mxgraph-js": "^1.0.1",
     "react-beautiful-dnd": "^8.0.7",
