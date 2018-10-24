@@ -26,22 +26,22 @@ const formItemLayout = {
 const prefixCls = 'issue-state';
 
 const stageOptions = {
-  status_todo: {
+  todo: {
     id: '0',
     code: 'todo',
     name: '待处理',
   },
-  status_doing: {
+  doing: {
     id: '1',
     code: 'doing',
     name: '处理中',
   },
-  status_done: {
+  done: {
     id: '2',
     code: 'done',
     name: '完成',
   },
-  status_none: {
+  none: {
     id: '3',
     code: 'none',
     name: '无阶段',
@@ -334,7 +334,7 @@ class StateList extends Component {
                 whitespace: true,
                 message: intl.formatMessage({ id: 'required' }),
               }],
-              initialValue: editState ? editState.type : 'status_todo',
+              initialValue: editState ? editState.type : 'todo',
             })(
               <Select
                 style={{ width: 520 }}
