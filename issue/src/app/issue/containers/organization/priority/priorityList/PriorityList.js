@@ -83,10 +83,10 @@ class PriorityList extends Component {
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => {
-        if (record.isDefault === '0') {
-          return text;
-        } else {
+        if (record.isDefault) {
           return `${text}（默认）`;
+        } else {
+          return text;
         }
       },
     },
