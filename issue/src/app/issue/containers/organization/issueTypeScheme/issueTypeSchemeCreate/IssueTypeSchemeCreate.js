@@ -12,6 +12,7 @@ import TransferDrag from '../../../../components/TransferDrag';
 import '../../../main.scss';
 import './IssueTypeSchemeCreate.scss';
 import TypeIcon from '../../../../components/TypeIcon';
+import TypeTag from "../../../../components/TypeTag/TypeTag";
 
 
 const { AppState } = stores;
@@ -192,7 +193,6 @@ class IssueTypeSchemeCreate extends Component {
       name = name ? `Copy ${name}` : '';
       titleId = 'issueTypeScheme.copy';
     }
-    console.log(`origin: ${origin}`);
     return (
       <Sidebar
         title={<FormattedMessage id={titleId} />}
@@ -258,18 +258,17 @@ class IssueTypeSchemeCreate extends Component {
                       value={issueType.id}
                       key={issueType.id}
                     >
-                      {/* <Icon type={issueType.icon} className="issue-schemeCreate-icon" />
-                      {issueType.name} */}
-                      <TypeIcon
-                        icon={issueType.icon}
-                        bgColor={issueType.colour}
-                        name={issueType.name}
-                        showName={true}
-                      />
+                      <div
+                        className="issue-type-wapper"
+                      >
+                        <TypeTag
+                          data={issueType}
+                          showName
+                        />
+                      </div>
                     </Option>
                   ))}
                 </Select>,
-
               )}
             </FormItem>
           </Form>

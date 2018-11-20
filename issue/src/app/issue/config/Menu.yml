@@ -26,57 +26,15 @@
         sort: 4
         permission:
           - 'issue-service.issue.hello'
-    - "screens":
-        icon: description
-        Routes: /issue/screens
-        sort: 5
-        permission:
-          - 'issue-service.issue.hello'
-    - "screen-schemes":
-        icon: library_books
-        Routes: /issue/screen-schemes
-        sort: 6
-        permission:
-          - 'issue-service.issue.hello'
-    - "issue-type-screen-schemes":
-        icon: collections_bookmark
-        Routes: /issue/issue-type-screen-schemes
-        sort: 7
-        permission:
-          - 'issue-service.issue.hello'
-    - "custom-fields":
-        icon: aspect_ratio
-        Routes: /issue/custom-fields
-        sort: 8
-        permission:
-          - 'issue-service.issue.hello'
-    - "field-configurations":
-        icon: spellcheck
-        Routes: /issue/field-configurations
-        sort: 9
-        permission:
-          - 'issue-service.issue.hello'
-    - "field-configuration-schemes":
-        icon: filter_none
-        Routes: /issue/field-configuration-schemes
-        sort: 10
-        permission:
-          - 'issue-service.issue.hello'
     - "state":
         icon: hdr_strong
         Routes: /issue/states
-        sort: 11
+        sort: 5
         permission:
           - 'state-machine-service.hello'
     - "priorities":
         icon: format_list_numbered
         Routes: /issue/priorities
-        sort: 12
-        permission:
-          - 'issue-service.issue.hello'
-    - "notification-schemes":
-        icon: notifications
-        Routes: /issue/notification-schemes
-        sort: 13
+        sort: 6
         permission:
           - 'issue-service.issue.hello'

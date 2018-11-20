@@ -10,6 +10,7 @@ const config = {
     port: 8080,
     server: 'http://api.staging.saas.hand-china.com',
     // server: 'http://10.211.102.55:8080', //士男
+    dashboard: {},
   };
   
   module.exports = config;

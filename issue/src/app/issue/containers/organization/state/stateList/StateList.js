@@ -9,10 +9,10 @@ import '../../../main.scss';
 import './StateList.scss';
 
 const { AppState } = stores;
-const Sidebar = Modal.Sidebar;
+const { Sidebar } = Modal;
 const FormItem = Form.Item;
-const TextArea = Input.TextArea;
-const Option = Select.Option;
+const { TextArea } = Input;
+const { Option } = Select;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -27,24 +27,28 @@ const prefixCls = 'issue-state';
 
 const stageOptions = {
   todo: {
-    id: '0',
+    id: 'todo',
     code: 'todo',
     name: '待处理',
+    colour: '#ffb100',
   },
   doing: {
-    id: '1',
+    id: 'doing',
     code: 'doing',
     name: '处理中',
+    colour: '#4d90fe',
   },
   done: {
-    id: '2',
+    id: 'done',
     code: 'done',
     name: '完成',
+    colour: '#00bfa5',
   },
   none: {
-    id: '3',
+    id: 'none',
     code: 'none',
     name: '无阶段',
+    colour: '#EFEFEF',
   },
 };
 
@@ -96,7 +100,12 @@ class StateList extends Component {
       text: '无阶段',
       value: '3',
     }],
-    render: record => <span>{stageOptions[record].name}</span>,
+    render: record => (
+      <div>
+        <div className="issue-state-block" style={{ backgroundColor: stageOptions[record].colour }} />
+        <span>{stageOptions[record].name}</span>
+      </div>
+    ),
   }, {
     title: <FormattedMessage id="state.stateMachine" />,
     dataIndex: 'stateMachine',
@@ -113,8 +122,8 @@ class StateList extends Component {
             <i className="icon icon-mode_edit" />
           </Button>
         </Tooltip>
-        {record.canDelete ?
-          <Tooltip placement="top" title={<FormattedMessage id="delete" />}>
+        {record.canDelete
+          ? <Tooltip placement="top" title={<FormattedMessage id="delete" />}>
             <Button shape="circle" size="small" onClick={this.confirmDelete.bind(this, record)}>
               <i className="icon icon-delete" />
             </Button>
@@ -122,7 +131,7 @@ class StateList extends Component {
         }
       </div>
     ),
-  }])
+  }]);
 
   showSideBar = (state, id = '') => {
     const { StateStore } = this.props;
@@ -142,7 +151,7 @@ class StateList extends Component {
       show: true,
       type: state,
     });
-  }
+  };
 
   confirmDelete = (record) => {
     this.setState({
@@ -150,19 +159,21 @@ class StateList extends Component {
       deleteId: record.id,
       deleteName: record.name,
     });
-  }
+  };
 
   handleCancel = () => {
     this.setState({
       deleteVisible: false,
       deleteId: '',
     });
-  }
+  };
 
   handleDelete = () => {
     const { StateStore } = this.props;
     const orgId = AppState.currentMenuType.organizationId;
-    const { deleteId, page, pageSize, sorter, tableParam } = this.state;
+    const {
+      deleteId, page, pageSize, sorter, tableParam,
+    } = this.state;
     StateStore.deleteState(orgId, deleteId).then((data) => {
       if (data && data.failed) {
         Choerodon.prompt(data.message);
@@ -174,7 +185,7 @@ class StateList extends Component {
         });
       }
     });
-  }
+  };
 
   hideSidebar = () => {
     this.setState({
@@ -182,7 +193,7 @@ class StateList extends Component {
       type: '',
       editState: false,
     });
-  }
+  };
 
   loadState = (page = 0, size = 10, sort = { field: 'id', order: 'desc' }, param) => {
     const { StateStore } = this.props;
@@ -193,11 +204,13 @@ class StateList extends Component {
         total: data.totalElements,
       });
     });
-  }
+  };
 
   handleSubmit = () => {
     const { StateStore, form } = this.props;
-    const { id, type, copyFrom, editState, page, pageSize, sorter, tableParam } = this.state;
+    const {
+      type, editState, page, pageSize, sorter, tableParam,
+    } = this.state;
     const orgId = AppState.currentMenuType.organizationId;
 
     form.validateFieldsAndScroll((err, data) => {
@@ -245,12 +258,14 @@ class StateList extends Component {
         }
       }
     });
-  }
+  };
 
   refreshData = () => {
-    const { page, pageSize, sorter, tableParam } = this.state;
+    const {
+      page, pageSize, sorter, tableParam,
+    } = this.state;
     this.loadState(page, pageSize, sorter, tableParam);
-  }
+  };
 
 
   tableChange = (pagination, filters, sorter, param) => {
@@ -275,18 +290,17 @@ class StateList extends Component {
       sorter: sorter.column ? sorter : undefined,
       tableParam: postData,
     });
-    this.loadState(pagination.current - 1, pagination.pageSize, sorter.column ? sorter : undefined, postData);
+    this.loadState(pagination.current - 1,
+      pagination.pageSize, sorter.column ? sorter : undefined, postData);
   };
 
   render() {
     const { StateStore, intl } = this.props;
-    const { statesList = [], deleteName, editState, page, pageSize, total } = this.state;
-    // const dataSource = StateStore.getStateList;
+    const {
+      statesList = [], deleteName, editState, page, pageSize, total,
+    } = this.state;
     const { getFieldDecorator } = this.props.form;
-    const serviceData = StateStore.getAllData;
     const { getStageOptionsData } = StateStore;
-    const menu = AppState.currentMenuType;
-    const { type, id: projectId, organizationId: orgId } = menu;
     const formContent = (
       <div className="issue-region">
         <Form layout="vertical" className="issue-sidebar-form">
@@ -342,12 +356,16 @@ class StateList extends Component {
                 dropdownMatchSelectWidth
                 size="default"
               >
-                {getStageOptionsData && getStageOptionsData.length > 0 && getStageOptionsData.map(s => (
+                {getStageOptionsData && getStageOptionsData.length > 0
+                && getStageOptionsData.map(stage => (
                   <Option
-                    value={s.id}
-                    key={s.id}
+                    value={stage.code}
+                    key={stage.code}
                   >
-                    <span style={{ display: 'inline-block', width: '100%' }}>{s.name}</span>
+                    <div style={{ display: 'inline-block' }}>
+                      <div className="issue-state-block" style={{ backgroundColor: stage.colour }} />
+                      <span style={{ display: 'inline-block', width: '100%' }}>{stage.name}</span>
+                    </div>
                   </Option>
                 ))}
               </Select>,
