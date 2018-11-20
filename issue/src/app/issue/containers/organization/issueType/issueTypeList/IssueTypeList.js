@@ -11,7 +11,7 @@ import {
 import '../../../main.scss';
 import './IssueTypeList.scss';
 import IssueTypeCreate from '../issueTypeCreate';
-import TypeIcon from '../../../../components/TypeIcon';
+import TypeTag from '../../../../components/TypeTag/TypeTag';
 
 const { AppState } = stores;
 
@@ -37,19 +37,10 @@ class IssueTypeList extends Component {
     key: 'name',
     filters: [],
     render: (text, record) => (
-      // <div>
-      //   <Icon 
-      //     type={record.icon} 
-      //     className="issue-issueTypeList-icon"
-      //     style={{ color: `${record.colour}` }}
-      //   />
-      //   {record.name}
-      // </div>
-      <TypeIcon
-        icon={record.icon}
-        bgColor={record.colour}
-        name={record.name}
-        showName={true}
+      <TypeTag
+        data={record}
+        showName
+        style={{ margin: 0 }}
       />
     ),
   }, {
@@ -80,7 +71,12 @@ class IssueTypeList extends Component {
           placement="bottom"
           title={<FormattedMessage id="edit" />}
         >
-          <Button size="small" shape="circle" onClick={this.showEdit.bind(this, record.id)}>
+          <Button
+            disabled
+            size="small"
+            shape="circle"
+            onClick={this.showEdit.bind(this, record.id)}
+          >
             <i className="icon icon-mode_edit" />
           </Button>
         </Tooltip>
@@ -88,7 +84,12 @@ class IssueTypeList extends Component {
           placement="bottom"
           title={<FormattedMessage id="delete" />}
         >
-          <Button size="small" shape="circle" onClick={this.openRemove.bind(this, record)}>
+          <Button
+            disabled
+            size="small"
+            shape="circle"
+            onClick={this.openRemove.bind(this, record)}
+          >
             <i className="icon icon-delete" />
           </Button>
         </Tooltip>
@@ -144,7 +145,7 @@ class IssueTypeList extends Component {
 
   closeRemove = () => {
     this.setState({
-      deleteVisible: false, visible: false, id: false, issueType: false, 
+      deleteVisible: false, visible: false, id: false, issueType: false,
     });
   };
 
@@ -197,7 +198,7 @@ class IssueTypeList extends Component {
     return (
       <Page className="issue-region">
         <Header title={<FormattedMessage id="issueType.title" />}>
-          <Button onClick={() => this.showCreate('create')}>
+          <Button disabled onClick={() => this.showCreate('create')}>
             <i className="icon-add icon" />
             <FormattedMessage id="issueType.create" />
           </Button>

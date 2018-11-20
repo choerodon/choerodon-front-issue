@@ -7,6 +7,7 @@ import Tips from '../Tips';
 import './TransferDrag.scss';
 import drag from '../../assets/images/drag.png';
 import TypeIcon from '../TypeIcon';
+import TypeTag from "../TypeTag/TypeTag";
 
 class TransferDrag extends Component {
   constructor(props) {
@@ -168,35 +169,14 @@ class TransferDrag extends Component {
                           >
                             {renderChildren ? renderChildren(item) : <React.Fragment>
                               <img src={drag} className="issue-issueTypeDrag-drag" alt="" />
-                              {/* {item.icon && <Icon type={item.icon} className="issue-issueTypeDrag-icon" />}
-                              {textField ? item[textField] : item.name} */}
-                               {/* {
-                                item.icon && (
-                                  <TypeIcon
-                                    style={{ marginTop: -20, marginLeft: 20 }}
-                                    icon={item.icon}
-                                    bgColor={item.colour}
-                                    name={`${textField ? item[textField] : item.name}`}
-                                    showName={true}
-                                  />
-                                )
-                              } */}
                                {
                                 item.icon && (
-                                  <TypeIcon
-                                    style={{ marginTop: -20, marginLeft: 20 }}
-                                    icon={item.icon}
-                                    bgColor={item.colour}
-                                    // name={`${textField ? item[textField] : item.name}`}
-                                    showName={false}
+                                  <TypeTag
+                                    data={item}
+                                    showName
                                   />
                                 )
                               }
-                              <div
-                                style={ item.icon ? { marginTop: -20, marginLeft: 48 } : { marginTop: -20, marginLeft: 20 }}
-                              >
-                                {textField ? item[textField] : item.name}
-                              </div>
                             </React.Fragment>
                             }
                           </div>
@@ -237,24 +217,14 @@ class TransferDrag extends Component {
                           >
                             {renderChildren ? renderChildren(item) : <React.Fragment>
                               <img src={drag} className="issue-issueTypeDrag-drag" alt="" />
-                              {/* {item.icon && <Icon type={item.icon} className="issue-issueTypeDrag-icon" />}
-                              {textField ? item[textField] : item.name} */}
                               {
                                 item.icon && (
-                                  <TypeIcon
-                                    style={{ marginTop: -20, marginLeft: 20 }}
-                                    icon={item.icon}
-                                    bgColor={item.colour}
-                                    // name={`${textField ? item[textField] : item.name}`}
-                                    showName={false}
+                                  <TypeTag
+                                    data={item}
+                                    showName
                                   />
                                 )
                               }
-                              <div
-                                style={ item.icon ? { marginTop: -20, marginLeft: 48 } : { marginTop: -20, marginLeft: 20 }}
-                              >
-                                {textField ? item[textField] : item.name}
-                              </div>
                             </React.Fragment>
                             }
 

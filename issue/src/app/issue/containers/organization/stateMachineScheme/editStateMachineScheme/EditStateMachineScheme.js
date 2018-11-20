@@ -17,6 +17,7 @@ import Graph from '../../../../components/Graph';
 import './EditStateMachineScheme.scss';
 import '../../../main.scss';
 import StateMachineStore from '../../../../stores/organization/stateMachine';
+import TypeTag from "../../../../components/TypeTag/TypeTag";
 
 const Sidebar = Modal.Sidebar;
 const FormItem = Form.Item;
@@ -277,7 +278,7 @@ class EditStateMachineScheme extends Component {
         </Spin>
       </Fragment>
     );
-  }
+  };
 
   renderConnectStateMachineForm = () => {
     const { intl } = this.props;
@@ -291,17 +292,20 @@ class EditStateMachineScheme extends Component {
         key: 'connectIssueType',
         render: record => (
           <Fragment>
-            <Icon type={record.icon} className="issue-scheme-icon" />
-            {record.name}
+            <TypeTag
+              data={record}
+              showName
+            />
           </Fragment>
         ),
       },
       {
         title: intl.formatMessage({
-          id: 'stateMachineScheme.connectedStateMachine'
+          id: 'stateMachineScheme.connectedStateMachine',
         }),
         key: 'connectedStateMachine',
-        render: (text, record) => record.stateMachineSchemeConfigDTO && record.stateMachineSchemeConfigDTO.stateMachineName,
+        render: (text, record) => record.stateMachineSchemeConfigDTO
+          && record.stateMachineSchemeConfigDTO.stateMachineName,
       },
       {
         title: '',
@@ -326,7 +330,8 @@ class EditStateMachineScheme extends Component {
         this.handleRowSelectChange(selectedRowKeys, selectedRows);
       },
       getCheckboxProps: record => ({
-        defaultChecked: StateMachineSchemeStore.getSelectedIssueTypeId.length !== 0 && StateMachineSchemeStore.getSelectedIssueTypeId.includes(record.id),
+        defaultChecked: StateMachineSchemeStore.getSelectedIssueTypeId.length !== 0
+        && StateMachineSchemeStore.getSelectedIssueTypeId.includes(record.id),
       }),
     };
     return (
@@ -344,7 +349,7 @@ class EditStateMachineScheme extends Component {
         </FormItem>
       </Form>
     );
-  }
+  };
 
   getColumns = () => [
     {
@@ -353,7 +358,7 @@ class EditStateMachineScheme extends Component {
       key: 'stateMachine',
       className: 'issue-table-ellipsis',
       render: record => (
-        record.stateMachineDTO.length !== 0 && (
+        record.stateMachineDTO && record.stateMachineDTO.length !== 0 && (
           <Fragment>{record.stateMachineDTO.name}</Fragment>
         )
       ),
@@ -386,7 +391,7 @@ class EditStateMachineScheme extends Component {
             size="small"
             onClick={this.handleEditStateMachine.bind(
               this,
-              record.stateMachineDTO.id,
+              record.stateMachineDTO && record.stateMachineDTO.id,
             )}
           >
             <Icon type="mode_edit" />
@@ -396,8 +401,8 @@ class EditStateMachineScheme extends Component {
             size="small"
             onClick={this.handleDelete.bind(
               this,
-              record.stateMachineDTO.id,
-              record.stateMachineDTO.name,
+              record.stateMachineDTO && record.stateMachineDTO.id,
+              record.stateMachineDTO && record.stateMachineDTO.name,
             )}
           >
             <Icon type="delete" />
@@ -503,7 +508,7 @@ class EditStateMachineScheme extends Component {
                       >
                         {<FormattedMessage id="stateMachineScheme.pre" />}
                       </Button>
-                    )}
+                  )}
 
                   <Button
                     key="finish"

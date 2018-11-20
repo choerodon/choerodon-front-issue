@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import {
-  Modal, Form, Select, Input, message, IconSelect, 
+  Modal, Form, Select, Input, message, IconSelect,
 } from 'choerodon-ui';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import {
-  Content, Header, Page, Permission, stores, 
+  Content, Header, Page, Permission, stores,
 } from 'choerodon-front-boot';
 import _ from 'lodash';
 import { CompactPicker } from 'react-color';
@@ -34,7 +34,7 @@ class IssueTypeCreate extends Component {
   constructor(props) {
     const menu = AppState.currentMenuType;
     super(props);
-    
+
     this.state = {
       submitting: false,
       displayColorPicker: false,
@@ -66,7 +66,7 @@ class IssueTypeCreate extends Component {
   };
 
   handleSubmit = () => {
-    const { store, id, intl } = this.props; 
+    const { store, id, intl } = this.props;
     const { issueTypeColor } = this.state;
     const orgId = AppState.currentMenuType.organizationId;
     const objectVersionNumber = store.issueType ? store.issueType.objectVersionNumber : 0;
@@ -234,7 +234,10 @@ class IssueTypeCreate extends Component {
                   ? (
                     <div className="popover">
                       <div className="cover" onClick={this.handleCloseColorPicker} role="none" />
-                      <CompactPicker color={issueTypeColor} onChange={this.handleChangeColorComplete} />
+                      <CompactPicker
+                        color={issueTypeColor}
+                        onChange={this.handleChangeColorComplete}
+                      />
                     </div>
                   )
                   : null

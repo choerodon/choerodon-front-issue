@@ -11,8 +11,7 @@ import {
 import '../../../main.scss';
 import './IssueTypeSchemeList.scss';
 import IssueTypeSchemeCreate from '../issueTypeSchemeCreate';
-import TypeIcon from '../../../../components/TypeIcon';
-
+import TypeTag from '../../../../components/TypeTag/TypeTag';
 
 const { AppState } = stores;
 
@@ -57,13 +56,9 @@ class IssueTypeSchemeList extends Component {
         <div>
           {record.issueTypes.map(type => (
             <div key={type.id} className="issue-issueTypeScheme-type">
-              {/* <Icon type={type.icon} className="issue-issueTypeScheme-icon" />
-              {type.name} */}
-              <TypeIcon
-                icon={type.icon}
-                bgColor={type.colour}
-                name={type.name}
-                showName={true}
+              <TypeTag
+                data={type}
+                showName
               />
             </div>))
           }
@@ -92,7 +87,12 @@ class IssueTypeSchemeList extends Component {
           placement="bottom"
           title={<FormattedMessage id="edit" />}
         >
-          <Button size="small" shape="circle" onClick={this.showEdit.bind(this, record.id)}>
+          <Button
+            disabled
+            size="small"
+            shape="circle"
+            onClick={this.showEdit.bind(this, record.id)}
+          >
             <i className="icon icon-mode_edit" />
           </Button>
         </Tooltip>
@@ -100,9 +100,10 @@ class IssueTypeSchemeList extends Component {
           placement="bottom"
           title={<FormattedMessage id="relation" />}
         >
-          <Button 
-            size="small" 
-            shape="circle" 
+          <Button
+            disabled
+            size="small"
+            shape="circle"
             onClick={
               () => {
                 const {
@@ -119,7 +120,12 @@ class IssueTypeSchemeList extends Component {
           placement="bottom"
           title={<FormattedMessage id="copy" />}
         >
-          <Button size="small" shape="circle" onClick={this.showCopy.bind(this, record.id)}>
+          <Button
+            disabled
+            size="small"
+            shape="circle"
+            onClick={this.showCopy.bind(this, record.id)}
+          >
             <i className="icon icon-content_copy />" />
           </Button>
         </Tooltip>
@@ -127,7 +133,12 @@ class IssueTypeSchemeList extends Component {
           placement="bottom"
           title={<FormattedMessage id="delete" />}
         >
-          <Button size="small" shape="circle" onClick={this.openRemove.bind(this, record)}>
+          <Button
+            disabled
+            size="small"
+            shape="circle"
+            onClick={this.openRemove.bind(this, record)}
+          >
             <i className="icon icon-delete" />
           </Button>
         </Tooltip>

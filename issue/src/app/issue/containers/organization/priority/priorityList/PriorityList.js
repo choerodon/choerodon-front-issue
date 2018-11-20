@@ -57,25 +57,12 @@ class PriorityList extends Component {
     PriorityStore.setPriorityList(priorityListAfterDrag);
     // 更新顺序
     PriorityStore.reOrder(orgId);
-  }
+  };
 
   refresh = () => {
     const orgId = AppState.currentMenuType.organizationId;
     this.loadPriorityList(orgId);
-    // const { PriorityStore } = this.props;
-    // PriorityStore.setPriorityList([
-    //   {
-    //     id: 1,
-    //     name: '阿斯顿',
-    //     colour: '#999999',
-    //   },
-    //   {
-    //     id: 2,
-    //     name: '路上看到房价',
-    //     colour: '#234234',
-    //   },
-    // ]);
-  }
+  };
 
   getColumns = () => [
     {
