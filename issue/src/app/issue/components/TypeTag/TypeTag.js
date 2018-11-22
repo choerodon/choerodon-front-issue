@@ -7,7 +7,7 @@ const initTypes = ['agile_epic', 'agile_story', 'agile_fault', 'agile_task', 'ag
 class TypeTag extends Component {
   render() {
     const {
-      data, showName, style,
+      data, showName, style, iconStyle,
     } = this.props;
     return (
       <div className="c7n-typeTag" style={style}>
@@ -25,6 +25,7 @@ class TypeTag extends Component {
               className="icon-wapper"
               style={{
                 backgroundColor: data ? data.colour : '#fab614',
+                ...iconStyle,
               }}
             >
               <Icon

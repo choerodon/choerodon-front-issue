@@ -112,6 +112,12 @@ const zh_CN = {
   'stateMachineScheme.deleteDesBefore': '确实要删除 ',
   'stateMachineScheme.deleteDesAfter': '注意：将会从所有项目中删除这个状态机方案。',
   'stateMachineScheme.conflictInfo': '此问题类型已经关联其他状态机。你如果需要更新此关联，之前的结果将会被覆盖。',
+  'stateMachineScheme.tips': '注意：此状态机方案正在被使用。你正在编辑 #状态机方案草稿# ，如果修改后的草稿需要生效，点击 #发布# 。',
+  'stateMachineScheme.publish': '发布',
+  'stateMachineScheme.deleteDraft': '删除草稿',
+  'stateMachineScheme.original': '查看原件',
+  'stateMachineScheme.draft': '编辑草稿',
+
   // 自定义字段
   'customFields.title': '自定义字段',
   'customFields.create': '添加自定义字段',
@@ -193,6 +199,7 @@ const zh_CN = {
   'priority.delete.used,notice':
     '注意：将会从所有使用的事件单中删除这个优先级。请你为受影响的事件单选择一个新的优先级。',
   'priority.delete.chooseNewPriority.placeholder': '请选择一个新的优先级',
+  'priority.default': '（默认）',
 
   // 页面
   'page.title': '页面',
