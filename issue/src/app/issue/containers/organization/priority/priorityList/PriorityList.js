@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Table, Button, Modal, Form, Select, Input, Tooltip, Icon, Divider, message } from 'choerodon-ui';
+import {
+  Table, Button, Modal, Form, Select, Input, Tooltip, Icon, Divider, message,
+} from 'choerodon-ui';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Content, Header, Page, Permission, stores, axios } from 'choerodon-front-boot';
-import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
+import {
+  Content, Header, Page, Permission, stores, axios,
+} from 'choerodon-front-boot';
+import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
-
 import PriorityCreate from '../priorityCreate';
 import PriorityEdit from '../priorityEdit';
 import DeletePriorityModal from '../deletePriorityModal';
@@ -15,8 +18,6 @@ import BodyRow from './bodyRow';
 
 import '../../../main.scss';
 import './PriorityList.scss';
-
-const FormItem = Form.Item;
 
 const { AppState } = stores;
 
@@ -37,7 +38,7 @@ class PriorityList extends Component {
     body: {
       row: BodyRow,
     },
-  }
+  };
 
   componentDidMount() {
     this.refresh();
@@ -70,8 +71,8 @@ class PriorityList extends Component {
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => {
-        if (record.isDefault) {
-          return `${text}（默认）`;
+        if (record.default) {
+          return `${text} ${this.props.intl.formatMessage({ id: 'priority.default' })}`;
         } else {
           return text;
         }
@@ -96,12 +97,22 @@ class PriorityList extends Component {
       render: (text, record) => (
         <div>
           <Tooltip placement="top" title={<FormattedMessage id="edit" />}>
-            <Button shape="circle" size={'small'} onClick={this.handleEdit.bind(this, record.id)}>
+            <Button
+              disabled
+              shape="circle"
+              size="small"
+              onClick={this.handleEdit.bind(this, record.id)}
+            >
               <Icon type="mode_edit" />
             </Button>
           </Tooltip>
           <Tooltip placement="top" title={<FormattedMessage id="delete" />}>
-            <Button shape="circle" size={'small'} onClick={this.handleDelete.bind(this, record.id)}>
+            <Button
+              disabled
+              shape="circle"
+              size="small"
+              onClick={this.handleDelete.bind(this, record.id)}
+            >
               <Icon type="delete" />
             </Button>
           </Tooltip>
@@ -114,7 +125,7 @@ class PriorityList extends Component {
     const { PriorityStore } = this.props;
     PriorityStore.setEditingPriorityId(priorityId);
     this.showSideBar('edit');
-  }
+  };
 
   handleDelete = async (priorityId) => {
     const { PriorityStore } = this.props;
@@ -125,7 +136,7 @@ class PriorityList extends Component {
     } catch (err) {
       message.error('删除校验失败');
     }
-  }
+  };
 
   showSideBar = (operation) => {
     const { PriorityStore } = this.props;
@@ -139,7 +150,7 @@ class PriorityList extends Component {
       default:
         break;
     }
-  }
+  };
 
   async loadPriorityList(orgId) {
     const { PriorityStore } = this.props;

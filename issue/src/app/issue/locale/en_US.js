@@ -85,6 +85,12 @@ const enUS = {
   'stateMachineScheme.deleteDesAfter': 'Note: This state machine scenario will be removed from all projects.',
   'stateMachineScheme.conflictInfo':
     'This problem type is already associated with another state machine. If you need to update this association, the previous results will be overwritten.',
+  'stateMachineScheme.tips': 'Note: This state machine scheme is being used.You are editing #draft state machine# , if the revised draft needs to take effect, click #publish# .',
+  'stateMachineScheme.publish': 'Publish',
+  'stateMachineScheme.deleteDraft': 'Delete Draft',
+  'stateMachineScheme.original': 'Show Original',
+  'stateMachineScheme.draft': 'Edit Draft',
+
   // 自定义字段
   'customFields.title': 'Custom Field',
   'customFields.create': 'Add Custom Field',
@@ -165,6 +171,7 @@ const enUS = {
   'priority.delete.unused.notice': 'Note：This priority will be removed from all used tickets.。',
   'priority.delete.used,notice': 'Note: This priority will be removed from all used event tickets.Please select a new priority for the affected event list.',
   'priority.delete.chooseNewPriority.placeholder': 'Please choose a new priority',
+  'priority.default': '(Default)',
 
   // 问题类型页面方案
   'issueTypeScreenSchemes.title': '问题类型页面方案',

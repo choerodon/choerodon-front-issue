@@ -22,22 +22,23 @@ import {
 } from 'choerodon-front-boot';
 import '../../../main.scss';
 import './StateMachineSchemeList.scss';
+import TypeTag from "../../../../components/TypeTag/TypeTag";
 
 const { AppState } = stores;
 const prefixCls = 'issue-stateMachineScheme';
-const Sidebar = Modal.Sidebar;
+const { Sidebar } = Modal;
 const FormItem = Form.Item;
-const TextArea = Input.TextArea;
-const Option = Select.Option;
+const { TextArea } = Input;
+
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
-    sm: { span: 100 }
+    sm: { span: 100 },
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 26 }
-  }
+    sm: { span: 26 },
+  },
 };
 
 @observer
@@ -77,6 +78,13 @@ class StateMachineSchemeList extends Component {
       dataIndex: 'project',
       key: 'project',
       filters: [],
+      render: (text, record) => (
+        record.projectDTOs && record.projectDTOs.map(project => (
+          <div>
+            {`• ${project.name}`}
+          </div>
+        ))
+      ),
     },
     {
       title: (
@@ -89,7 +97,7 @@ class StateMachineSchemeList extends Component {
           </span>
         </div>
       ),
-      width: 400,
+      width: 500,
       dataIndex: 'related',
       key: 'related',
       render: (text, record) => record.configDTOs && record.configDTOs
@@ -97,9 +105,18 @@ class StateMachineSchemeList extends Component {
           <Fragment key={configDTO.id}>
             <div className={`${prefixCls}-table-related`}>
               <span className={`${prefixCls}-table-issueType`}>
-                <Icon type={configDTO.issueTypeIcon} />
-                <span>{configDTO.issueTypeName}</span>
-                <span className="icon icon-arrow_forward" />
+                <TypeTag
+                  data={{
+                    colour: configDTO.issueTypeColour,
+                    name: configDTO.issueTypeName,
+                    icon: configDTO.issueTypeIcon,
+                  }}
+                  showName
+                />
+                <Icon
+                  type="arrow_forward"
+                  style={{ verticalAlign: 'top', marginLeft: 10 }}
+                />
               </span>
               <span className={`${prefixCls}-table-stateMachine-content`}>
                 {configDTO.stateMachineName}
@@ -109,7 +126,6 @@ class StateMachineSchemeList extends Component {
         )),
     },
     {
-      align: 'right',
       title: <FormattedMessage id="stateMachineScheme.operation" />,
       width: 104,
       key: 'action',
@@ -123,8 +139,8 @@ class StateMachineSchemeList extends Component {
               <i className="icon icon-mode_edit" />
             </Button>
           </Tooltip>
-          {record.canDelete ?
-            <Tooltip
+          {record.status === 'create'
+            ? <Tooltip
               placement="bottom"
               title={<FormattedMessage id="delete" />}
             >
@@ -156,9 +172,9 @@ class StateMachineSchemeList extends Component {
   handleEdit = (record) => {
     const { StateMachineSchemeStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    StateMachineSchemeStore.loadStateMachine(organizationId, id);
+    // StateMachineSchemeStore.loadStateMachine(organizationId, id);
     history.push(`/issue/state-machine-schemes/edit/${record.id}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
-  }
+  };
 
   handleDelete = (deleteId, deleteItemName) => {
     const { StateMachineSchemeStore } = this.props;
@@ -218,7 +234,6 @@ class StateMachineSchemeList extends Component {
   tableChange = (pagination, filters, sorter, param) => {
     const orgId = AppState.currentMenuType.organizationId;
     const sort = {};
-    console.log(pagination);
     if (sorter.column) {
       const { field, order } = sorter;
       sort[field] = order;
@@ -233,7 +248,7 @@ class StateMachineSchemeList extends Component {
     };
     this.setState({
       sorter: sorter.column ? sorter : undefined,
-      tableParam: postData
+      tableParam: postData,
     });
     this.loadStateMachineSchemeList(pagination,
       sorter.column ? sorter : undefined,
@@ -278,14 +293,14 @@ class StateMachineSchemeList extends Component {
             </FormItem>
           )}
           <FormItem {...formItemLayout} className="issue-sidebar-form">
-            {getFieldDecorator("description")(
+            {getFieldDecorator('description')(
               <TextArea
                 placeholder={intl.formatMessage({
-                  id: "stateMachineScheme.createDes"
+                  id: 'stateMachineScheme.createDes',
                 })}
                 style={{ width: 520 }}
                 label={<FormattedMessage id="stateMachineScheme.des" />}
-              />
+              />,
             )}
           </FormItem>
         </Form>
@@ -309,7 +324,7 @@ class StateMachineSchemeList extends Component {
             dataSource={getStateMachineSchemeList}
             rowClassName={`${prefixCls}-table-col`}
             columns={this.getColumns()}
-            filterBarPlaceholder={intl.formatMessage({ id: "filter" })}
+            filterBarPlaceholder={intl.formatMessage({ id: 'filter' })}
             rowKey={record => record.id}
             pagination={pagination}
             onChange={this.tableChange}
@@ -349,7 +364,7 @@ class StateMachineSchemeList extends Component {
             visible={this.state.show}
             okText={
               <FormattedMessage
-                id={this.state.type === "create" ? "create" : "save"}
+                id={this.state.type === 'create' ? 'create' : 'save'}
               />
             }
             cancelText={<FormattedMessage id="cancel" />}
