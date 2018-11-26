@@ -117,6 +117,14 @@ const zh_CN = {
   'stateMachineScheme.deleteDraft': '删除草稿',
   'stateMachineScheme.original': '查看原件',
   'stateMachineScheme.draft': '编辑草稿',
+  'stateMachineScheme.delete.draft': '删除状态机草稿',
+  'stateMachineScheme.delete.des': '确实要删除当前编辑的状态机草稿吗？',
+  'stateMachineScheme.title.matching': '问题类型及状态匹配',
+  'stateMachineScheme.title.publish': '发布状态机方案',
+  'stateMachineScheme.publish.des': '为了使部分问题兼容新的状态机，这些问题的当前状态需要进行新的匹配。',
+  'stateMachineScheme.publish.noMatch': '此修改中，所有问题类型及状态都可以自动迁移。',
+  'stateMachineScheme.targetStatus': '新的状态',
+  'stateMachineScheme.sourceStatus': '当前状态',
 
   // 自定义字段
   'customFields.title': '自定义字段',

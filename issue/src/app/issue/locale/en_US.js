@@ -90,6 +90,14 @@ const enUS = {
   'stateMachineScheme.deleteDraft': 'Delete Draft',
   'stateMachineScheme.original': 'Show Original',
   'stateMachineScheme.draft': 'Edit Draft',
+  'stateMachineScheme.delete.draft': 'Delete Draft State Machine',
+  'stateMachineScheme.delete.des': 'Confirm delete the currently edited state machine draft?',
+  'stateMachineScheme.title.matching': 'Match issue type and status',
+  'stateMachineScheme.title.publish': 'Publish the state machine',
+  'stateMachineScheme.publish.des': 'In order to make some issue compatible with the new state machine, the current state of these issue requires a new match.',
+  'stateMachineScheme.publish.noMatch': 'In this modification, all issue types and states are automatically migrated.',
+  'stateMachineScheme.targetStatus': 'New State',
+  'stateMachineScheme.sourceStatus': 'Current State',
 
   // 自定义字段
   'customFields.title': 'Custom Field',

@@ -21,6 +21,7 @@ import '../../../main.scss';
 import StateMachineStore from '../../../../stores/organization/stateMachine';
 import TypeTag from '../../../../components/TypeTag/TypeTag';
 import Tips from '../../../../components/Tips';
+import PublishSidebar from './PublishSidebar';
 
 const { Sidebar } = Modal;
 const FormItem = Form.Item;
@@ -45,10 +46,9 @@ class EditStateMachineScheme extends Component {
     const schemeId = this.props.match.params.id;
     this.state = {
       stateMachineId: '',
-      deleteId: 0,
       schemeId,
-      deleteItemName: '',
       showStatus: 'draft',
+      stateMachineIds: [],
     };
   }
 
@@ -60,32 +60,40 @@ class EditStateMachineScheme extends Component {
     StateMachineSchemeStore.loadStateMachine(
       organizationId,
       schemeId,
-    );
-    StateMachineSchemeStore.loadAllStateMachine(organizationId)
-      .then(() => {
-        this.loadGraphData();
+    ).then(() => {
+      const { viewDTOs } = StateMachineSchemeStore.getStateMachine;
+      // 过滤已经关联的状态机
+      const stateMachineIds = [];
+      viewDTOs.forEach((data) => {
+        if (data.stateMachineDTO) {
+          stateMachineIds.push(data.stateMachineDTO.id);
+        }
       });
-    // StateMachineSchemeStore.loadGraphData(organizationId, stateMachineId);
+      this.setState({
+        stateMachineIds,
+      });
+    });
+    StateMachineSchemeStore.loadAllStateMachine(organizationId);
   }
 
-  loadAllData = () => {
+  refresh = () => {
     const { organizationId } = AppState.currentMenuType;
-    const { schemeId } = this.state;
+    const { schemeId, showStatus } = this.state;
     const { StateMachineSchemeStore } = this.props;
-
-    StateMachineSchemeStore.loadStateMachine(organizationId, schemeId);
+    StateMachineSchemeStore.loadStateMachine(organizationId, schemeId, showStatus === 'draft');
   };
 
   handleAddStateMachine = () => {
+    const { stateMachineIds } = this.state;
     const { StateMachineSchemeStore, form } = this.props;
-    const allStateMachine = StateMachineSchemeStore.getAllStateMachine;
+    const allStateMachine = StateMachineSchemeStore.getAllStateMachine
+      .filter(data => stateMachineIds.indexOf(data.id) === -1);
     StateMachineSchemeStore.setIsAddVisible(true);
     StateMachineSchemeStore.setSelectedIssueTypeId([]);
-
     if (allStateMachine && allStateMachine.length) {
       this.setState({
         stateMachineId: allStateMachine[0].id,
-      });
+      }, this.loadGraphData(allStateMachine[0]));
     }
     form.setFieldsValue({
       stateMachineId: allStateMachine.length !== 0 && allStateMachine[0].id,
@@ -113,12 +121,14 @@ class EditStateMachineScheme extends Component {
 
   handleCloseConnectStateMachine = () => {
     const { StateMachineSchemeStore } = this.props;
+    StateMachineSchemeStore.setSchemeDTOs([]);
     StateMachineSchemeStore.setIsAddVisible(false);
     StateMachineSchemeStore.setIsConnectVisible(false);
   };
 
   handleFinishConnectStateMachine = () => {
     const { StateMachineSchemeStore } = this.props;
+    StateMachineSchemeStore.setSchemeDTOs([]);
     StateMachineSchemeStore.setIsAddVisible(false);
     StateMachineSchemeStore.setIsConnectVisible(false);
     StateMachineSchemeStore.setSelectedIssueTypeId(StateMachineSchemeStore.getSelectedIssueTypeId);
@@ -132,8 +142,10 @@ class EditStateMachineScheme extends Component {
 
   loadGraphData = (item) => {
     const { StateMachineSchemeStore } = this.props;
+    const { stateMachineIds, stateMachineId } = this.state;
     const { organizationId } = AppState.currentMenuType;
-    const stateMachine = item || StateMachineSchemeStore.getAllStateMachine.slice()[0];
+    const stateMachine = item || StateMachineSchemeStore
+      .getAllStateMachine.slice().filter(data => stateMachineIds.indexOf(data.id) === -1)[0];
     if (stateMachine.status === 'state_machine_create') {
       StateMachineStore.loadStateMachineDraftById(organizationId, stateMachine.id)
         .then((data) => {
@@ -175,7 +187,7 @@ class EditStateMachineScheme extends Component {
 
   handleFinish = () => {
     const { organizationId } = AppState.currentMenuType;
-    const { schemeId, stateMachineId } = this.state;
+    const { schemeId, stateMachineId, stateMachineIds } = this.state;
     const { StateMachineSchemeStore } = this.props;
 
     const schemeDTOs = StateMachineSchemeStore.getSchemeDTOs;
@@ -187,31 +199,22 @@ class EditStateMachineScheme extends Component {
       stateMachineId,
       schemeDTOs,
     ).then(() => {
+      this.setState({
+        stateMachineIds: [
+          ...stateMachineIds,
+          stateMachineId,
+        ],
+      });
       this.handleFinishConnectStateMachine();
     });
   };
 
-  handleDelete = (deleteId, deleteItemName) => {
-    const { StateMachineSchemeStore } = this.props;
-    this.setState({
-      deleteId,
-      deleteItemName,
-    });
-    // StateMachineSchemeStore.setIsMachineDeleteVisible(true);
-    this.confirmDelete(deleteId);
-  };
-
-  confirmDelete = (stateMachineId) => {
+  // 删除行
+  handleDelete = (deleteId) => {
     const { schemeId } = this.state;
     const { StateMachineSchemeStore } = this.props;
     const { organizationId } = AppState.currentMenuType;
-    StateMachineSchemeStore.deleteStateMachine(organizationId, schemeId, stateMachineId);
-    // StateMachineSchemeStore.setIsMachineDeleteVisible(false);
-  };
-
-  cancelDelete = (e) => {
-    const { StateMachineSchemeStore } = this.props;
-    StateMachineSchemeStore.setIsMachineDeleteVisible(false);
+    StateMachineSchemeStore.deleteStateMachine(organizationId, schemeId, deleteId);
   };
 
   handleEditStateMachine = (stateMachineId) => {
@@ -226,7 +229,7 @@ class EditStateMachineScheme extends Component {
       .then(() => {
         StateMachineSchemeStore.getAllIssueType
           .map((issueType) => {
-            if (issueType.stateMachineName) {
+            if (issueType.stateMachineId === stateMachineId) {
               issueTypeId.push(issueType.id);
             }
             return true;
@@ -239,8 +242,10 @@ class EditStateMachineScheme extends Component {
 
   renderAddStateMachineForm = () => {
     const { StateMachineSchemeStore, form, intl } = this.props;
+    const { stateMachineIds } = this.state;
     const { getFieldDecorator } = form;
-    const allStateMachine = StateMachineSchemeStore.getAllStateMachine;
+    const allStateMachine = StateMachineSchemeStore
+      .getAllStateMachine.filter(data => stateMachineIds.indexOf(data.id) === -1);
 
     return (
       <Fragment>
@@ -255,15 +260,15 @@ class EditStateMachineScheme extends Component {
                 })}
                 onChange={val => this.handleSelectChange(val)}
               >
-                {allStateMachine
-                && allStateMachine.map((stateMachineItem, index) => (
+                {allStateMachine && allStateMachine
+                  .map((stateMachineItem, index) => (
                     <Option
                       key={stateMachineItem.id}
                       value={String(index)}
                     >
                       {stateMachineItem.name}
                     </Option>
-                ))}
+                  ))}
               </Select>,
             )}
           </FormItem>
@@ -347,30 +352,42 @@ class EditStateMachineScheme extends Component {
             filterBar={false}
             className="issue-table"
             rowClassName={`${prefixCls}-table-col`}
+            pagination={false}
           />
         </FormItem>
       </Form>
     );
   };
 
-  // 发布
+  // 发布校验
   handlePublish = () => {
-    const { organizationId } = AppState.currentMenuType;
-    const { StateMachineSchemeStore } = this.props;
     const { schemeId } = this.state;
-    StateMachineSchemeStore.publishStateMachine(organizationId, schemeId).then(() => {
+    const { StateMachineSchemeStore } = this.props;
+    const { organizationId } = AppState.currentMenuType;
+    StateMachineSchemeStore.setPublishLoading(true);
+    StateMachineSchemeStore.checkPublishStateMachine(organizationId, schemeId);
+    StateMachineSchemeStore.setIsPublishVisible(true);
+  };
+
+  handleDeleteDraft = () => {
+    const { StateMachineSchemeStore } = this.props;
+    StateMachineSchemeStore.setIsMachineDeleteVisible(true);
+  };
+
+  // 删除草稿
+  confirmDelete = () => {
+    const { schemeId } = this.state;
+    const { StateMachineSchemeStore } = this.props;
+    const { organizationId } = AppState.currentMenuType;
+    StateMachineSchemeStore.setIsMachineDeleteVisible(false);
+    StateMachineSchemeStore.deleteDraft(organizationId, schemeId).then(() => {
       StateMachineSchemeStore.loadStateMachine(organizationId, schemeId);
     });
   };
 
-  // 删除草稿
-  handleDeleteDraft = () => {
-    const { organizationId } = AppState.currentMenuType;
+  cancelDelete = () => {
     const { StateMachineSchemeStore } = this.props;
-    const { schemeId } = this.state;
-    StateMachineSchemeStore.deleteDraft(organizationId, schemeId).then(() => {
-      StateMachineSchemeStore.loadStateMachine(organizationId, schemeId);
-    });
+    StateMachineSchemeStore.setIsMachineDeleteVisible(false);
   };
 
   // 查看原件 or 编辑草稿
@@ -438,7 +455,6 @@ class EditStateMachineScheme extends Component {
               onClick={this.handleDelete.bind(
                 this,
                 record.stateMachineDTO && record.stateMachineDTO.id,
-                record.stateMachineDTO && record.stateMachineDTO.name,
               )}
             >
               <Icon type="delete" />
@@ -448,13 +464,48 @@ class EditStateMachineScheme extends Component {
     },
   ];
 
+  renderFooter = () => {
+    const { StateMachineSchemeStore } = this.props;
+    return (
+      <Fragment>
+        {StateMachineSchemeStore.getSelectedIssueTypeId
+        && StateMachineSchemeStore.getSelectedIssueTypeId.length === 0 && (
+          <Button
+            key="pre"
+            type="primary"
+            onClick={this.handlePreStep}
+          >
+            {<FormattedMessage id="stateMachineScheme.pre" />}
+          </Button>
+        )}
+        <Button
+          key="finish"
+          type="primary"
+          funcType="raised"
+          onClick={this.handleFinish}
+          disabled={!(StateMachineSchemeStore.getSchemeDTOs
+          && StateMachineSchemeStore.getSchemeDTOs.length)}
+        >
+          {<FormattedMessage id="stateMachineScheme.finish" />}
+        </Button>
+        <Button
+          key="cancel"
+          funcType="raised"
+          onClick={this.handleCloseConnectStateMachine}
+        >
+          {<FormattedMessage id="stateMachineScheme.cancel" />}
+        </Button>
+      </Fragment>
+    );
+  };
+
   render() {
     const menu = AppState.currentMenuType;
     const {
       type, id: projectId, organizationId: orgId, name,
     } = menu;
     const { intl, StateMachineSchemeStore } = this.props;
-    const { showStatus } = this.state;
+    const { showStatus, schemeId } = this.state;
     const {
       getStateMachine,
       getStateMachineLoading,
@@ -468,7 +519,7 @@ class EditStateMachineScheme extends Component {
           title={<FormattedMessage id="stateMachineScheme.edit" />}
           backPath={`/issue/state-machine-schemes?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
         >
-          <Button onClick={() => this.loadAllData} funcType="flat">
+          <Button onClick={this.refresh} funcType="flat">
             <i className="icon-refresh icon" />
             <FormattedMessage id="refresh" />
           </Button>
@@ -539,27 +590,12 @@ class EditStateMachineScheme extends Component {
             filterBar={false}
           />
           <Modal
-            title={<FormattedMessage id="stateMachineScheme.delete" />}
-            visible={
-              this.props.StateMachineSchemeStore.getIsMachineDeleteVisible
-            }
-            onOk={this.confirmDelete.bind(this, this.state.deleteId)}
+            title={<FormattedMessage id="stateMachineScheme.delete.draft" />}
+            visible={StateMachineSchemeStore.getIsMachineDeleteVisible}
+            onOk={this.confirmDelete}
             onCancel={this.cancelDelete}
-            center
           >
-            <p>
-              {
-                <Fragment>
-                  {intl.formatMessage({
-                    id: 'stateMachineScheme.deleteDesBefore',
-                  })}
-                  <strong>{this.state.deleteItemName}</strong>
-                  {intl.formatMessage({
-                    id: 'stateMachineScheme.deleteDesAfter',
-                  })}
-                </Fragment>
-              }
-            </p>
+            <FormattedMessage id="stateMachineScheme.delete.des" />
           </Modal>
           {getIsAddVisible && (
             <Sidebar
@@ -576,41 +612,16 @@ class EditStateMachineScheme extends Component {
             <Sidebar
               title={<FormattedMessage id="stateMachineScheme.connect" />}
               visible={getIsConnectVisible}
-              footer={
-                <Fragment>
-                  {this.props.StateMachineSchemeStore.getSelectedIssueTypeId
-                  && this.props.StateMachineSchemeStore.getSelectedIssueTypeId.length === 0 && (
-                      <Button
-                        key="pre"
-                        type="primary"
-                        onClick={this.handlePreStep}
-                      >
-                        {<FormattedMessage id="stateMachineScheme.pre" />}
-                      </Button>
-                  )}
-
-                  <Button
-                    key="finish"
-                    type="primary"
-                    funcType="raised"
-                    onClick={this.handleFinish}
-                  >
-                    {<FormattedMessage id="stateMachineScheme.finish" />}
-                  </Button>
-
-                  <Button
-                    key="cancel"
-                    funcType="raised"
-                    onClick={this.handleCloseConnectStateMachine}
-                  >
-                    {<FormattedMessage id="stateMachineScheme.cancel" />}
-                  </Button>
-                </Fragment>
-              }
+              footer={this.renderFooter()}
             >
               {this.renderConnectStateMachineForm()}
             </Sidebar>
           )}
+          <PublishSidebar
+            schemeId={schemeId}
+            store={StateMachineSchemeStore}
+            refresh={this.refresh}
+          />
         </Content>
       </Page>
     );

@@ -1,14 +1,14 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
-import { asyncRouter, nomatch } from "choerodon-front-boot";
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { asyncRouter, nomatch } from 'choerodon-front-boot';
 
 const StateMachineSchemeList = asyncRouter(
-  () => import("./stateMachineSchemeList"),
-  () => import("../../../stores/organization/stateMachineScheme")
+  () => import('./stateMachineSchemeList'),
+  () => import('../../../stores/organization/stateMachineScheme')
 );
 const EditStateMachineScheme = asyncRouter(
-  () => import("./editStateMachineScheme"),
-  () => import("../../../stores/organization/stateMachineScheme")
+  () => import('./editStateMachineScheme'),
+  () => import('../../../stores/organization/stateMachineScheme')
 );
 const StateMachineSchemeIndex = ({ match }) => (
   <Switch>
@@ -18,7 +18,7 @@ const StateMachineSchemeIndex = ({ match }) => (
       path={`${match.url}/edit/:id`}
       component={EditStateMachineScheme}
     />
-    <Route path={"*"} component={nomatch} />
+    <Route path={'*'} component={nomatch} />
   </Switch>
 );
 
