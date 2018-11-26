@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Table, Button, Modal, Form, Select, Input, Tooltip, Tabs, Checkbox, Popconfirm, Spin } from 'choerodon-ui';
+import {
+  Table, Button, Modal, Form, Select, Input, Tooltip, Tabs, Checkbox, Popconfirm, Spin,
+} from 'choerodon-ui';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Content, Header, Page, Permission, stores } from 'choerodon-front-boot';
+import {
+  Content, Header, Page, Permission, stores,
+} from 'choerodon-front-boot';
 import _ from 'lodash';
 import Graph from '../../../../components/Graph';
 import StateStore from '../../../../stores/organization/state';
@@ -13,11 +17,11 @@ import './EditStateMachine.scss';
 const prefixCls = 'issue-state-machine';
 const { AppState } = stores;
 
-const Sidebar = Modal.Sidebar;
+const { Sidebar } = Modal;
 const FormItem = Form.Item;
-const TextArea = Input.TextArea;
-const Option = Select.Option;
-const TabPane = Tabs.TabPane;
+const { TextArea } = Input;
+const { Option } = Select;
+const { TabPane } = Tabs;
 
 const formItemLayout = {
   labelCol: {
@@ -328,7 +332,7 @@ class EditStateMachine extends Component {
         </div>
       );
     }
-  }
+  };
 
   getCreateForm = () => {
     const { form, intl } = this.props;
@@ -401,18 +405,18 @@ class EditStateMachine extends Component {
         </div>
       </Form>
     </div>);
-  }
+  };
 
   setGraphRef = (graph) => {
     this.graph = graph;
-  }
+  };
 
   handleCreateState = () => {
     this.setState({
       createShow: true,
       show: false,
     });
-  }
+  };
 
   loadStateMachine = () => {
     const { StateMachineStore } = this.props;
@@ -448,11 +452,11 @@ class EditStateMachine extends Component {
           }
         });
     }
-  }
+  };
 
   refresh = () => {
     this.loadStateMachine();
-  }
+  };
 
   loadStateList = () => {
     const { organizationId, stateMachineData, nodeData } = this.state;
@@ -468,7 +472,7 @@ class EditStateMachine extends Component {
         });
       }
     });
-  }
+  };
 
   addStateMachineNode = (data) => {
     const { organizationId, stateMachineData } = this.state;
@@ -484,7 +488,7 @@ class EditStateMachine extends Component {
     this.setState({
       isLoading: true,
     });
-    StateMachineStore.addStateMachineNode(organizationId, node)
+    StateMachineStore.addStateMachineNode(organizationId, stateMachineData.id, node)
       .then((nodeData) => {
         if (nodeData && nodeData.failed) {
           Choerodon.prompt(nodeData.message);
@@ -500,7 +504,7 @@ class EditStateMachine extends Component {
           nodeData,
         });
       });
-  }
+  };
 
   updateStateMachineNode = (data) => {
     const { organizationId, stateMachineData } = this.state;
@@ -508,8 +512,9 @@ class EditStateMachine extends Component {
     this.setState({
       isLoading: true,
     });
-    return StateMachineStore.updateStateMachineNode(organizationId, data.id, data);
-  }
+    return StateMachineStore
+      .updateStateMachineNode(organizationId, data.id, stateMachineData.id, data);
+  };
 
   addStateMachineTransfer = (data) => {
     const { organizationId, stateMachineData, transferData } = this.state;
@@ -524,7 +529,7 @@ class EditStateMachine extends Component {
     this.setState({
       isLoading: true,
     });
-    StateMachineStore.addStateMachineTransfer(organizationId, node)
+    StateMachineStore.addStateMachineTransfer(organizationId, stateMachineData.id, node)
       .then((item) => {
         if (item && item.failed) {
           Choerodon.prompt(item.message);
@@ -541,13 +546,17 @@ class EditStateMachine extends Component {
   }
 
   updateStateMachineTransfer = (data) => {
-    const { organizationId, stateMachineData, source, target, selectedCell } = this.state;
+    const {
+      organizationId,
+      stateMachineData,
+    } = this.state;
     const { StateMachineStore } = this.props;
     this.setState({
       isLoading: true,
     });
-    return StateMachineStore.updateStateMachineTransfer(organizationId, data.id, data);
-  }
+    return StateMachineStore
+      .updateStateMachineTransfer(organizationId, data.id, stateMachineData.id, data);
+  };
 
   // DOUBLE CLICK NODE or TRANSFER
   handleDbClick = (cell, type) => {
@@ -561,7 +570,7 @@ class EditStateMachine extends Component {
       });
     }
     this.showSideBar(type, 'edit');
-  }
+  };
 
   // ON DRAG NODE, UPDATE NODE'S POSITION
   handleOnMove = (cell) => {
@@ -588,10 +597,10 @@ class EditStateMachine extends Component {
           });
       }
     }
-  }
+  };
 
   handleReLink = (edge, style) => {
-    const transferId = edge.transferId;
+    const { transferId } = edge;
     const { transferData } = this.state;
     // GET INDEX OF SELECTED TRANSFER IN TRANSFER DATA
     const index = _.findIndex(transferData,
@@ -621,7 +630,7 @@ class EditStateMachine extends Component {
           }
         });
     }
-  }
+  };
 
   handleCellClick = (cell) => {
     if ((cell && cell.statusId !== 0) || !cell) {
@@ -630,12 +639,12 @@ class EditStateMachine extends Component {
         allChecked: cell && cell.allStatusTransformId,
       });
     }
-  }
+  };
 
   // DISPLAY TRANSFER NAME or NO
   handleCheckChange = (e) => {
     this.graph.handleCheckChange(e);
-  }
+  };
 
 
   handleSubmit = () => {
@@ -663,7 +672,9 @@ class EditStateMachine extends Component {
             const { nodeData } = this.state;
             if (nodeData && nodeData.length) {
               // GET NODE DATA
-              const node = _.find(nodeData, item => item.id.toString() === selectedCell.nodeId.toString());
+              const node = _.find(
+                nodeData, item => item.id.toString() === selectedCell.nodeId.toString(),
+              );
               if (node) {
                 // UPDATE STATEID OF NODE DATA
                 const param = {
@@ -733,7 +744,7 @@ class EditStateMachine extends Component {
         }
       }
     });
-  }
+  };
 
   // CREATE NEW TRANSFER BY LINKING
   handleOnTransfer = (source, target, style) => {
@@ -743,7 +754,7 @@ class EditStateMachine extends Component {
       edgeStyle: style,
     });
     this.showSideBar('transfer', 'add');
-  }
+  };
 
   changeStyle = (cell, transferData, node) => {
     let change = true;
@@ -757,11 +768,13 @@ class EditStateMachine extends Component {
       });
     }
     return change;
-  }
+  };
 
   removeCell = (cell) => {
     const { StateMachineStore } = this.props;
-    const { selectedCell, organizationId, transferData, nodeData } = this.state;
+    const {
+      stateMachineData, organizationId, transferData, nodeData,
+    } = this.state;
     this.setState({
       loading: true,
     });
@@ -783,7 +796,9 @@ class EditStateMachine extends Component {
         });
       }
 
-      StateMachineStore.deleteStateMachineNode(organizationId, cell.nodeId).then((data) => {
+      StateMachineStore.deleteStateMachineNode(
+        organizationId, cell.nodeId, stateMachineData.id,
+      ).then((data) => {
         this.setState({
           loading: false,
         });
@@ -815,7 +830,8 @@ class EditStateMachine extends Component {
       });
     } else {
       const targetNode = cell.target;
-      StateMachineStore.deleteStateMachineTransfer(organizationId, cell.transferId)
+      StateMachineStore
+        .deleteStateMachineTransfer(organizationId, cell.transferId, stateMachineData.id)
         .then((data) => {
           this.setState({
             loading: false,
@@ -840,7 +856,7 @@ class EditStateMachine extends Component {
           }
         });
     }
-  }
+  };
 
   textTransferDel = (id) => {
     const { transferData } = this.state;
@@ -850,7 +866,7 @@ class EditStateMachine extends Component {
       deleteVisible: true,
       deleteId: id,
     });
-  }
+  };
 
   textTransferAdd = (id) => {
     const { nodeData } = this.state;
@@ -864,7 +880,7 @@ class EditStateMachine extends Component {
         this.showSideBar('transfer', 'add');
       });
     }
-  }
+  };
 
   handleCancel = () => {
     this.setState({
@@ -873,7 +889,8 @@ class EditStateMachine extends Component {
       deleteId: null,
       deleteDraftVisible: false,
     });
-  }
+  };
+
   handleDeleteTransfer = () => {
     const { selectedDeleteId } = this.state;
     const cell = this.graph.getCell(`t${selectedDeleteId}`);
@@ -882,7 +899,7 @@ class EditStateMachine extends Component {
     }, () => {
       this.removeCell(cell);
     });
-  }
+  };
 
   toolbarAdd = (type) => {
     this.setState({
@@ -892,14 +909,14 @@ class EditStateMachine extends Component {
     }, () => {
       this.showSideBar(type, 'add');
     });
-  }
+  };
 
   handleCardEdit = (cell) => {
     if (cell) {
       const type = cell.edge ? 'transfer' : 'state';
       this.handleDbClick(cell, type);
     }
-  }
+  };
 
   showSideBar = (type, state) => {
     this.setState({
@@ -910,21 +927,21 @@ class EditStateMachine extends Component {
     if (type === 'state') {
       this.loadStateList();
     }
-  }
+  };
 
   hideSidebar = () => {
     this.setState({
       show: false,
       // type: '',
     });
-  }
+  };
 
   hideCreateSidebar = () => {
     this.setState({
       createShow: false,
       show: true,
     });
-  }
+  };
 
   handleConfig = (cell) => {
     const { intl, history } = this.props;
@@ -932,20 +949,20 @@ class EditStateMachine extends Component {
     const { stateMachineData } = this.state;
     const configId = cell.transferId;
     history.push(`/issue/state-machines/${stateMachineData.id}/editconfig/${configId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
-  }
+  };
 
   handleDeploy = () => {
     const { StateMachineStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
     const { id: stateMachineId } = this.state;
     history.push(`/issue/state-machines/edit/${stateMachineId}/state_machine_draft?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
-  }
+  };
 
   showDeleteDraft = () => {
     this.setState({
       deleteDraftVisible: true,
     });
-  }
+  };
 
   handleDeleteDraft = () => {
     const { StateMachineStore, intl, history } = this.props;
@@ -957,7 +974,7 @@ class EditStateMachine extends Component {
           history.push(`/issue/state-machines/edit/${stateMachineId}/state_machine_active?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
         }
       });
-  }
+  };
 
   handlePublish = () => {
     const { stateMachineData } = this.state;
@@ -970,11 +987,13 @@ class EditStateMachine extends Component {
         history.push(`/issue/state-machines/edit/${stateMachineData.id}/state_machine_active?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
       }
     });
-  }
+  };
 
   handleAllChange = (e) => {
     const { StateMachineStore } = this.props;
-    const { organizationId, selectedCell, stateMachineData, transferData } = this.state;
+    const {
+      organizationId, selectedCell, stateMachineData, transferData,
+    } = this.state;
     this.setState({
       allChecked: e.target.checked,
     });
@@ -1002,7 +1021,7 @@ class EditStateMachine extends Component {
           this.graph.removeCells(cells);
         });
     }
-  }
+  };
 
   handlecreateSubmit = () => {
     const { organizationId } = this.state;
@@ -1033,7 +1052,7 @@ class EditStateMachine extends Component {
           });
       }
     });
-  }
+  };
 
   render() {
     const { StateMachineStore, intl } = this.props;
@@ -1053,7 +1072,9 @@ class EditStateMachine extends Component {
     const serviceData = StateMachineStore.getAllData;
     const { singleData, getStageOptionsData } = StateMachineStore;
     const menu = AppState.currentMenuType;
-    const { type, id: projectId, organizationId: orgId, name } = menu;
+    const {
+      type, id: projectId, organizationId: orgId, name,
+    } = menu;
     const graphHeader = (
       <React.Fragment>
         <Button onClick={() => this.toolbarAdd('state')} className="graph-toolbar-button" icon="add"><FormattedMessage id="stateMachine.state.add" /></Button>
@@ -1249,7 +1270,10 @@ class EditStateMachine extends Component {
               size="default"
               onChange={value => this.setState({ selectedDeleteId: value })}
             >
-              {this.state.deleteList && this.state.deleteList.length && this.state.deleteList.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
+              {this.state.deleteList
+              && this.state.deleteList.length
+              && this.state.deleteList
+                .map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
             </Select>
           </Modal>
         )}

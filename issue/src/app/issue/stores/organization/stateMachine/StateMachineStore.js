@@ -70,18 +70,24 @@ class StateMachineStore {
   updateStateMachine = (orgId, stateId, map) => axios.put(`/state/v1/organizations/${orgId}/state_machines/${stateId}`, JSON.stringify(map));
 
   // 编辑状态机时添加状态
-  addStateMachineNode = (orgId, map) => axios.post(`/state/v1/organizations/${orgId}/state_machine_nodes`, JSON.stringify(map));
+  addStateMachineNode = (orgId, stateMachineId, map) => axios
+    .post(`/state/v1/organizations/${orgId}/state_machine_nodes?stateMachineId=${stateMachineId}`, JSON.stringify(map));
 
-  updateStateMachineNode = (orgId, nodeId, map) => axios.put(`/state/v1/organizations/${orgId}/state_machine_nodes/${nodeId}`, JSON.stringify(map));
+  updateStateMachineNode = (orgId, nodeId, stateMachineId, map) => axios
+    .put(`/state/v1/organizations/${orgId}/state_machine_nodes/${nodeId}?stateMachineId=${stateMachineId}`, JSON.stringify(map));
 
-  deleteStateMachineNode = (orgId, nodeId) => axios.delete(`/state/v1/organizations/${orgId}/state_machine_nodes/${nodeId}`)
+  deleteStateMachineNode = (orgId, nodeId, stateMachineId) => axios
+    .delete(`/state/v1/organizations/${orgId}/state_machine_nodes/${nodeId}?stateMachineId=${stateMachineId}`);
 
   // 编辑状态机时添加转换
-  addStateMachineTransfer = (orgId, map) => axios.post(`state/v1/organizations/${orgId}/state_machine_transforms`, JSON.stringify(map));
+  addStateMachineTransfer = (orgId, stateMachineId, map) => axios
+    .post(`state/v1/organizations/${orgId}/state_machine_transforms?stateMachineId=${stateMachineId}`, JSON.stringify(map));
 
-  updateStateMachineTransfer = (orgId, nodeId, map) => axios.put(`/state/v1/organizations/${orgId}/state_machine_transforms/${nodeId}`, JSON.stringify(map));
+  updateStateMachineTransfer = (orgId, nodeId, stateMachineId, map) => axios
+    .put(`/state/v1/organizations/${orgId}/state_machine_transforms/${nodeId}?stateMachineId=${stateMachineId}`, JSON.stringify(map));
 
-  deleteStateMachineTransfer = (orgId, nodeId) => axios.delete(`/state/v1/organizations/${orgId}/state_machine_transforms/${nodeId}`);
+  deleteStateMachineTransfer = (orgId, nodeId, stateMachineId) => axios
+    .delete(`/state/v1/organizations/${orgId}/state_machine_transforms/${nodeId}?stateMachineId=${stateMachineId}`);
 
   getTransferById = (orgId, id) => axios.get(`/state/v1/organizations/${orgId}/state_machine_transforms/${id}`).then(data => this.handleProptError(data));
 
