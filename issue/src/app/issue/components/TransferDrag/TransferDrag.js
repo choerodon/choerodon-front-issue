@@ -6,8 +6,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import Tips from '../Tips';
 import './TransferDrag.scss';
 import drag from '../../assets/images/drag.png';
-import TypeIcon from '../TypeIcon';
-import TypeTag from "../TypeTag/TypeTag";
+import TypeTag from '../TypeTag/TypeTag';
 
 class TransferDrag extends Component {
   constructor(props) {

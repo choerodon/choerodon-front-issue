@@ -25,6 +25,8 @@ class StateMachineSchemeStore {
 
   @observable isSchemeDeleteVisible = false;
 
+  @observable isPublishVisible = false;
+
   @observable stateMachine = {};
 
   @observable allStateMachine = [];
@@ -40,6 +42,10 @@ class StateMachineSchemeStore {
   @observable nodeData = [];
 
   @observable transferData = [];
+
+  @observable publishData = [];
+
+  @observable publishLoading = false;
 
 
   @action setGraphLoading(data) {
@@ -109,6 +115,16 @@ class StateMachineSchemeStore {
   @action
   setIsConnectVisible(visibleStatus) {
     this.isConnectVisible = visibleStatus;
+  }
+
+  @computed
+  get getIsPublishVisible() {
+    return this.isPublishVisible;
+  }
+
+  @action
+  setIsPublishVisible(data) {
+    this.isPublishVisible = data;
   }
 
   @computed
@@ -201,6 +217,25 @@ class StateMachineSchemeStore {
     this.transferData = data;
   }
 
+  @computed
+  get getPublishData() {
+    return this.publishData;
+  }
+
+  @action
+  setPublishData(data) {
+    this.publishData = data;
+  }
+
+  @action setPublishLoading(data) {
+    this.publishLoading = data;
+  }
+
+  @computed
+  get getPublishLoading() {
+    return this.publishLoading;
+  }
+
   loadStateMachineSchemeList = (orgId, pagination = this.pagination, sort = { field: 'id', order: 'desc' }, map = {}) => {
     this.setIsLoading(true);
     const { current, pageSize } = pagination;
@@ -283,9 +318,7 @@ class StateMachineSchemeStore {
 
   loadAllIssueType(orgId, schemeId) {
     return axios
-      .get(
-        `/issue/v1/organizations/${orgId}/issue_type/query_issue_type/${schemeId}`
-      )
+      .get(`/issue/v1/organizations/${orgId}/issue_type/query_issue_type_with_state_machine?schemeId=${schemeId}`)
       .then(
         action((res) => {
           this.setAllIssueType(res);
@@ -320,7 +353,21 @@ class StateMachineSchemeStore {
     .then(data => this.handleProptError(data));
 
   // 发布方案
-  publishStateMachine = (orgId, schemeId) => axios.get(`/issue/v1/organizations/${orgId}/state_machine_scheme/deploy/${schemeId}`);
+  publishStateMachine = (orgId, schemeId, data) => axios.post(`/issue/v1/organizations/${orgId}/state_machine_scheme/deploy/${schemeId}`, data);
+
+  // 检查发布
+  checkPublishStateMachine = (orgId, schemeId) => axios.get(`/issue/v1/organizations/${orgId}/state_machine_scheme/check_deploy/${schemeId}`).then((data) => {
+    if (data) {
+      this.setPublishData(data);
+      this.setPublishLoading(false);
+    } else {
+      this.setPublishData([]);
+      this.setPublishLoading(false);
+    }
+  }).catch(() => {
+    this.setPublishData([]);
+    this.setPublishLoading(false);
+  });
 
   // 删除草稿
   deleteDraft = (orgId, schemeId) => axios.delete(`/issue/v1/organizations/${orgId}/state_machine_scheme/delete_draft/${schemeId}`);

@@ -11,8 +11,7 @@ import {
 import TransferDrag from '../../../../components/TransferDrag';
 import '../../../main.scss';
 import './IssueTypeSchemeCreate.scss';
-import TypeIcon from '../../../../components/TypeIcon';
-import TypeTag from "../../../../components/TypeTag/TypeTag";
+import TypeTag from '../../../../components/TypeTag/TypeTag';
 
 
 const { AppState } = stores;
