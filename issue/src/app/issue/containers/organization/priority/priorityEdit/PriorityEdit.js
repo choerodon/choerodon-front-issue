@@ -40,7 +40,7 @@ class PriorityEdit extends Component {
     const { form, PriorityStore } = this.props;
     form.validateFieldsAndScroll(async (err, data) => {
       if (!err) {
-        const { name, des, isDefault } = data;
+        const { name, des, default: isDefault } = data;
         const { editingPriority: { id, objectVersionNumber } } = PriorityStore;
         const { priorityColor } = this.state;
         const orgId = AppState.currentMenuType.organizationId;
@@ -49,11 +49,11 @@ class PriorityEdit extends Component {
           await PriorityStore.editPriorityById(orgId, {
             id,
             name,
-            des,
-            isDefault,
+            description: des,
+            default: !!isDefault,
             objectVersionNumber,
-            priorityColor,
-            orgId,
+            colour: priorityColor,
+            organizationId: orgId,
           });
           message.success('修改成功');
           PriorityStore.loadPriorityList(orgId);
@@ -170,14 +170,14 @@ class PriorityEdit extends Component {
             }
           </div>
           <FormItem
-            label="isDefault"
+            label="default"
           >
             {
               getFieldDecorator(
-                'isDefault',
+                'default',
                 {
                   valuePropName: 'checked',
-                  initialValue: editingPriority.isDefault === '1',
+                  initialValue: !!editingPriority.default,
                 },
               )(
                 <Checkbox>设置为默认优先级</Checkbox>,

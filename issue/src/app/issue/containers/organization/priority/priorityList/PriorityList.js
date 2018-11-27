@@ -48,10 +48,10 @@ class PriorityList extends Component {
     const orgId = AppState.currentMenuType.organizationId;
 
     const { PriorityStore } = this.props;
-    const { priorityList } = PriorityStore;
-    const dragRow = priorityList[dragIndex];
+    const { getPriorityList } = PriorityStore;
+    const dragRow = getPriorityList[dragIndex];
 
-    const priorityListAfterDrag = update(priorityList, {
+    const priorityListAfterDrag = update(getPriorityList, {
       $splice: [[dragIndex, 1], [hoverIndex, 0, dragRow]],
     });
 
@@ -98,7 +98,6 @@ class PriorityList extends Component {
         <div>
           <Tooltip placement="top" title={<FormattedMessage id="edit" />}>
             <Button
-              disabled
               shape="circle"
               size="small"
               onClick={this.handleEdit.bind(this, record.id)}
@@ -164,7 +163,7 @@ class PriorityList extends Component {
   render() {
     const { PriorityStore, intl } = this.props;
     const {
-      priorityList,
+      getPriorityList,
       onLoadingList,
       onDeletingPriority,
       onEditingPriority,
@@ -191,7 +190,7 @@ class PriorityList extends Component {
           <Table
             filterBarPlaceholder={intl.formatMessage({ id: 'filter' })}
             columns={this.getColumns()}
-            dataSource={priorityList}
+            dataSource={getPriorityList}
             rowKey={record => record.id}
             loading={onLoadingList}
             pagination={false}

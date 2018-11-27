@@ -253,7 +253,10 @@ class IssueTypeSchemeList extends Component {
     return (
       <Page className="issue-region">
         <Header title={<FormattedMessage id="issueTypeScheme.title" />}>
-          <Button onClick={() => this.showCreate('create')}>
+          <Button
+            disabled
+            onClick={() => this.showCreate('create')}
+          >
             <i className="icon-add icon" />
             <FormattedMessage id="issueTypeScheme.create" />
           </Button>

@@ -22,37 +22,38 @@ class PriorityCreate extends Component {
   state = {
     priorityColor: '#3F51B5',
     displayColorPicker: false,
-  }
+  };
 
   handleCreatingOk = () => {
     const { form, PriorityStore } = this.props;
 
     form.validateFieldsAndScroll(async (err, data) => {
       if (!err) {
-        const { name, des, isDefault } = data;
+        const { name, des, default: isDefault } = data;
         const { priorityColor } = this.state;
         const orgId = AppState.currentMenuType.organizationId;
 
         try {
           await PriorityStore.createPriority(orgId, {
             name,
-            des,
-            isDefault,
-            priorityColor,
+            description: des,
+            default: !!isDefault,
+            colour: priorityColor,
+            objectVersionNumber: 1,
           });
           message.success('添加成功');
           PriorityStore.loadPriorityList(orgId);
           this.hideSidebar();
-        } catch (err) {
+        } catch (e) {
           message.error('添加失败');
         }
       }
     });
-  }
+  };
 
   handleCreatingCancel = () => {
     this.hideSidebar();
-  }
+  };
 
   handleChangeComplete = async (color) => {
     this.setState({
@@ -65,14 +66,14 @@ class PriorityCreate extends Component {
     this.setState({
       displayColorPicker: !displayColorPicker,
     });
-  }
+  };
 
   handleCloseColorPicker = () => {
     const { displayColorPicker } = this.state;
     this.setState({
       displayColorPicker: false,
     });
-  }
+  };
 
   checkName = async (rule, value, callback) => {
     // 名称检查
@@ -172,11 +173,11 @@ class PriorityCreate extends Component {
             }
           </div>
           <FormItem
-            label="isDefault"
+            label="default"
           >
             {
               getFieldDecorator(
-                'isDefault',
+                'default',
               )(
                 <Checkbox>设置为默认优先级</Checkbox>,
               )
