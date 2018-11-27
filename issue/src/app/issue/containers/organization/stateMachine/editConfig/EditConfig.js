@@ -13,11 +13,11 @@ import './EditConfig.scss';
 const prefixCls = 'issue-state-machine-config';
 const { AppState } = stores;
 
-const Sidebar = Modal.Sidebar;
+const { Sidebar } = Modal;
 const FormItem = Form.Item;
-const TextArea = Input.TextArea;
-const Option = Select.Option;
-const TabPane = Tabs.TabPane;
+const { TextArea } = Input;
+const { Option } = Select;
+const { TabPane } = Tabs;
 const RadioGroup = Radio.Group;
 
 const formItemLayout = {
@@ -142,21 +142,21 @@ class EditConfig extends Component {
         this.renderTransfer(data);
       }
     });
-  }
+  };
 
   renderTransfer = (data) => {
     const figure = [];
     const { canvas } = this;
     const { width, height } = canvas.getBoundingClientRect();
     const { startNodeDTO, name, endNodeDTO } = data;
-    const devicePixelRatio = window.devicePixelRatio;
+    const { devicePixelRatio } = window;
     canvas.setAttribute('width', width * devicePixelRatio);
     canvas.setAttribute('height', height * devicePixelRatio);
     const recWidth = 140;
     const recHeight = 70;
     let lineWidth = 400;
     let recX = 50;
-    let recY = 70;
+    const recY = 70;
     const range = {
       x: recX,
       y: recY,
@@ -251,7 +251,7 @@ class EditConfig extends Component {
         range,
       },
     });
-  }
+  };
 
   getStateById = (onLoad = false) => {
     const { organizationId, stateId } = this.state;
@@ -273,22 +273,24 @@ class EditConfig extends Component {
         this.renderState(data);
       }
     });
-  }
+  };
 
   renderState = (data) => {
     const figure = [];
     const { canvas } = this;
     const { width, height } = canvas.getBoundingClientRect();
     const { intoTransform, statusDTO, outTransform } = data;
-    const devicePixelRatio = window.devicePixelRatio;
+    const { devicePixelRatio } = window;
+    // 计算出物理像素
     canvas.setAttribute('width', width * devicePixelRatio);
 
     const recWidth = 140;
     const recHeight = 70;
     let lineWidth = 400;
     let recX = 50;
-    let recY = 70;
+    const recY = 70;
     if (width > 1000) {
+      // 计算起始位置，
       recX = (width * devicePixelRatio - recWidth * 4 - lineWidth * 2) / 2;
     } else {
       lineWidth = 200;
@@ -325,7 +327,7 @@ class EditConfig extends Component {
         ctx.fillStyle = '#000000a6';
         ctx.font = '25px Georgia';
         ctx.textAlign = 'center';
-        ctx.fillText(item.name || 'sss', recX + recWidth, y + index * (recHeight / 2 + 20) + recHeight / 4 + 8);
+        ctx.fillText(item.name || '', recX + recWidth, y + index * (recHeight / 2 + 20) + recHeight / 4 + 8);
         ctx.stroke();
         intoFigure.push({
           x: recX,
@@ -470,7 +472,7 @@ class EditConfig extends Component {
         range,
       },
     });
-  }
+  };
 
   loadStateMachine = () => {
     const { organizationId, id, machineId } = this.state;
@@ -486,7 +488,7 @@ class EditConfig extends Component {
         });
       }
     });
-  }
+  };
 
   loadTarget = (onLoad = false) => {
     const { stateId } = this.state;
@@ -500,20 +502,20 @@ class EditConfig extends Component {
     } else {
       this.getTransferById(onLoad);
     }
-  }
+  };
 
   refresh = () => {
     this.loadTarget();
-  }
+  };
 
   getCanvas = (node) => {
     this.canvas = node;
-  }
+  };
 
   // DISPLAY TRANSFER NAME or NO
   handleCheckChange = (e) => {
     this.graph.handleCheckChange(e);
-  }
+  };
 
 
   handleSubmit = () => {
@@ -540,7 +542,9 @@ class EditConfig extends Component {
             const { nodeData } = this.state;
             if (nodeData && nodeData.length) {
               // GET NODE DATA
-              const node = _.find(nodeData, item => item.id.toString() === selectedCell.id.toString());
+              const node = _.find(
+                nodeData, item => item.id.toString() === selectedCell.id.toString(),
+              );
               if (node) {
                 // UPDATE STATEID OF NODE DATA
                 const param = {
@@ -609,7 +613,7 @@ class EditConfig extends Component {
         }
       }
     });
-  }
+  };
 
   handleCancel = () => {
     this.setState({
@@ -617,23 +621,23 @@ class EditConfig extends Component {
       deleteVisible: false,
       deleteId: null,
     });
-  }
+  };
 
   handleEdit = (state) => {
     const { StateMachineStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
     const { machineId, id: configId } = this.state;
     history.push(`/issue/state-machines/${machineId}/editconfig/select/${state}/${configId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
-  }
+  };
 
   isPointIn = (x, y, range) => {
-    const devicePixelRatio = window.devicePixelRatio;
+    const { devicePixelRatio } = window;
     if (range && x * devicePixelRatio >= range.x && x * devicePixelRatio <= range.x + range.w
       && y * devicePixelRatio >= range.y && y * devicePixelRatio <= range.y + range.h) {
       return true;
     }
     return false;
-  }
+  };
 
   handleStateClick = (stateId) => {
     const { intl, history } = this.props;
@@ -644,7 +648,7 @@ class EditConfig extends Component {
     } else {
       history.push(`/issue/state-machines/${machineId}/editconfig/${transferId}/state/${stateId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
     }
-  }
+  };
 
   onDelete = (id) => {
     const { StateMachineStore } = this.props;
@@ -661,7 +665,7 @@ class EditConfig extends Component {
         });
       }
     });
-  }
+  };
 
   handleMousOover = (e) => {
     const { canvas } = this;
@@ -687,7 +691,7 @@ class EditConfig extends Component {
     } else {
       canvas.style.cursor = 'auto';
     }
-  }
+  };
 
   handleCanvasClick = (e) => {
     const { canvas } = this;
@@ -707,18 +711,18 @@ class EditConfig extends Component {
         });
       }
     }
-  }
+  };
 
   changeTab = (key) => {
     const { StateMachineStore } = this.props;
     StateMachineStore.setConfigType(key);
-  }
+  };
 
   handleConditoinChange = (e) => {
     const { StateMachineStore } = this.props;
     const { organizationId, id } = this.state;
     StateMachineStore.updateCondition(organizationId, id, e.target.value);
-  }
+  };
 
   render() {
     const { StateMachineStore, intl } = this.props;
@@ -733,7 +737,12 @@ class EditConfig extends Component {
     } = this.state;
     const { singleData, getStageOptionsData } = StateMachineStore;
     const menu = AppState.currentMenuType;
-    const { type, id: projectId, organizationId: orgId, name } = menu;
+    const {
+      type,
+      id: projectId,
+      organizationId: orgId,
+      name,
+    } = menu;
     const rowSelection = {
       getCheckboxProps: record => ({
         defaultChecked: record.id === 119,
@@ -787,13 +796,22 @@ class EditConfig extends Component {
               <div className={`${prefixCls}-header-des`}>{stateMachineData.description}</div>
             </div>
             <div>
-              <canvas onMouseMove={this.handleMousOover} onClick={this.handleCanvasClick} ref={this.getCanvas} style={{ border: '1px solid #d3d3d3', width: '100%', height: '120px' }}>
+              <canvas
+                onMouseMove={this.handleMousOover}
+                onClick={this.handleCanvasClick}
+                ref={this.getCanvas}
+                style={{ border: '1px solid #d3d3d3', width: '100%', height: '120px' }}
+              >
                 Your browser does not support the HTML5 canvas tag.
-            </canvas>
+              </canvas>
             </div>
             {
               !stateId && (
-                <Tabs onChange={this.changeTab} defaultActiveKey={StateMachineStore.getConfigType} activeKey={StateMachineStore.getConfigType}>
+                <Tabs
+                  onChange={this.changeTab}
+                  defaultActiveKey={StateMachineStore.getConfigType}
+                  activeKey={StateMachineStore.getConfigType}
+                >
                   <TabPane tab={<FormattedMessage id="stateMachine.condition" />} key="config_condition">
                     <div className={`${prefixCls}-condition-des`}>
                       <FormattedMessage id="stateMachine.condition.des" />
