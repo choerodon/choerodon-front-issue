@@ -47,9 +47,12 @@ class StateStore {
     this.isLoading = loading;
   }
 
-  loadStateList = (orgId, sort = { field: 'id', order: 'desc' }, map = {}) => {
+  loadStateList = (orgId, page, size, sort = { field: 'id', order: 'desc' }, param) => {
     this.setIsLoading(true);
-    return axios.get(`/state/v1/organizations/${orgId}/status?${querystring.stringify(map)}&sort=${sort.field},${sort.order}`).then((data) => {
+    return axios.post(
+      `/state/v1/organizations/${orgId}/statuses?page=${page}&size=${size}&sort=${sort.field},${sort.order}`,
+      JSON.stringify(param),
+    ).then((data) => {
       this.setStateList(data.content);
       if (data && data.failed) {
         Choerodon.prompt(data.message);
@@ -59,7 +62,7 @@ class StateStore {
         return Promise.resolve(data);
       }
     }).catch(() => Promise.reject());
-  }
+  };
 
   loadStateById = (orgId, stateId) => axios.get(`/state/v1/organizations/${orgId}/status/${stateId}`);
 
