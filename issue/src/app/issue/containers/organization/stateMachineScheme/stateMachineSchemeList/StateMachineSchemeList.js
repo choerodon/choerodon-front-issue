@@ -81,7 +81,7 @@ class StateMachineSchemeList extends Component {
       render: (text, record) => (
         record.projectDTOs && record.projectDTOs.map(project => (
           <div>
-            {`• ${project.name}`}
+            {project ? `• ${project.name}` : ''}
           </div>
         ))
       ),

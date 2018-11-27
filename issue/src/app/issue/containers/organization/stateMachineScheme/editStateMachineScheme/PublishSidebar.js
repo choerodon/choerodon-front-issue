@@ -51,6 +51,8 @@ class PublishSidebar extends Component {
       data.push({
         statusChangeItems: changeItems,
         issueTypeId: typeData.issueTypeId,
+        newStateMachineId: typeData.newStateMachineId,
+        oldStateMachineId: typeData.oldStateMachineId,
       });
     });
     store.publishStateMachine(organizationId, schemeId, data).then((res) => {

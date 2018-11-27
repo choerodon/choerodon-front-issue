@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Table, Button, Modal, Form, Select, Input, Tooltip } from 'choerodon-ui';
+import {
+  Table, Button, Modal, Form, Select, Input, Tooltip,
+} from 'choerodon-ui';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Content, Header, Page, Permission, stores } from 'choerodon-front-boot';
+import {
+  Content, Header, Page, Permission, stores,
+} from 'choerodon-front-boot';
 import Tips from '../../../../components/Tips';
 import '../../../main.scss';
 import './StateList.scss';
 
 const { AppState } = stores;
-const { Sidebar } = Modal;
+const { Sidebar, info } = Modal;
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -66,6 +70,7 @@ class StateList extends Component {
       submitting: false,
       deleteVisible: false,
     };
+    this.modelRef = false;
   }
 
   componentDidMount() {
@@ -89,16 +94,13 @@ class StateList extends Component {
     key: 'type',
     filters: [{
       text: '待处理',
-      value: '0',
+      value: 'todo',
     }, {
       text: '处理中',
-      value: '1',
+      value: 'doing',
     }, {
       text: '完成',
-      value: '2',
-    }, {
-      text: '无阶段',
-      value: '3',
+      value: 'done',
     }],
     render: record => (
       <div>
@@ -110,7 +112,18 @@ class StateList extends Component {
     title: <FormattedMessage id="state.stateMachine" />,
     dataIndex: 'stateMachine',
     key: 'stateMachine',
-    filters: [],
+    render: (text, record) => (
+      <div>
+        {record.stateMachineInfoList && record.stateMachineInfoList.length
+          ? <a
+            onClick={() => this.showStateMachines(record)}
+          >
+            {record.stateMachineInfoList.length}个关联的状态机
+          </a>
+          : '-'
+        }
+      </div>
+    ),
   }, {
     align: 'right',
     width: 104,
@@ -122,16 +135,45 @@ class StateList extends Component {
             <i className="icon icon-mode_edit" />
           </Button>
         </Tooltip>
-        {record.canDelete
-          ? <Tooltip placement="top" title={<FormattedMessage id="delete" />}>
+        {record.stateMachineInfoList && record.stateMachineInfoList.length
+          ? <div className="issue-del-space" />
+          : <Tooltip placement="top" title={<FormattedMessage id="delete" />}>
             <Button shape="circle" size="small" onClick={this.confirmDelete.bind(this, record)}>
               <i className="icon icon-delete" />
             </Button>
-          </Tooltip> : <div className="issue-del-space" />
+          </Tooltip>
         }
       </div>
     ),
   }]);
+
+  linkToStateMachine = (machineId) => {
+    this.modelRef.destroy();
+    const { history } = this.props;
+    const { name, id, organizationId } = AppState.currentMenuType;
+    history.push(`/issue/state-machines/edit/${machineId}/state_machine_active?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+  };
+
+  showStateMachines = (data) => {
+    this.modelRef = info({
+      title: `${data.name}关联的工作流`,
+      content: (
+        <ul style={{ maxHeight: '300px', overflow: 'scroll' }}>
+          {
+            data.stateMachineInfoList.map(stateMachine => (
+              <li key={stateMachine.stateMachineId}>
+                <a onClick={() => this.linkToStateMachine(stateMachine.stateMachineId)}>
+                  {stateMachine.stateMachineName}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      ),
+      onOk() {},
+      okText: '确定',
+    });
+  };
 
   showSideBar = (state, id = '') => {
     const { StateStore } = this.props;
@@ -195,10 +237,10 @@ class StateList extends Component {
     });
   };
 
-  loadState = (page = 0, size = 10, sort = { field: 'id', order: 'desc' }, param) => {
+  loadState = (page = 0, size = 10, sort = { field: 'id', order: 'desc' }, param = {}) => {
     const { StateStore } = this.props;
     const orgId = AppState.currentMenuType.organizationId;
-    StateStore.loadStateList(orgId, sort, { page, size, ...param }).then((data) => {
+    StateStore.loadStateList(orgId, page, size, sort, param).then((data) => {
       this.setState({
         statesList: data.content,
         total: data.totalElements,
@@ -277,21 +319,38 @@ class StateList extends Component {
       sort[field] = order;
     }
     let searchParam = {};
-    if (Object.keys(filters).length) {
-      searchParam = filters;
+    if (filters && filters.name && filters.name.length) {
+      searchParam = {
+        ...searchParam,
+        name: filters.name[0],
+      };
     }
-    const postData = {
-      ...searchParam,
-      param: param.toString(),
-    };
+    if (filters && filters.description && filters.description.length) {
+      searchParam = {
+        ...searchParam,
+        description: filters.description[0],
+      };
+    }
+    if (filters && filters.type && filters.type.length) {
+      searchParam = {
+        ...searchParam,
+        type: filters.type[0],
+      };
+    }
+    if (param && param.length) {
+      searchParam = {
+        ...searchParam,
+        param: param.toString(),
+      };
+    }
     this.setState({
       page: pagination.current - 1,
       pageSize: pagination.pageSize,
       sorter: sorter.column ? sorter : undefined,
-      tableParam: postData,
+      tableParam: searchParam,
     });
     this.loadState(pagination.current - 1,
-      pagination.pageSize, sorter.column ? sorter : undefined, postData);
+      pagination.pageSize, sorter.column ? sorter : undefined, searchParam);
   };
 
   render() {

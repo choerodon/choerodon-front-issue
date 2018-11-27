@@ -121,7 +121,7 @@ class EditStateMachine extends Component {
             </Permission>
           </div>
         ),
-      })
+      });
     }
     return column;
   }
@@ -220,9 +220,9 @@ class EditStateMachine extends Component {
                         </Option>
                       )
                     }
-                    {nodeData &&
-                      nodeData.length > 0 &&
-                      nodeData.map(dto => dto.statusDTO && (
+                    {nodeData
+                      && nodeData.length > 0
+                      && nodeData.map(dto => dto.statusDTO && (
                         <Option
                           value={dto.statusDTO.id.toString()}
                           key={dto.statusDTO.toString()}
@@ -251,9 +251,9 @@ class EditStateMachine extends Component {
                     size="default"
                     disabled={target !== false}
                   >
-                    {nodeData &&
-                      nodeData.length > 0 &&
-                      nodeData.map(dto => dto.statusDTO && (
+                    {nodeData
+                      && nodeData.length > 0
+                      && nodeData.map(dto => dto.statusDTO && (
                         <Option
                           value={dto.statusDTO.id.toString()}
                           key={dto.statusDTO.toString()}
@@ -295,38 +295,44 @@ class EditStateMachine extends Component {
                   />,
                 )}
               </FormItem>
-              <FormItem
-                {...formItemLayout}
-              >
-                {getFieldDecorator('page', {
-                  initialValue: stateData ? { key: stateData.id } : [],
-                })(
-                  <Select
-                    style={{ width: 520 }}
-                    label={<FormattedMessage id="stateMachine.transfer.page" />}
-                    dropdownMatchSelectWidth
-                    size="default"
-                    labelInValue
-                  >
-                    {nodeData &&
-                      nodeData.length > 0 &&
-                      nodeData.map((dto) => {
-                        if (dto.statusDTO) {
-                          return (
-                            <Option
-                              value={dto.statusDTO.id.toString()}
-                              key={dto.statusDTO.toString()}
-                            >
-                              <span id={dto.statusDTO.id} name={dto.statusDTO.name} style={{ display: 'inline-block', width: '100%' }}>{dto.statusDTO.name}</span>
-                            </Option>
-                          );
-                        }
-                        return null;
-                      })}
-                  </Select>,
+              {/* <FormItem */}
+                {/* {...formItemLayout} */}
+              {/* > */}
+                {/* {getFieldDecorator('page', { */}
+                  {/* initialValue: stateData ? { key: stateData.id } : [], */}
+                {/* })( */}
+                  {/* <Select */}
+                    {/* style={{ width: 520 }} */}
+                    {/* label={<FormattedMessage id="stateMachine.transfer.page" />} */}
+                    {/* dropdownMatchSelectWidth */}
+                    {/* size="default" */}
+                    {/* labelInValue */}
+                  {/* > */}
+                    {/* {nodeData && */}
+                      {/* nodeData.length > 0 && */}
+                      {/* nodeData.map((dto) => { */}
+                        {/* if (dto.statusDTO) { */}
+                          {/* return ( */}
+                            {/* <Option */}
+                              {/* value={dto.statusDTO.id.toString()} */}
+                              {/* key={dto.statusDTO.toString()} */}
+                            {/* > */}
+                              {/* <span */}
+                                {/* id={dto.statusDTO.id} */}
+                                {/* name={dto.statusDTO.name} */}
+                                {/* style={{ display: 'inline-block', width: '100%' }} */}
+                              {/* > */}
+                                {/* {dto.statusDTO.name} */}
+                              {/* </span> */}
+                            {/* </Option> */}
+                          {/* ); */}
+                        {/* } */}
+                        {/* return null; */}
+                      {/* })} */}
+                  {/* </Select>, */}
 
-                )}
-              </FormItem>
+                {/* )} */}
+              {/* </FormItem> */}
             </React.Fragment>
           </Form>
         </div>

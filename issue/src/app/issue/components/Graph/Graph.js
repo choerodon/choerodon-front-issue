@@ -709,6 +709,7 @@ class Graph extends Component {
       };
 
       // 按键监听
+      /*
       const keyHandler = new mxDefaultKeyHandler(this.editor);
       keyHandler.bindAction(46, 'delete');
       keyHandler.bindAction(8, 'delete');
@@ -718,7 +719,7 @@ class Graph extends Component {
       keyHandler.bindAction(67, 'copy', true);
       keyHandler.bindAction(86, 'paste', true);
       keyHandler.bindAction(107, 'zoomIn');
-      keyHandler.bindAction(109, 'zoomOut');
+      keyHandler.bindAction(109, 'zoomOut'); */
 
       let clickFlag = null;
 
