@@ -22,6 +22,7 @@ import StateMachineStore from '../../../../stores/organization/stateMachine';
 import TypeTag from '../../../../components/TypeTag/TypeTag';
 import Tips from '../../../../components/Tips';
 import PublishSidebar from './PublishSidebar';
+import ReadAndEdit from '../../../../components/ReadAndEdit';
 
 const { Sidebar } = Modal;
 const FormItem = Form.Item;
@@ -163,7 +164,9 @@ class EditStateMachineScheme extends Component {
 
   handleSelectChange = (value) => {
     const { StateMachineSchemeStore } = this.props;
-    const allStateMachine = StateMachineSchemeStore.getAllStateMachine;
+    const { stateMachineIds } = this.state;
+    const allStateMachine = StateMachineSchemeStore.getAllStateMachine
+      .filter(data => stateMachineIds.indexOf(data.id) === -1);
     const item = allStateMachine[value];
     this.setState({
       stateMachineId: item.id,
