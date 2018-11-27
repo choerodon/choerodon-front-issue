@@ -35,6 +35,11 @@ class PriorityStore {
     this.priorityList = [...newPriorityList];
   }
 
+  @computed
+  get getPriorityList() {
+    return this.priorityList.slice();
+  }
+
   @action
   setOnLoadingList(state) {
     this.onLoadingList = state;
@@ -121,29 +126,9 @@ class PriorityStore {
     `/issue/v1/organizations/${orgId}/priority/check_name?name=${name}`,
   );
 
-  editPriorityById = (orgId, priority) => axios.put(
-    `/issue/v1/organizations/${orgId}/priority/${priority.id}`,
-    {
-      colour: priority.priorityColor,
-      description: priority.des,
-      id: priority.id,
-      isDefault: priority.isDefault ? '1' : '0',
-      name: priority.name,
-      objectVersionNumber: priority.objectVersionNumber,
-      organizationId: orgId,
-    },
-  );
+  editPriorityById = (orgId, priority) => axios.put(`/issue/v1/organizations/${orgId}/priority/${priority.id}`, priority);
 
-  createPriority = (orgId, priority) => axios.post(
-    `/issue/v1/organizations/${orgId}/priority`,
-    {
-      colour: priority.priorityColor,
-      description: priority.des,
-      isDefault: priority.isDefault ? '1' : '0',
-      name: priority.name,
-      objectVersionNumber: 1,
-    },
-  );
+  createPriority = (orgId, priority) => axios.post(`/issue/v1/organizations/${orgId}/priority`, priority);
 
   deletePriorityById = (orgId, priorityId) => axios.delete(
     `/issue/v1/organizations/${orgId}/priority/${priorityId}`,

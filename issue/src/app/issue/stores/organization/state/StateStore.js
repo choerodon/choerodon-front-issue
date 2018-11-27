@@ -23,10 +23,6 @@ class StateStore {
       code: 'done',
       name: '完成',
       colour: '#00bfa5',
-    }, {
-      code: 'none',
-      name: '无阶段',
-      colour: '#EFEFEF',
     }];
   }
 

@@ -141,7 +141,7 @@ class PublishSidebar extends Component {
       )));
       return (
         <Fragment>
-          <div style={{ marginBottom: 5 }}>ALSKEHDNX：项目问题管理状态机</div>
+          <div style={{ marginBottom: 5 }}>{record.oldStateMachine.name}</div>
           {list}
         </Fragment>
       );
@@ -192,7 +192,7 @@ class PublishSidebar extends Component {
       )));
       return (
         <Fragment>
-          <div style={{ marginBottom: 5 }}>Agile：子任务问题管理状态机</div>
+          <div style={{ marginBottom: 5 }}>{record.newStateMachine.name}</div>
           {list}
         </Fragment>
       );
