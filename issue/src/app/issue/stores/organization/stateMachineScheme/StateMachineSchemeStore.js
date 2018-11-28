@@ -1,6 +1,6 @@
-import { observable, action, computed } from "mobx";
-import { axios, store } from "choerodon-front-boot";
-import querystring from "query-string";
+import { observable, action, computed } from 'mobx';
+import { axios, store } from 'choerodon-front-boot';
+import querystring from 'query-string';
 
 @store('StateMachineSchemeStore')
 class StateMachineSchemeStore {
@@ -276,6 +276,9 @@ class StateMachineSchemeStore {
         Choerodon.prompt('保存失败');
       });
   };
+
+  editStateMachineScheme = (orgId, schemeId, data) => axios
+    .put(`/issue/v1/organizations/${orgId}/state_machine_scheme/${schemeId}`, JSON.stringify(data));
 
   loadStateMachine = (orgId, schemeId, isDraft = true) => {
     this.setStateMachineLoading(true);

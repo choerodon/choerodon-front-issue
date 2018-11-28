@@ -10,6 +10,7 @@ import {
   Select,
   Popover,
   Spin,
+  Input,
 } from 'choerodon-ui';
 import {
   Page, Header, Content, stores,
@@ -28,6 +29,7 @@ const { Sidebar } = Modal;
 const FormItem = Form.Item;
 const { Option } = Select;
 const { AppState } = stores;
+const { TextArea } = Input;
 const prefixCls = 'issue-stateMachineScheme';
 const formItemLayout = {
   labelCol: {
@@ -50,10 +52,20 @@ class EditStateMachineScheme extends Component {
       schemeId,
       showStatus: 'draft',
       stateMachineIds: [],
+      currentRae: undefined,
+      name: '',
+      description: '',
     };
   }
 
   componentDidMount() {
+    const { organizationId } = AppState.currentMenuType;
+    const { StateMachineSchemeStore } = this.props;
+    this.loadStateMachine();
+    StateMachineSchemeStore.loadAllStateMachine(organizationId);
+  }
+
+  loadStateMachine = (isDraft = true) => {
     const { organizationId } = AppState.currentMenuType;
     const { StateMachineSchemeStore } = this.props;
     const { schemeId } = this.state;
@@ -61,8 +73,11 @@ class EditStateMachineScheme extends Component {
     StateMachineSchemeStore.loadStateMachine(
       organizationId,
       schemeId,
+      isDraft,
     ).then(() => {
-      const { viewDTOs } = StateMachineSchemeStore.getStateMachine;
+      const {
+        viewDTOs, name, description, objectVersionNumber,
+      } = StateMachineSchemeStore.getStateMachine;
       // 过滤已经关联的状态机
       const stateMachineIds = [];
       viewDTOs.forEach((data) => {
@@ -72,16 +87,16 @@ class EditStateMachineScheme extends Component {
       });
       this.setState({
         stateMachineIds,
+        name,
+        description,
+        objectVersionNumber,
       });
     });
-    StateMachineSchemeStore.loadAllStateMachine(organizationId);
-  }
+  };
 
   refresh = () => {
-    const { organizationId } = AppState.currentMenuType;
-    const { schemeId, showStatus } = this.state;
-    const { StateMachineSchemeStore } = this.props;
-    StateMachineSchemeStore.loadStateMachine(organizationId, schemeId, showStatus === 'draft');
+    const { showStatus } = this.state;
+    this.loadStateMachine(showStatus === 'draft');
   };
 
   handleAddStateMachine = () => {
@@ -384,7 +399,7 @@ class EditStateMachineScheme extends Component {
     const { organizationId } = AppState.currentMenuType;
     StateMachineSchemeStore.setIsMachineDeleteVisible(false);
     StateMachineSchemeStore.deleteDraft(organizationId, schemeId).then(() => {
-      StateMachineSchemeStore.loadStateMachine(organizationId, schemeId);
+      this.loadStateMachine();
     });
   };
 
@@ -395,14 +410,7 @@ class EditStateMachineScheme extends Component {
 
   // 查看原件 or 编辑草稿
   handleShowChange = (isDraft) => {
-    const { organizationId } = AppState.currentMenuType;
-    const { StateMachineSchemeStore } = this.props;
-    const { schemeId } = this.state;
-    StateMachineSchemeStore.loadStateMachine(
-      organizationId,
-      schemeId,
-      isDraft,
-    );
+    this.loadStateMachine(isDraft);
     this.setState({
       showStatus: isDraft ? 'draft' : 'original',
     });
@@ -502,13 +510,67 @@ class EditStateMachineScheme extends Component {
     );
   };
 
+  changeRae = (currentRae) => {
+    this.setState({
+      currentRae,
+    });
+  };
+
+  updateScheme = (code) => {
+    const { StateMachineSchemeStore } = this.props;
+    const { objectVersionNumber, [code]: newValue, schemeId } = this.state;
+    if (code === 'name' && !newValue) {
+      const {
+        name, description,
+      } = StateMachineSchemeStore.getStateMachine;
+      this.setState({
+        currentRae: undefined,
+        name,
+        description,
+      });
+    } else {
+      const menu = AppState.currentMenuType;
+      const {
+        organizationId: orgId,
+      } = menu;
+      const data = {
+        [code]: this.state[code],
+        objectVersionNumber,
+      };
+      StateMachineSchemeStore.editStateMachineScheme(orgId, schemeId, data).then(() => {
+        this.refresh();
+        this.setState({
+          currentRae: undefined,
+        });
+      });
+    }
+  };
+
+  resetScheme = (origin, code) => {
+    this.setState({
+      [code]: origin,
+    });
+  };
+
+  handleChange = (e, code) => {
+    this.setState({
+      [code]: e.target.value,
+    });
+  };
+
   render() {
     const menu = AppState.currentMenuType;
     const {
       type, id: projectId, organizationId: orgId, name,
     } = menu;
     const { intl, StateMachineSchemeStore } = this.props;
-    const { showStatus, schemeId } = this.state;
+    const {
+      showStatus,
+      schemeId,
+      currentRae,
+      name: schemeName,
+      description,
+    } = this.state;
     const {
       getStateMachine,
       getStateMachineLoading,
@@ -570,8 +632,58 @@ class EditStateMachineScheme extends Component {
               }
             </div> : null
           }
-          <div className="issue-scheme-name">{getStateMachine.name}</div>
-          <div className="issue-scheme-description">{getStateMachine.description}</div>
+          <div style={{ width: 440 }}>
+            <ReadAndEdit
+              callback={this.changeRae}
+              thisType="name"
+              current={currentRae}
+              origin={schemeName}
+              onOk={() => this.updateScheme('name')}
+              onCancel={origin => this.resetScheme(origin, 'name')}
+              readModeContent={(
+                <div className="issue-scheme-name">
+                  {schemeName}
+                </div>
+              )}
+              style={{ marginBottom: 10 }}
+            >
+              <TextArea
+                size="small"
+                maxLength={20}
+                value={schemeName}
+                onChange={e => this.handleChange(e, 'name')}
+                onPressEnter={() => this.updateScheme('name')}
+                autoize={{ minRows: 1, maxRows: 1 }}
+              />
+            </ReadAndEdit>
+            <ReadAndEdit
+              callback={this.changeRae}
+              thisType="description"
+              current={currentRae}
+              origin={description}
+              onOk={() => this.updateScheme('description')}
+              onCancel={origin => this.resetScheme(origin, 'description')}
+              readModeContent={(
+                description
+                  ? <div className="issue-scheme-description">
+                    {description}
+                  </div>
+                  : <div style={{ opacity: 0.5 }}>
+                    {intl.formatMessage({ id: 'stateMachineScheme.des.none' })}
+                  </div>
+              )}
+              style={{ marginBottom: 20 }}
+            >
+              <TextArea
+                maxLength={44}
+                value={description}
+                size="small"
+                onChange={e => this.handleChange(e, 'description')}
+                onPressEnter={() => this.updateScheme('description')}
+                placeholder={intl.formatMessage({ id: 'stateMachineScheme.des' })}
+              />
+            </ReadAndEdit>
+          </div>
           <Button
             type="primary"
             onClick={this.handleAddStateMachine}
