@@ -4,6 +4,7 @@ const zh_CN = {
   filter: '筛选条件',
   create: '创建',
   save: '保存',
+  confirm: '确认',
   cancel: '取消',
   delete: '删除',
   edit: '编辑',
@@ -371,5 +372,13 @@ const zh_CN = {
   'stateMachine.node.all': '让所有的状态转换到这里',
   'stateMachine.node.name.start': '开始',
   'stateMachine.node.name.all': '全部',
+  'stateMachine.delete.confirm': '确定要删除状态“{des}”及其相关转换吗？',
+  'stateMachine.node.deleteTip': '确认删除？',
+  'stateMachine.node.deleteInfo': '无法删除状态',
+  'stateMachine.node.deleteDes': '有{count}个问题在使用此状态，如要删除状态，需要将问题转换到其他状态。',
+  'stateMachine.transfer.deleteTip': '请选择需要删除的转换。',
+  'stateMachine.draft': '草稿',
+  'stateMachine.publish': '发布',
+  'stateMachine.publish.success': '发布成功！',
 };
 export default zh_CN;
