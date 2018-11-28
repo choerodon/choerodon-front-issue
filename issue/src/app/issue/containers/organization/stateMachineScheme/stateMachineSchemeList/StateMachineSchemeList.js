@@ -229,7 +229,7 @@ class StateMachineSchemeList extends Component {
     const { sorter, tableParam } = this.state;
     const { pagination } = this.props.StateMachineSchemeStore;
     this.loadStateMachineSchemeList(pagination, sorter, tableParam);
-  }
+  };
 
   tableChange = (pagination, filters, sorter, param) => {
     const orgId = AppState.currentMenuType.organizationId;

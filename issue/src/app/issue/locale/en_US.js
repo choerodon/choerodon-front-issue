@@ -3,6 +3,7 @@ const enUS = {
   filter: 'Filter',
   create: 'Create',
   save: 'Save',
+  confirm: 'Confirm',
   cancel: 'Cancel',
   delete: 'Delete',
   edit: 'Edit',
@@ -343,5 +344,13 @@ const enUS = {
   'stateMachine.node.all': 'Let all the states change here',
   'stateMachine.node.name.start': 'Start',
   'stateMachine.node.name.all': 'All',
+  'stateMachine.delete.confirm': 'Confirm delete the status {des} and its related conversions?',
+  'stateMachine.node.deleteTip': 'Confirm delete？',
+  'stateMachine.node.deleteInfo': 'Unable to delete status',
+  'stateMachine.node.deleteDes': 'There are {count} issues using this state, and to delete the state, you need to convert the issues to a different state.',
+  'stateMachine.transfer.deleteTip': 'Please select the transform you want to delete.',
+  'stateMachine.draft': 'Draft',
+  'stateMachine.publish': 'Publish',
+  'stateMachine.publish.success': 'Publish Success!',
 };
 export default enUS;

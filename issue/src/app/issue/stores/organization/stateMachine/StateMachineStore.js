@@ -79,6 +79,9 @@ class StateMachineStore {
   deleteStateMachineNode = (orgId, nodeId, stateMachineId) => axios
     .delete(`/state/v1/organizations/${orgId}/state_machine_nodes/${nodeId}?stateMachineId=${stateMachineId}`);
 
+  checkDeleteNode = (orgId, statusId, stateMachineId) => axios
+    .get(`/state/v1/organizations/${orgId}/state_machine_nodes/check_delete?statusId=${statusId}&stateMachineId=${stateMachineId}`);
+
   // 编辑状态机时添加转换
   addStateMachineTransfer = (orgId, stateMachineId, map) => axios
     .post(`state/v1/organizations/${orgId}/state_machine_transforms?stateMachineId=${stateMachineId}`, JSON.stringify(map));

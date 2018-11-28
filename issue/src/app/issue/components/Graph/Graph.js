@@ -859,6 +859,7 @@ class Graph extends Component {
       // Enables snapping waypoints to terminals
       mxEdgeHandler.prototype.snapToTerminals = true;
     }
+    new mxOutline(graph, this.outlineContainer);
   };
 
   /**
@@ -866,7 +867,6 @@ class Graph extends Component {
    * @returns {XML}
    */
   render() {
-
     return (
       <div className="graph">
         <div className="graph-toolbar">
@@ -874,6 +874,11 @@ class Graph extends Component {
         </div>
         <div className="graph-container" ref={(container) => { this.graphContainer = container; }} id="graphContainer" />
         {this.props.extra}
+        <div
+          id="outlineContainer"
+          ref={(container) => { this.outlineContainer = container; }}
+          className="outline-container"
+        />
       </div>
     );
   }

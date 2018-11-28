@@ -17,7 +17,7 @@ import './EditStateMachine.scss';
 const prefixCls = 'issue-state-machine';
 const { AppState } = stores;
 
-const { Sidebar } = Modal;
+const { Sidebar, info, confirm } = Modal;
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Option } = Select;
@@ -56,6 +56,7 @@ class EditStateMachine extends Component {
       target: false,
       enable: status !== 'state_machine_active',
       loading: false,
+      publishLoading: false,
     };
     this.graph = null;
   }
@@ -776,6 +777,56 @@ class EditStateMachine extends Component {
     return change;
   };
 
+  checkDelete = (cell) => {
+    const { StateMachineStore, intl } = this.props;
+    const {
+      stateMachineData, organizationId,
+    } = this.state;
+    const that = this;
+    StateMachineStore.checkDeleteNode(
+      organizationId, cell.stateId, stateMachineData.id,
+    ).then((data) => {
+      if (data && !data.failed) {
+        if (data.canDelete) {
+          confirm({
+            title: intl.formatMessage({ id: 'stateMachine.node.deleteTip' }),
+            content: (
+              <p>
+                {intl.formatMessage(
+                  {
+                    id: 'stateMachine.delete.confirm',
+                  }, {
+                    des: cell.des,
+                  },
+                )}
+              </p>
+            ),
+            onOk() {
+              that.removeCell(cell);
+            },
+          });
+        } else {
+          info({
+            title: intl.formatMessage({ id: 'stateMachine.node.deleteInfo' }),
+            content: (
+              <p>
+                {intl.formatMessage(
+                  {
+                    id: 'stateMachine.node.deleteDes',
+                  }, {
+                    count: data.count,
+                  },
+                )}
+              </p>
+            ),
+            onOk() {},
+            okText: intl.formatMessage({ id: 'confirm' }),
+          });
+        }
+      }
+    });
+  };
+
   removeCell = (cell) => {
     const { StateMachineStore } = this.props;
     const {
@@ -986,10 +1037,15 @@ class EditStateMachine extends Component {
     const { stateMachineData } = this.state;
     const { StateMachineStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-
+    this.setState({
+      publishLoading: true,
+    });
     StateMachineStore.publishStateMachine(organizationId, stateMachineData.id).then((data) => {
+      this.setState({
+        publishLoading: false,
+      });
       if (data) {
-        Choerodon.prompt('Success');
+        Choerodon.prompt(intl.formatMessage({ id: 'stateMachine.publish.success' }));
         history.push(`/issue/state-machines/edit/${stateMachineData.id}/state_machine_active?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
       }
     });
@@ -1071,6 +1127,7 @@ class EditStateMachine extends Component {
       loading,
       transferData,
       status,
+      publishLoading,
     } = this.state;
     const dataSource = nodeData && nodeData.slice();
     _.remove(dataSource, item => item.statusId === 0);
@@ -1107,7 +1164,7 @@ class EditStateMachine extends Component {
             <div className="graph-card-toolbar">
               <Button
                 className="graph-card-btn"
-                funcType="flat"
+                funcType="raised"
                 onClick={() => this.handleCardEdit(this.state.selectedCell)}
               ><FormattedMessage id="edit" /></Button>
               <Button
@@ -1133,15 +1190,14 @@ class EditStateMachine extends Component {
               <div className="graph-card-all">
                 <Checkbox checked={this.state.allChecked} onChange={this.handleAllChange}><FormattedMessage id="stateMachine.node.all" /></Checkbox>
               </div>
-              <Popconfirm title={<FormattedMessage id="pageScheme.related.deleteTip" />} onConfirm={() => this.removeCell(this.state.selectedCell)}>
-                <Button
-                  disabled={selectedCell && selectedCell.status !== 'node_custom'}
-                  className="graph-card-btn"
-                  funcType="raised"
-                >
-                  <FormattedMessage id={`stateMachine.${selectedCell && selectedCell.vertex ? 'state' : 'transfer'}.delete`} />
-                </Button>
-              </Popconfirm>
+              <Button
+                disabled={selectedCell && selectedCell.status !== 'node_custom'}
+                className="graph-card-btn"
+                funcType="raised"
+                onClick={() => this.checkDelete(this.state.selectedCell)}
+              >
+                <FormattedMessage id={`stateMachine.${selectedCell && selectedCell.vertex ? 'state' : 'transfer'}.delete`} />
+              </Button>
             </React.Fragment>
           )}
       </div>);
@@ -1177,25 +1233,33 @@ class EditStateMachine extends Component {
                   <Button onClick={() => this.handleDeploy()} type="primary" funcType="raised"><FormattedMessage id="edit" /></Button>
                 </div>
               </div>
-              // <Button onClick={() => this.setState({ enable: true })}>wwww</Button>
             )}
-            {status && (status === 'state_machine_draft' || status === 'state_machine_create') && (
+            {status && status === 'state_machine_draft' && (
               <div className={`${prefixCls}-header-tip`}>
                 <span className="icon icon-warning" />
                 <div className={`${prefixCls}-header-tip-text`}>
                   <FormattedMessage id="stateMachine.edit.draft.tip" />
                 </div>
                 <div className={`${prefixCls}-header-tip-action`}>
-                  <Button onClick={this.handlePublish} type="primary" funcType="raised">发布</Button>
+                  <Button
+                    onClick={this.handlePublish}
+                    type="primary"
+                    funcType="raised"
+                    loading={publishLoading}
+                  >
+                    <FormattedMessage id="stateMachine.publish" />
+                  </Button>
                   {
-                    status === 'state_machine_draft' && <Button onClick={this.showDeleteDraft} funcType="raised" className="delete">删除草稿</Button>
+                    status === 'state_machine_draft' && <Button onClick={this.showDeleteDraft} funcType="raised" className="delete">
+                      <FormattedMessage id="stateMachine.draft.delete" />
+                    </Button>
                   }
                 </div>
               </div>
             )}
             <div className={`${prefixCls}-header-name`}>
               {stateMachineData.name}
-              {status && status === 'state_machine_draft' && <span>草稿</span>}
+              {status && status === 'state_machine_draft' && <FormattedMessage id="stateMachine.draft" />}
             </div>
             <div className={`${prefixCls}-header-des`}>{stateMachineData.description}</div>
           </div>
@@ -1268,7 +1332,7 @@ class EditStateMachine extends Component {
             onOk={this.handleDeleteTransfer}
             onCancel={this.handleCancel}
           >
-            <div>请选择你需要删除的转换。</div>
+            <div><FormattedMessage id="stateMachine.transfer.deleteTip" /></div>
             <Select
               label={<FormattedMessage id="stateMachine.transfer.delete.tip" />}
               style={{ width: '100%' }}
