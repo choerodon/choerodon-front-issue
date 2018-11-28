@@ -1,5 +1,15 @@
 .issue-readAndEdit {
-  .c7n-readAndEdit {
+  .ant-input-length-info {
+    position: absolute;
+    float: left;
+    letter-spacing: 0;
+  }
+
+  .ant-input-icon {
+    right: auto;
+  }
+
+  &.c7n-readAndEdit {
     position: relative;
     line-height: 20px;
     padding: 2px 30px 2px 5px;
@@ -75,16 +85,16 @@
     color: rgba(0, 0, 0, 0.65);
   }
 
-  .c7n-readAndEdit:hover {
+  &.c7n-readAndEdit:hover {
     // box-shadow: 0 0 0 1px #ccc;
     border-bottom-color: rgba(0, 0, 0, 0.54);
   }
 
-  .c7n-readAndEdit:hover .edit {
+  &.c7n-readAndEdit:hover .edit {
     display: flex !important;
   }
 
-  .c7n-readAndEdit:hover .close {
+  &.c7n-readAndEdit:hover .close {
     display: block !important;
   }
 }

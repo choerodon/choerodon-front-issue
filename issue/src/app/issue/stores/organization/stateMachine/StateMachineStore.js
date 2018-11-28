@@ -67,7 +67,8 @@ class StateMachineStore {
   deleteStateMachine = (orgId, stateId) => axios.delete(`/issue/v1/organizations/${orgId}/state_machine/${stateId}`)
     .then(data => this.handleProptError(data));
 
-  updateStateMachine = (orgId, stateId, map) => axios.put(`/state/v1/organizations/${orgId}/state_machines/${stateId}`, JSON.stringify(map));
+  updateStateMachine = (orgId, stateId, map) => axios
+    .put(`/state/v1/organizations/${orgId}/state_machines/${stateId}`, JSON.stringify(map));
 
   // 编辑状态机时添加状态
   addStateMachineNode = (orgId, stateMachineId, map) => axios
@@ -103,7 +104,7 @@ class StateMachineStore {
         this.setIsLoading(false);
         return this.handleProptError(data);
       });
-  }
+  };
 
   addConfig = (orgId, stateMachineId, map) => axios.post(`/state/v1/organizations/${orgId}/state_machine_configs/${stateMachineId}?transform_id=${map.transformId}`, JSON.stringify(map))
     .then(data => this.handleProptError(data));

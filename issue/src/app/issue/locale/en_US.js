@@ -99,6 +99,7 @@ const enUS = {
   'stateMachineScheme.publish.noMatch': 'In this modification, all issue types and states are automatically migrated.',
   'stateMachineScheme.targetStatus': 'New State',
   'stateMachineScheme.sourceStatus': 'Current State',
+  'stateMachineScheme.des.none': 'No description',
 
   // 自定义字段
   'customFields.title': 'Custom Field',

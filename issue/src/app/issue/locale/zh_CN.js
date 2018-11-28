@@ -126,6 +126,7 @@ const zh_CN = {
   'stateMachineScheme.publish.noMatch': '此修改中，所有问题类型及状态都可以自动迁移。',
   'stateMachineScheme.targetStatus': '新的状态',
   'stateMachineScheme.sourceStatus': '当前状态',
+  'stateMachineScheme.des.none': '无描述',
 
   // 自定义字段
   'customFields.title': '自定义字段',

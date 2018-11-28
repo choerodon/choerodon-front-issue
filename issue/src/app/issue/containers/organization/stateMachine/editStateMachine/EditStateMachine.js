@@ -11,6 +11,7 @@ import {
 import _ from 'lodash';
 import Graph from '../../../../components/Graph';
 import StateStore from '../../../../stores/organization/state';
+import ReadAndEdit from '../../../../components/ReadAndEdit';
 import '../../../main.scss';
 import './EditStateMachine.scss';
 
@@ -57,6 +58,9 @@ class EditStateMachine extends Component {
       enable: status !== 'state_machine_active',
       loading: false,
       publishLoading: false,
+      currentRae: undefined,
+      name: '',
+      description: '',
     };
     this.graph = null;
   }
@@ -436,10 +440,14 @@ class EditStateMachine extends Component {
           } else {
             const nodeData = data.nodeDTOs;
             const transferData = data.transformDTOs;
+            const { name, description, objectVersionNumber } = data;
             this.setState({
               stateMachineData: data,
               transferData,
               nodeData,
+              name,
+              description,
+              objectVersionNumber,
             });
           }
         });
@@ -451,10 +459,14 @@ class EditStateMachine extends Component {
           } else {
             const nodeData = data.nodeDTOs;
             const transferData = data.transformDTOs;
+            const { name, description, objectVersionNumber } = data;
             this.setState({
               stateMachineData: data,
               transferData,
               nodeData,
+              name,
+              description,
+              objectVersionNumber,
             });
           }
         });
@@ -1116,6 +1128,54 @@ class EditStateMachine extends Component {
     });
   };
 
+  changeRae = (currentRae) => {
+    this.setState({
+      currentRae,
+    });
+  };
+
+  updateScheme = (code) => {
+    const { StateMachineStore } = this.props;
+    const { objectVersionNumber, [code]: newValue, id } = this.state;
+    if (code === 'name' && !newValue) {
+      const {
+        name, description,
+      } = StateMachineStore.getStateMachine;
+      this.setState({
+        currentRae: undefined,
+        name,
+        description,
+      });
+    } else {
+      const menu = AppState.currentMenuType;
+      const {
+        organizationId: orgId,
+      } = menu;
+      const data = {
+        [code]: this.state[code],
+        objectVersionNumber,
+      };
+      StateMachineStore.updateStateMachine(orgId, id, data).then(() => {
+        this.refresh();
+        this.setState({
+          currentRae: undefined,
+        });
+      });
+    }
+  };
+
+  resetScheme = (origin, code) => {
+    this.setState({
+      [code]: origin,
+    });
+  };
+
+  handleChange = (e, code) => {
+    this.setState({
+      [code]: e.target.value,
+    });
+  };
+
   render() {
     const { StateMachineStore, intl } = this.props;
     const {
@@ -1128,6 +1188,9 @@ class EditStateMachine extends Component {
       transferData,
       status,
       publishLoading,
+      currentRae,
+      name: schemeName,
+      description,
     } = this.state;
     const dataSource = nodeData && nodeData.slice();
     _.remove(dataSource, item => item.statusId === 0);
@@ -1257,11 +1320,56 @@ class EditStateMachine extends Component {
                 </div>
               </div>
             )}
-            <div className={`${prefixCls}-header-name`}>
-              {stateMachineData.name}
-              {status && status === 'state_machine_draft' && <FormattedMessage id="stateMachine.draft" />}
+            <div style={{ width: 440 }}>
+              <ReadAndEdit
+                callback={this.changeRae}
+                thisType="name"
+                current={currentRae}
+                origin={schemeName}
+                onOk={() => this.updateScheme('name')}
+                onCancel={origin => this.resetScheme(origin, 'name')}
+                readModeContent={(
+                  <div className={`${prefixCls}-header-name`}>
+                    {schemeName}
+                    {status && status === 'state_machine_draft' && <FormattedMessage id="stateMachine.draft" />}
+                  </div>
+                )}
+                style={{ marginBottom: 10 }}
+              >
+                <TextArea
+                  size="small"
+                  maxLength={20}
+                  value={schemeName}
+                  onChange={e => this.handleChange(e, 'name')}
+                  onPressEnter={() => this.updateScheme('name')}
+                  autoize={{ minRows: 1, maxRows: 1 }}
+                />
+              </ReadAndEdit>
+              <ReadAndEdit
+                callback={this.changeRae}
+                thisType="description"
+                current={currentRae}
+                origin={description}
+                onOk={() => this.updateScheme('description')}
+                onCancel={origin => this.resetScheme(origin, 'description')}
+                readModeContent={(
+                  <div
+                    className={`${prefixCls}-header-des`}
+                  >
+                    {description || '无描述'}
+                  </div>
+                )}
+              >
+              <TextArea
+                maxLength={44}
+                value={description}
+                size="small"
+                onChange={e => this.handleChange(e, 'description')}
+                onPressEnter={() => this.updateScheme('description')}
+                placeholder={intl.formatMessage({ id: 'stateMachineScheme.des' })}
+              />
+              </ReadAndEdit>
             </div>
-            <div className={`${prefixCls}-header-des`}>{stateMachineData.description}</div>
           </div>
           <Tabs defaultActiveKey="graph">
             <TabPane tab={<FormattedMessage id="stateMachine.tab.graph" />} key="graph">
