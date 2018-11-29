@@ -55,6 +55,7 @@ class EditStateMachineScheme extends Component {
       currentRae: undefined,
       name: '',
       description: '',
+      loading: false,
     };
   }
 
@@ -124,6 +125,7 @@ class EditStateMachineScheme extends Component {
   handleNextStep = () => {
     const { StateMachineSchemeStore } = this.props;
     const { schemeId } = this.state;
+    StateMachineSchemeStore.setIsAddVisible(false);
     StateMachineSchemeStore.setIsConnectVisible(true);
     const { organizationId } = AppState.currentMenuType;
     StateMachineSchemeStore.loadAllIssueType(organizationId, schemeId);
@@ -132,6 +134,7 @@ class EditStateMachineScheme extends Component {
 
   handlePreStep = () => {
     const { StateMachineSchemeStore } = this.props;
+    StateMachineSchemeStore.setIsAddVisible(true);
     StateMachineSchemeStore.setIsConnectVisible(false);
   };
 
@@ -142,12 +145,12 @@ class EditStateMachineScheme extends Component {
     StateMachineSchemeStore.setIsConnectVisible(false);
   };
 
-  handleFinishConnectStateMachine = () => {
+  handleFinishConnectStateMachine = (schemeDTOs) => {
     const { StateMachineSchemeStore } = this.props;
     StateMachineSchemeStore.setSchemeDTOs([]);
     StateMachineSchemeStore.setIsAddVisible(false);
     StateMachineSchemeStore.setIsConnectVisible(false);
-    StateMachineSchemeStore.setSelectedIssueTypeId(StateMachineSchemeStore.getSelectedIssueTypeId);
+    StateMachineSchemeStore.setSelectedIssueTypeId(schemeDTOs);
   };
 
   setGraphData = (res) => {
@@ -207,10 +210,11 @@ class EditStateMachineScheme extends Component {
     const { organizationId } = AppState.currentMenuType;
     const { schemeId, stateMachineId, stateMachineIds } = this.state;
     const { StateMachineSchemeStore } = this.props;
-
+    this.setState({
+      loading: true,
+    });
     const schemeDTOs = StateMachineSchemeStore.getSchemeDTOs;
 
-    StateMachineSchemeStore.setSelectedIssueTypeId(schemeDTOs);
     StateMachineSchemeStore.saveStateMachine(
       organizationId,
       schemeId,
@@ -218,12 +222,10 @@ class EditStateMachineScheme extends Component {
       schemeDTOs,
     ).then(() => {
       this.setState({
-        stateMachineIds: [
-          ...stateMachineIds,
-          stateMachineId,
-        ],
+        loading: false,
       });
-      this.handleFinishConnectStateMachine();
+      this.handleFinishConnectStateMachine(schemeDTOs);
+      this.refresh();
     });
   };
 
@@ -232,7 +234,9 @@ class EditStateMachineScheme extends Component {
     const { schemeId } = this.state;
     const { StateMachineSchemeStore } = this.props;
     const { organizationId } = AppState.currentMenuType;
-    StateMachineSchemeStore.deleteStateMachine(organizationId, schemeId, deleteId);
+    StateMachineSchemeStore.deleteStateMachine(organizationId, schemeId, deleteId).then(() => {
+      this.refresh();
+    });
   };
 
   handleEditStateMachine = (stateMachineId) => {
@@ -477,6 +481,7 @@ class EditStateMachineScheme extends Component {
 
   renderFooter = () => {
     const { StateMachineSchemeStore } = this.props;
+    const { loading } = this.state;
     return (
       <Fragment>
         {StateMachineSchemeStore.getSelectedIssueTypeId
@@ -485,6 +490,7 @@ class EditStateMachineScheme extends Component {
             key="pre"
             type="primary"
             onClick={this.handlePreStep}
+            disabled={loading}
           >
             {<FormattedMessage id="stateMachineScheme.pre" />}
           </Button>
@@ -496,6 +502,7 @@ class EditStateMachineScheme extends Component {
           onClick={this.handleFinish}
           disabled={!(StateMachineSchemeStore.getSchemeDTOs
           && StateMachineSchemeStore.getSchemeDTOs.length)}
+          loading={loading}
         >
           {<FormattedMessage id="stateMachineScheme.finish" />}
         </Button>
@@ -697,8 +704,7 @@ class EditStateMachineScheme extends Component {
             loading={getStateMachineLoading}
             columns={this.getColumns()}
             dataSource={getStateMachine.viewDTOs || []}
-            rowKey={record => record.id
-            }
+            rowKey={record => record.id}
             className="issue-table"
             rowClassName={`${prefixCls}-table-col`}
             pagination={false}

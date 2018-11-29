@@ -50,7 +50,7 @@ class StateStore {
   loadStateList = (orgId, page, size, sort = { field: 'id', order: 'desc' }, param) => {
     this.setIsLoading(true);
     return axios.post(
-      `/state/v1/organizations/${orgId}/statuses?page=${page}&size=${size}&sort=${sort.field},${sort.order}`,
+      `/state/v1/organizations/${orgId}/status/list?page=${page}&size=${size}&sort=${sort.field},${sort.order}`,
       JSON.stringify(param),
     ).then((data) => {
       this.setStateList(data.content);

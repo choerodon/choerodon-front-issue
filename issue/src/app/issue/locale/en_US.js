@@ -353,5 +353,7 @@ const enUS = {
   'stateMachine.draft': 'Draft',
   'stateMachine.publish': 'Publish',
   'stateMachine.publish.success': 'Publish Success!',
+  'stateMachine.publish.info': 'Publish draft stateMachine fail',
+  'stateMachine.publish.des': '当前工作流草案无法删除，因为您的修改中移除了关联问题的状态，需要将问题转换到其他状态才能继续发布。',
 };
 export default enUS;

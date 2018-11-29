@@ -381,5 +381,7 @@ const zh_CN = {
   'stateMachine.draft': '草稿',
   'stateMachine.publish': '发布',
   'stateMachine.publish.success': '发布成功！',
+  'stateMachine.publish.info': '发布工作流草案失败',
+  'stateMachine.publish.des': '当前工作流草案无法删除，因为您的修改中移除了关联问题的状态，需要将问题转换到其他状态才能继续发布。',
 };
 export default zh_CN;

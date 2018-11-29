@@ -14,6 +14,7 @@ import IssueTypeCreate from '../issueTypeCreate';
 import TypeTag from '../../../../components/TypeTag/TypeTag';
 
 const { AppState } = stores;
+const { info } = Modal;
 
 @observer
 class IssueTypeList extends Component {
@@ -24,7 +25,9 @@ class IssueTypeList extends Component {
       visible: false,
       deleteVisible: false,
       issueType: false,
+      tableParam: {},
     };
+    this.modelRef = false;
   }
 
   componentDidMount() {
@@ -53,15 +56,18 @@ class IssueTypeList extends Component {
     title: <FormattedMessage id="issueType.scheme" />,
     dataIndex: 'scheme',
     key: 'scheme',
-    render: (text, record) => (record.scheme && record.scheme.length
-      ? (
-        <ul className="issue-issueType-ul">
-          {record.scheme.map(scheme => (<li key={scheme.id}>{scheme.name}</li>))}
-        </ul>
-      )
-      : (
-        <div>-</div>
-      )),
+    render: (text, record) => (
+      <div>
+        {record.issueTypeSchemeRelationList && record.issueTypeSchemeRelationList.length
+          ? <a
+            onClick={() => this.showSchemes(record)}
+          >
+            {record.issueTypeSchemeRelationList.length}个关联的方案
+          </a>
+          : '-'
+        }
+      </div>
+    ),
   }, {
     align: 'right',
     key: 'action',
@@ -96,6 +102,36 @@ class IssueTypeList extends Component {
       </div>
     ),
   }]);
+
+  linkToScheme = (schemeId) => {
+    this.modelRef.destroy();
+    const { history } = this.props;
+    const { name, id, organizationId } = AppState.currentMenuType;
+    // 方案详情目前不可访问
+    history.push(`/issue/issue-type-schemes?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+  };
+
+  showSchemes = (data) => {
+    const { intl } = this.props;
+    this.modelRef = info({
+      title: `${data.name}关联的方案`,
+      content: (
+        <ul className="issue-issueType-ul">
+          {
+            data.issueTypeSchemeRelationList.map(scheme => (
+              <li key={scheme.issueTypeSchemeId}>
+                <a onClick={() => this.linkToScheme(scheme.issueTypeSchemeId)}>
+                  {scheme.issueTypeSchemeName}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      ),
+      onOk() {},
+      okText: intl.formatMessage({ id: 'confirm' }),
+    });
+  };
 
   loadIssueType = () => {
     const { IssueTypeStore } = this.props;
@@ -174,16 +210,27 @@ class IssueTypeList extends Component {
       sort[field] = order;
     }
     let searchParam = {};
-    if (Object.keys(filters).length) {
-      searchParam = filters;
+    if (filters && filters.name && filters.name.length) {
+      searchParam = {
+        ...searchParam,
+        name: filters.name[0],
+      };
     }
-    const postData = {
-      ...searchParam,
-      param: param.toString(),
-    };
+    if (filters && filters.description && filters.description.length) {
+      searchParam = {
+        ...searchParam,
+        description: filters.description[0],
+      };
+    }
+    if (param && param.length) {
+      searchParam = {
+        ...searchParam,
+        param: param.toString(),
+      };
+    }
     this.setState({
       sorter: sorter.column ? sorter : undefined,
-      tableParam: postData,
+      tableParam: searchParam,
       page: pagination.current,
       pageSize: pagination.pageSize,
     }, () => this.loadIssueType());
@@ -266,7 +313,7 @@ class IssueTypeList extends Component {
             <span className="issue-issueType-bold">{issueType.name}</span>
           </p>
           <p className="issue-issueType-tip">
-            <Icon type="error" className="issue-issueTypeList-icon issue-error-msg" />
+            <Icon type="error" className="issue-issueType-icon issue-error-msg" />
             {intl.formatMessage({ id: 'issueType.delete.forbidden' })}
           </p>
           <p className="issue-issueType-tip">

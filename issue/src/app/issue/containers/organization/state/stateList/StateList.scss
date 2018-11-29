@@ -1,4 +1,9 @@
 .issue-state {
+  &-ul {
+    max-height: 300px;
+    overflow: scroll;
+    padding-left: 20px;
+  }
   &-block {
     width: 16px;
     height: 16px;

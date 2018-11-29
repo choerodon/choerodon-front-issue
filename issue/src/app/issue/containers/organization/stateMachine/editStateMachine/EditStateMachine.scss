@@ -1,4 +1,12 @@
 .issue-state-machine {
+  &-block {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+  }
   &-header {
     margin-bottom: 12px;
     &-name {

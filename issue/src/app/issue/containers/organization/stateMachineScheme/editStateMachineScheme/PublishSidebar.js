@@ -17,6 +17,7 @@ class PublishSidebar extends Component {
     super(props, context);
     this.state = {
       transform: {},
+      loading: false,
     };
   }
 
@@ -31,6 +32,9 @@ class PublishSidebar extends Component {
     const { organizationId } = AppState.currentMenuType;
     const publishData = store.getPublishData;
     const data = [];
+    this.setState({
+      loading: true,
+    });
     publishData.forEach((typeData) => {
       const changeItems = [];
       typeData.statusChangeItems.forEach((stateData) => {
@@ -63,6 +67,9 @@ class PublishSidebar extends Component {
         store.setIsPublishVisible(false);
         refresh();
       }
+      this.setState({
+        loading: false,
+      });
     });
   };
 
@@ -83,6 +90,7 @@ class PublishSidebar extends Component {
         type="primary"
         funcType="raised"
         onClick={this.handlePublish}
+        loading={this.state.loading}
       >
         {<FormattedMessage id="stateMachineScheme.publish" />}
       </Button>
