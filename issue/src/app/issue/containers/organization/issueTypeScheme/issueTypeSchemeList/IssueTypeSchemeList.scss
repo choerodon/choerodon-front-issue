@@ -1,28 +1,36 @@
-.issue-issueTypeScheme-ul {
-  padding-left: 16px;
-  margin-bottom: 0;
+.issue-issueTypeScheme {
+  &-ul {
+    padding-left: 16px;
+    margin-bottom: 0;
+  }
+
+  &-type {
+    margin: 3px 0;
+  }
+
+  &-icon {
+    vertical-align: text-bottom;
+    margin-right: 10px;
+  }
+
+  &-list-tip {
+    margin-bottom: 20px;
+    font-size: 14px;
+    width: 520px;
+  }
+
+  &-table-col {
+    vertical-align: top;
+  }
 }
 
-.issue-issueTypeScheme-type {
-  margin: 3px 0;
-}
+.issue-issueType {
+  &-tip {
+    font-size: 14px;
+    margin: 10px 0;
+  }
 
-.issue-issueTypeScheme-icon {
-  vertical-align: text-bottom;
-  margin-right: 10px;
-}
-
-.issue-issueType-tip {
-  font-size: 14px;
-  margin: 10px 0;
-}
-
-.issue-issueTypeScheme-list-tip {
-  margin-bottom: 20px;
-  font-size: 14px;
-  width: 520px;
-}
-
-.issue-issueType-bold {
-  font-weight: 500;
+  &-bold {
+    font-weight: 500;
+  }
 }

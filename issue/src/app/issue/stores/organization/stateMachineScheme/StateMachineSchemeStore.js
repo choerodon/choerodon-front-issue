@@ -262,7 +262,7 @@ class StateMachineSchemeStore {
   };
 
   createStateMachineScheme = (stateMachineScheme, organizationId) => {
-    axios
+    returnaxios
       .post(
         `/issue/v1/organizations/${organizationId}/state_machine_scheme`,
         JSON.stringify(stateMachineScheme),
@@ -329,28 +329,11 @@ class StateMachineSchemeStore {
       );
   }
 
-  saveStateMachine(orgId, schemeId, stateMachineId, schemeDTOs) {
-    return axios
-      .post(
-        `/issue/v1/organizations/${orgId}/state_machine_scheme/create_config/${schemeId}/${stateMachineId}`,
-        schemeDTOs,
-      )
-      .then(
-        action(() => {
-          this.loadStateMachine(orgId, schemeId);
-        }),
-      );
-  }
+  saveStateMachine = (orgId, schemeId, stateMachineId, schemeDTOs) => axios
+    .post(`/issue/v1/organizations/${orgId}/state_machine_scheme/create_config/${schemeId}/${stateMachineId}`, schemeDTOs);
 
-  deleteStateMachine(orgId, schemeId, stateMachineId) {
-    return axios
-      .delete(`/issue/v1/organizations/${orgId}/state_machine_scheme/delete_config/${schemeId}/${stateMachineId}`)
-      .then(
-        action(() => {
-          this.loadStateMachine(orgId, schemeId);
-        }),
-      );
-  }
+  deleteStateMachine = (orgId, schemeId, stateMachineId) => axios
+    .delete(`/issue/v1/organizations/${orgId}/state_machine_scheme/delete_config/${schemeId}/${stateMachineId}`);
 
   deleteStateMachineScheme = (orgId, schemeId) => axios.delete(`/issue/v1/organizations/${orgId}/state_machine_scheme/${schemeId}`)
     .then(data => this.handleProptError(data));

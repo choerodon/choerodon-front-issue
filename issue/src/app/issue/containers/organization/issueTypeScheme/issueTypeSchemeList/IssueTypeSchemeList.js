@@ -23,6 +23,9 @@ class IssueTypeSchemeList extends Component {
       id: '',
       deleteVisible: false,
       scheme: false,
+      page: 1,
+      pageSize: 10,
+      tableParam: {},
     };
   }
 
@@ -51,10 +54,10 @@ class IssueTypeSchemeList extends Component {
     title: <FormattedMessage id="issueTypeScheme.type" />,
     dataIndex: 'type',
     key: 'type',
-    render: (text, record) => (record.issueTypes.length
+    render: (text, record) => (record.issueTypeWithInfoList.length
       ? (
         <div>
-          {record.issueTypes.map(type => (
+          {record.issueTypeWithInfoList.map(type => (
             <div key={type.id} className="issue-issueTypeScheme-type">
               <TypeTag
                 data={type}
@@ -71,10 +74,12 @@ class IssueTypeSchemeList extends Component {
     title: <FormattedMessage id="issueTypeScheme.project" />,
     dataIndex: 'project',
     key: 'project',
-    render: (text, record) => (record.projects && record.projects.length
+    render: (text, record) => (record.projectWithInfoList && record.projectWithInfoList.length
       ? (
         <ul className="issue-issueTypeScheme-ul">
-          {record.projects.map(project => (<li key={project.id}>{project.name}</li>))}
+          {record.projectWithInfoList.map(
+            project => (<li key={project.projectId}>{project.projectName}</li>),
+          )}
         </ul>
       )
       : <div>-</div>),
@@ -228,16 +233,27 @@ class IssueTypeSchemeList extends Component {
       sort[field] = order;
     }
     let searchParam = {};
-    if (Object.keys(filters).length) {
-      searchParam = filters;
+    if (filters && filters.name && filters.name.length) {
+      searchParam = {
+        ...searchParam,
+        name: filters.name[0],
+      };
     }
-    const postData = {
-      ...searchParam,
-      param: param.toString(),
-    };
+    if (filters && filters.description && filters.description.length) {
+      searchParam = {
+        ...searchParam,
+        description: filters.description[0],
+      };
+    }
+    if (param && param.length) {
+      searchParam = {
+        ...searchParam,
+        param: param.toString(),
+      };
+    }
     this.setState({
       sorter: sorter.column ? sorter : undefined,
-      tableParam: postData,
+      tableParam: searchParam,
       page: pagination.current,
       pageSize: pagination.pageSize,
     }, () => this.loadSchemeList());

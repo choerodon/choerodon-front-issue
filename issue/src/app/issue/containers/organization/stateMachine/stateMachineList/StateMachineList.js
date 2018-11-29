@@ -96,14 +96,14 @@ class StateMachineList extends Component {
       show: true,
       type: state,
     });
-  }
+  };
 
   hideSidebar = () => {
     this.setState({
       show: false,
       type: '',
     });
-  }
+  };
 
   confirmDelete = (record) => {
     this.setState({
@@ -111,13 +111,13 @@ class StateMachineList extends Component {
       deleteId: record.id,
       deleteName: record.name,
     });
-  }
+  };
 
   handleSchemeClick = (schemeId) => {
     const { StateMachineStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
     history.push(`/issue/state-machine-schemes/edit/${schemeId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
-  }
+  };
 
   loadStateMachine = (page = 0, size = 10, sort = { field: 'id', order: 'desc' }, param = {}) => {
     const { StateMachineStore } = this.props;
@@ -129,7 +129,7 @@ class StateMachineList extends Component {
           total: data.totalElements,
         });
       });
-  }
+  };
 
   tableChange = (pagination, filters, sorter, param) => {
     const orgId = AppState.currentMenuType.organizationId;

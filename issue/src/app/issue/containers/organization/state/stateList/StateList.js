@@ -155,10 +155,11 @@ class StateList extends Component {
   };
 
   showStateMachines = (data) => {
+    const { intl } = this.props;
     this.modelRef = info({
       title: `${data.name}关联的工作流`,
       content: (
-        <ul style={{ maxHeight: '300px', overflow: 'scroll' }}>
+        <ul className="issue-state-ul">
           {
             data.stateMachineInfoList.map(stateMachine => (
               <li key={stateMachine.stateMachineId}>
@@ -171,7 +172,7 @@ class StateList extends Component {
         </ul>
       ),
       onOk() {},
-      okText: '确定',
+      okText: intl.formatMessage({ id: 'confirm' }),
     });
   };
 
@@ -423,7 +424,7 @@ class StateList extends Component {
                   >
                     <div style={{ display: 'inline-block' }}>
                       <div className="issue-state-block" style={{ backgroundColor: stage.colour }} />
-                      <span style={{ display: 'inline-block', width: '100%' }}>{stage.name}</span>
+                      <span style={{ verticalAlign: 'text-top', width: '100%' }}>{stage.name}</span>
                     </div>
                   </Option>
                 ))}

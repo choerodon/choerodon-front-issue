@@ -22,11 +22,14 @@ class PriorityCreate extends Component {
   state = {
     priorityColor: '#3F51B5',
     displayColorPicker: false,
+    loading: false,
   };
 
   handleCreatingOk = () => {
     const { form, PriorityStore } = this.props;
-
+    this.setState({
+      loading: true,
+    });
     form.validateFieldsAndScroll(async (err, data) => {
       if (!err) {
         const { name, des, default: isDefault } = data;
@@ -46,6 +49,9 @@ class PriorityCreate extends Component {
           this.hideSidebar();
         } catch (e) {
           message.error('添加失败');
+          this.setState({
+            loading: false,
+          });
         }
       }
     });
@@ -87,7 +93,7 @@ class PriorityCreate extends Component {
     } else {
       callback();
     }
-  }
+  };
 
   hideSidebar() {
     const { PriorityStore, form } = this.props;
@@ -97,11 +103,12 @@ class PriorityCreate extends Component {
     this.setState({
       priorityColor: '#0062B1',
       displayColorPicker: false,
+      loading: false,
     });
   }
 
   render() {
-    const { priorityColor, displayColorPicker } = this.state;
+    const { priorityColor, displayColorPicker, loading } = this.state;
     const { PriorityStore, form, intl } = this.props;
     const { onCreatingPriority } = PriorityStore;
     const { getFieldDecorator } = form;
@@ -114,6 +121,7 @@ class PriorityCreate extends Component {
         cancelText={<FormattedMessage id="cancel" />}
         onOk={this.handleCreatingOk}
         onCancel={this.handleCreatingCancel}
+        confirmLoading={loading}
       >
         <Form className="issue-form">
           <FormItem

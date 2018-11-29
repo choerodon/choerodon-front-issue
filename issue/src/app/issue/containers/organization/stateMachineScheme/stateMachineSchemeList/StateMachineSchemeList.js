@@ -55,8 +55,12 @@ class StateMachineSchemeList extends Component {
   }
 
   componentDidMount() {
+    const { StateMachineSchemeStore } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    this.props.StateMachineSchemeStore.loadStateMachineSchemeList(organizationId);
+    StateMachineSchemeStore.loadStateMachineSchemeList(organizationId, {
+      current: 1,
+      pageSize: 10,
+    });
   }
 
   getColumns = () => [
@@ -79,11 +83,13 @@ class StateMachineSchemeList extends Component {
       key: 'project',
       filters: [],
       render: (text, record) => (
-        record.projectDTOs && record.projectDTOs.map(project => (
-          <div>
-            {project ? `• ${project.name}` : ''}
-          </div>
-        ))
+        record.projectDTOs && record.projectDTOs.length
+          ? <ul className={`${prefixCls}-table-ul`}>
+            {record.projectDTOs.map(
+              project => (<li>{project ? project.name : ''}</li>),
+            )}
+          </ul>
+          : <div>-</div>
       ),
     },
     {
@@ -159,6 +165,7 @@ class StateMachineSchemeList extends Component {
     this.setState({
       show: true,
       type: state,
+      submitting: false,
     });
   };
 
@@ -166,6 +173,7 @@ class StateMachineSchemeList extends Component {
     this.setState({
       show: false,
       type: '',
+      submitting: false,
     });
   };
 
@@ -211,10 +219,15 @@ class StateMachineSchemeList extends Component {
     const { organizationId } = AppState.currentMenuType;
     e.preventDefault();
     const { form, StateMachineSchemeStore } = this.props;
+    this.setState({
+      submitting: true,
+    });
     form.validateFields((err, stateMachineScheme) => {
       if (!err) {
-        StateMachineSchemeStore.createStateMachineScheme(stateMachineScheme, organizationId);
-        this.hideSidebar();
+        StateMachineSchemeStore.createStateMachineScheme(stateMachineScheme, organizationId)
+          .then(() => {
+            this.hideSidebar();
+          });
       }
     });
   };

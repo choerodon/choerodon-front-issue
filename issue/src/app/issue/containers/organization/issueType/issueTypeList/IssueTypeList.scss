@@ -1,18 +1,22 @@
-.issue-issueType-ul {
-  padding-left: 16px;
-  margin-bottom: 0;
+.issue-issueType {
+  &-ul {
+    max-height: 300px;
+    overflow: scroll;
+    padding-left: 20px;
+  }
+
+  &-icon {
+    vertical-align: text-bottom;
+    margin-right: 5px;
+  }
+
+  &-tip {
+    font-size: 14px;
+    margin: 10px 0;
+  }
+
+  &-bold {
+    font-weight: 500;
+  }
 }
 
-.issue-issueTypeList-icon {
-  vertical-align: text-bottom;
-  margin-right: 5px;
-}
-
-.issue-issueType-tip {
-  font-size: 14px;
-  margin: 10px 0;
-}
-
-.issue-issueType-bold {
-  font-weight: 500;
-}

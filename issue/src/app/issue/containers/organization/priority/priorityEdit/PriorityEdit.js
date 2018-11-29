@@ -26,6 +26,7 @@ class PriorityEdit extends Component {
   state = {
     priorityColor: null,
     displayColorPicker: false,
+    loading: false,
   };
 
   componentDidMount() {
@@ -60,6 +61,9 @@ class PriorityEdit extends Component {
           this.hideSidebar();
         } catch (e) {
           message.error('修改失败');
+          this.setState({
+            loading: false,
+          });
         }
       }
     });
@@ -94,10 +98,13 @@ class PriorityEdit extends Component {
     const { PriorityStore, form } = this.props;
     PriorityStore.setOnEditingPriority(false);
     form.resetFields();
+    this.setState({
+      loading: false,
+    });
   }
 
   render() {
-    const { priorityColor, displayColorPicker } = this.state;
+    const { priorityColor, displayColorPicker, loading } = this.state;
     const { PriorityStore, form, intl } = this.props;
     const { onEditingPriority, editingPriority } = PriorityStore;
     const { getFieldDecorator } = form;
@@ -110,6 +117,7 @@ class PriorityEdit extends Component {
         cancelText={<FormattedMessage id="cancel" />}
         onOk={this.handleEditingOk}
         onCancel={this.handleEditingCancel}
+        confirmLoading={loading}
       >
         <Form className="form">
           <FormItem

@@ -1,6 +1,5 @@
 import { observable, action, computed } from 'mobx';
 import { axios, store } from 'choerodon-front-boot';
-import querystring from 'query-string';
 
 const { height } = window.screen;
 @store('IssueTypeStore')
@@ -59,11 +58,18 @@ class IssueTypeStore {
     return this.issueType;
   }
 
-  loadIssueType = (orgId, page = this.pageInfo.current - 1, pageSize = this.pageInfo.pageSize, sort = { field: 'id', order: 'desc' }, map = {
-    param: '',
-  }) => {
+  loadIssueType = (
+    orgId,
+    page = this.pageInfo.current - 1,
+    pageSize = this.pageInfo.pageSize,
+    sort = { field: 'id', order: 'desc' },
+    param = {},
+  ) => {
     this.setIsLoading(true);
-    return axios.get(`/issue/v1/organizations/${orgId}/issue_type?${querystring.stringify(map)}&page=${page}&size=${pageSize}&sort=${sort.field},${sort.order}`).then((data) => {
+    return axios.post(
+      `/issue/v1/organizations/${orgId}/issue_type/list?page=${page}&size=${pageSize}&sort=${sort.field},${sort.order}`,
+      JSON.stringify(param),
+    ).then((data) => {
       const res = this.handleProptError(data);
       if (res) {
         this.setIssueTypes(data.content);
@@ -84,7 +90,7 @@ class IssueTypeStore {
 
   createIssueType = (orgId, issueType) => axios.post(`/issue/v1/organizations/${orgId}/issue_type`, JSON.stringify(issueType))
     .then(data => this.handleProptError(data))
-   
+
 
   updateIssueType = (orgId, id, issueType) => axios.put(`/issue/v1/organizations/${orgId}/issue_type/${id}`, JSON.stringify(issueType))
     .then(data => this.handleProptError(data));

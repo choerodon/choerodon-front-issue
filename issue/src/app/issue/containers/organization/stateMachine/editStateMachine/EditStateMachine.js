@@ -61,6 +61,7 @@ class EditStateMachine extends Component {
       currentRae: undefined,
       name: '',
       description: '',
+      deleteLoading: false,
     };
     this.graph = null;
   }
@@ -129,16 +130,12 @@ class EditStateMachine extends Component {
       });
     }
     return column;
-  }
+  };
 
   getFormContent = () => {
     const {
       type,
-      state,
-      stateData,
       stateList,
-      stateMachineData,
-      singleData,
       nodeData,
       source,
       target,
@@ -169,7 +166,7 @@ class EditStateMachine extends Component {
                   {stateList && stateList.length > 0 && stateList.map(s => (
                     <Option
                       value={s.id}
-                      key={s.toString()}
+                      key={String(s.id)}
                     >
                       <span id={s.id} name={s.name} style={{ display: 'inline-block', width: '100%' }}>{s.name}</span>
                     </Option>
@@ -390,6 +387,7 @@ class EditStateMachine extends Component {
               whitespace: true,
               message: intl.formatMessage({ id: 'required' }),
             }],
+            initialValue: 'todo',
           })(
             <Select
               style={{ width: 520 }}
@@ -398,12 +396,15 @@ class EditStateMachine extends Component {
               size="default"
             >
               {getStageOptionsData && getStageOptionsData.length > 0 && getStageOptionsData
-                .map(s => (
+                .map(stage => (
                   <Option
-                    value={s.id}
-                    key={s.id}
+                    value={stage.code}
+                    key={stage.code}
                   >
-                    <span style={{ display: 'inline-block', width: '100%' }}>{s.name}</span>
+                    <div style={{ display: 'inline-block' }}>
+                      <div className="issue-state-machine-block" style={{ backgroundColor: stage.colour }} />
+                      <span style={{ verticalAlign: 'text-top', width: '100%' }}>{stage.name}</span>
+                    </div>
                   </Option>
                 ))}
             </Select>,
@@ -478,7 +479,7 @@ class EditStateMachine extends Component {
   };
 
   loadStateList = () => {
-    const { organizationId, stateMachineData, nodeData } = this.state;
+    const { organizationId, nodeData } = this.state;
     StateStore.loadAllState(organizationId).then((data) => {
       if (data && data.failed) {
         Choerodon.prompt(data.message);
@@ -562,7 +563,7 @@ class EditStateMachine extends Component {
           });
         }
       });
-  }
+  };
 
   updateStateMachineTransfer = (data) => {
     const {
@@ -667,16 +668,9 @@ class EditStateMachine extends Component {
 
 
   handleSubmit = () => {
-    const { StateMachineStore } = this.props;
     const {
       state,
       type,
-      editState,
-      page,
-      pageSize,
-      sorter,
-      tableParam,
-      organizationId,
       selectedCell,
       edgeStyle,
     } = this.state;
@@ -1037,11 +1031,21 @@ class EditStateMachine extends Component {
     const { StateMachineStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
     const { id: stateMachineId } = this.state;
+    this.setState({
+      deleteLoading: true,
+    });
     StateMachineStore.deleteDraft(organizationId, stateMachineId)
       .then((data) => {
+        this.setState({
+          deleteLoading: true,
+        });
         if (data) {
           history.push(`/issue/state-machines/edit/${stateMachineId}/state_machine_active?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
         }
+      }).catch(() => {
+        this.setState({
+          deleteLoading: true,
+        });
       });
   };
 
@@ -1059,6 +1063,17 @@ class EditStateMachine extends Component {
       if (data) {
         Choerodon.prompt(intl.formatMessage({ id: 'stateMachine.publish.success' }));
         history.push(`/issue/state-machines/edit/${stateMachineData.id}/state_machine_active?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+      } else {
+        info({
+          title: intl.formatMessage({ id: 'stateMachine.publish.info' }),
+          content: (
+            <p>
+              {intl.formatMessage({ id: 'stateMachine.publish.des' })}
+            </p>
+          ),
+          onOk() {},
+          okText: intl.formatMessage({ id: 'confirm' }),
+        });
       }
     });
   };
@@ -1099,8 +1114,8 @@ class EditStateMachine extends Component {
 
   handlecreateSubmit = () => {
     const { organizationId } = this.state;
-
-    this.props.form.validateFieldsAndScroll((err, data) => {
+    const { form } = this.props;
+    form.validateFieldsAndScroll((err, data) => {
       if (!err) {
         const postData = data;
         postData.organizationId = organizationId;
@@ -1180,8 +1195,6 @@ class EditStateMachine extends Component {
     const { StateMachineStore, intl } = this.props;
     const {
       stateMachineData,
-      stateData,
-      stateList,
       selectedCell,
       nodeData,
       loading,
@@ -1191,12 +1204,10 @@ class EditStateMachine extends Component {
       currentRae,
       name: schemeName,
       description,
+      deleteLoading,
     } = this.state;
     const dataSource = nodeData && nodeData.slice();
     _.remove(dataSource, item => item.statusId === 0);
-    const { getFieldDecorator } = this.props.form;
-    const serviceData = StateMachineStore.getAllData;
-    const { singleData, getStageOptionsData } = StateMachineStore;
     const menu = AppState.currentMenuType;
     const {
       type, id: projectId, organizationId: orgId, name,
@@ -1231,6 +1242,7 @@ class EditStateMachine extends Component {
                 onClick={() => this.handleCardEdit(this.state.selectedCell)}
               ><FormattedMessage id="edit" /></Button>
               <Button
+                disabled
                 className="graph-card-btn"
                 funcType="raised"
                 type="primary"
@@ -1264,12 +1276,6 @@ class EditStateMachine extends Component {
             </React.Fragment>
           )}
       </div>);
-
-    const rowSelection = {
-      getCheckboxProps: record => ({
-        defaultChecked: record.id === 119,
-      }),
-    };
     return (
       <Page>
         <Header
@@ -1353,11 +1359,13 @@ class EditStateMachine extends Component {
                 onOk={() => this.updateScheme('description')}
                 onCancel={origin => this.resetScheme(origin, 'description')}
                 readModeContent={(
-                  <div
-                    className={`${prefixCls}-header-des`}
-                  >
-                    {description || '无描述'}
-                  </div>
+                  description
+                    ? <div className={`${prefixCls}-header-des`}>
+                      {description}
+                    </div>
+                    : <div style={{ opacity: 0.5 }}>
+                      {intl.formatMessage({ id: 'stateMachineScheme.des.none' })}
+                    </div>
                 )}
               >
               <TextArea
@@ -1461,6 +1469,7 @@ class EditStateMachine extends Component {
             visible={this.state.deleteDraftVisible}
             onOk={this.handleDeleteDraft}
             onCancel={this.handleCancel}
+            confirmLoading={deleteLoading}
           >
             <p className={`${prefixCls}-del-content`}>
               <FormattedMessage id="stateMachine.draft.delete" />

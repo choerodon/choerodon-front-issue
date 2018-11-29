@@ -1,6 +1,5 @@
 import { observable, action, computed } from 'mobx';
 import { axios, store } from 'choerodon-front-boot';
-import querystring from 'query-string';
 
 const { height } = window.screen;
 @store('IssueTypeSchemeStore')
@@ -69,11 +68,18 @@ class IssueTypeSchemeStore {
     return this.issueTypeList.slice();
   }
 
-  loadSchemeList = (orgId, page = this.pageInfo.current - 1, pageSize = this.pageInfo.pageSize, sort = { field: 'id', order: 'desc' }, map = {
-    param: '',
-  }) => {
+  loadSchemeList = (
+    orgId,
+    page = this.pageInfo.current - 1,
+    pageSize = this.pageInfo.pageSize,
+    sort = { field: 'id', order: 'desc' },
+    param = {},
+  ) => {
     this.setIsLoading(true);
-    return axios.get(`/issue/v1/organizations/${orgId}/issue_type_scheme?${querystring.stringify(map)}&page=${page}&size=${pageSize}&sort=${sort.field},${sort.order}`).then((data) => {
+    return axios.post(
+      `/issue/v1/organizations/${orgId}/issue_type_scheme/list?page=${page}&size=${pageSize}&sort=${sort.field},${sort.order}`,
+      JSON.stringify(param),
+    ).then((data) => {
       const res = this.handleProptError(data);
       if (res) {
         this.setSchemeList(data.content);
