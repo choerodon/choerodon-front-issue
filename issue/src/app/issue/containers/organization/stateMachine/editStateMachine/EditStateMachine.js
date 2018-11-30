@@ -62,6 +62,8 @@ class EditStateMachine extends Component {
       name: '',
       description: '',
       deleteLoading: false,
+      stateId: false,
+      stateName: false,
     };
     this.graph = null;
   }
@@ -108,25 +110,45 @@ class EditStateMachine extends Component {
         align: 'right',
         width: 104,
         key: 'action',
-        render: (test, record) => (
-          <div>
-            <Tooltip placement="top" title={<FormattedMessage id="stateMachine.transfer.add" />}>
-              <Button shape="circle" size={'small'} onClick={this.textTransferAdd.bind(this, record.id)}>
-                <span className="icon icon-add" />
-              </Button>
-            </Tooltip>
-            <Tooltip placement="top" title={<FormattedMessage id="delete" />}>
-              <Button shape="circle" size={'small'} onClick={this.textTransferDel.bind(this, record.id)}>
-                <span className="icon icon-delete" />
-              </Button>
-            </Tooltip>
-            <Permission service={['devops-service.application.update']} >
-              <Tooltip placement="bottom" title={<div>{!record.synchro ? <FormattedMessage id="app.synch" /> : <React.Fragment>{record.active ? <FormattedMessage id="edit" /> : <FormattedMessage id="app.start" />}</React.Fragment>}</div>}>
-                <span />
+        render: (test, record) => {
+          const transfes = _.filter(transferData, item => item.startNodeId === record.id);
+          return (
+            <div>
+              <Tooltip placement="top" title={<FormattedMessage id="stateMachine.transfer.add" />}>
+                <Button shape="circle" size={'small'} onClick={this.textTransferAdd.bind(this, record.id)}>
+                  <span className="icon icon-add" />
+                </Button>
               </Tooltip>
-            </Permission>
-          </div>
-        ),
+              {transfes && transfes.length
+                ? <Tooltip placement="top" title={<FormattedMessage id="delete" />}>
+                  <Button shape="circle" size={'small'} onClick={this.textTransferDel.bind(this, record.id)}>
+                    <span className="icon icon-delete" />
+                  </Button>
+                </Tooltip> : <span style={{ display: 'inline-block', width: 24 }} />
+              }
+              <Permission>
+                <Tooltip
+                  placement="bottom"
+                  title={
+                    <div>
+                      {!record.synchro
+                        ? <FormattedMessage id="app.synch" />
+                        : <React.Fragment>
+                          {record.active
+                            ? <FormattedMessage id="edit" />
+                            : <FormattedMessage id="app.start" />
+                          }
+                          </React.Fragment>
+                      }
+                      </div>
+                  }
+                >
+                  <span />
+                </Tooltip>
+              </Permission>
+            </div>
+          );
+        },
       });
     }
     return column;
@@ -140,6 +162,7 @@ class EditStateMachine extends Component {
       source,
       target,
       selectedCell,
+      stateId,
     } = this.state;
     const { form, intl } = this.props;
     const { getFieldDecorator } = form;
@@ -155,6 +178,7 @@ class EditStateMachine extends Component {
                   required: true,
                   message: intl.formatMessage({ id: 'required' }),
                 }],
+                initialValue: { key: stateId },
               })(
                 <Select
                   style={{ width: 520 }}
@@ -522,6 +546,8 @@ class EditStateMachine extends Component {
           show: false,
           isLoading: false,
           nodeData,
+          stateId: false,
+          stateName: false,
         });
       });
   };
@@ -673,12 +699,13 @@ class EditStateMachine extends Component {
       type,
       selectedCell,
       edgeStyle,
+      stateName,
     } = this.state;
 
     this.props.form.validateFieldsAndScroll((err, data) => {
       if (!err) {
         if (type === 'state') {
-          const { name } = data.state.label.props;
+          const { name } = data.state.label ? data.state.label.props : stateName;
           if (state === 'add') {
             this.addStateMachineNode(data);
           } else {
@@ -995,7 +1022,8 @@ class EditStateMachine extends Component {
   hideSidebar = () => {
     this.setState({
       show: false,
-      // type: '',
+      stateId: false,
+      stateName: false,
     });
   };
 
@@ -1128,7 +1156,12 @@ class EditStateMachine extends Component {
               Choerodon.prompt(res.message);
             } else {
               this.loadStateList();
-              this.setState({ createShow: false, show: true });
+              this.setState({
+                createShow: false,
+                show: true,
+                stateId: res.id,
+                stateName: res.name,
+              });
             }
             this.setState({
               submitting: false,
