@@ -217,7 +217,7 @@ class StateMachineList extends Component {
         message.error(intl.formatMessage({ id: 'deleteFailed' }));
         this.closeRemove();
       });
-  }
+  };
 
   refresh = () => {
     this.loadStateMachine();
@@ -233,7 +233,18 @@ class StateMachineList extends Component {
     const { StateMachineStore, intl, history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
     history.push(`/issue/state-machines/edit/${stateMachineId}/${status === 'state_machine_create' ? status : 'state_machine_active'}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
-  }
+  };
+
+  checkName = async (rule, value, callback) => {
+    const { StateMachineStore, intl } = this.props;
+    const orgId = AppState.currentMenuType.organizationId;
+    const res = await StateMachineStore.checkName(orgId, value);
+    if (res) {
+      callback(intl.formatMessage({ id: 'priority.create.name.error' }));
+    } else {
+      callback();
+    }
+  };
 
   render() {
     const { StateMachineStore, intl } = this.props;
@@ -262,6 +273,8 @@ class StateMachineList extends Component {
                 whitespace: true,
                 max: 47,
                 message: intl.formatMessage({ id: 'required' }),
+              }, {
+                validator: this.checkName,
               }],
             })(
               <Input

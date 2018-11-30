@@ -56,6 +56,7 @@ class EditStateMachineScheme extends Component {
       name: '',
       description: '',
       loading: false,
+      error: false,
     };
   }
 
@@ -525,43 +526,68 @@ class EditStateMachineScheme extends Component {
 
   updateScheme = (code) => {
     const { StateMachineSchemeStore } = this.props;
-    const { objectVersionNumber, [code]: newValue, schemeId } = this.state;
-    if (code === 'name' && !newValue) {
-      const {
-        name, description,
-      } = StateMachineSchemeStore.getStateMachine;
-      this.setState({
-        currentRae: undefined,
-        name,
-        description,
-      });
-    } else {
-      const menu = AppState.currentMenuType;
-      const {
-        organizationId: orgId,
-      } = menu;
-      const data = {
-        [code]: this.state[code],
-        objectVersionNumber,
-      };
-      StateMachineSchemeStore.editStateMachineScheme(orgId, schemeId, data).then(() => {
-        this.refresh();
+    const {
+      objectVersionNumber,
+      [code]: newValue,
+      schemeId,
+      error,
+    } = this.state;
+    if (!error) {
+      if (code === 'name' && !newValue) {
+        const {
+          name, description,
+        } = StateMachineSchemeStore.getStateMachine;
         this.setState({
           currentRae: undefined,
+          name,
+          description,
         });
-      });
+      } else {
+        const menu = AppState.currentMenuType;
+        const {
+          organizationId: orgId,
+        } = menu;
+        const data = {
+          [code]: this.state[code],
+          objectVersionNumber,
+        };
+        StateMachineSchemeStore.editStateMachineScheme(orgId, schemeId, data).then(() => {
+          this.refresh();
+          this.setState({
+            currentRae: undefined,
+          });
+        });
+      }
     }
   };
 
   resetScheme = (origin, code) => {
     this.setState({
       [code]: origin,
+      error: false,
     });
   };
 
-  handleChange = (e, code) => {
+  handleChange = async (e, code) => {
+    const { StateMachineSchemeStore, intl } = this.props;
+    const menu = AppState.currentMenuType;
+    const {
+      organizationId: orgId,
+    } = menu;
+    const { name } = StateMachineSchemeStore.getStateMachine;
+    const newName = e.target.value;
+    let error = '';
     this.setState({
-      [code]: e.target.value,
+      [code]: newName,
+    });
+    if (name !== newName) {
+      const res = await StateMachineSchemeStore.checkName(orgId, newName);
+      if (res) {
+        error = intl.formatMessage({ id: 'priority.create.name.error' });
+      }
+    }
+    this.setState({
+      error,
     });
   };
 
@@ -577,6 +603,7 @@ class EditStateMachineScheme extends Component {
       currentRae,
       name: schemeName,
       description,
+      error,
     } = this.state;
     const {
       getStateMachine,
@@ -653,6 +680,7 @@ class EditStateMachineScheme extends Component {
                 </div>
               )}
               style={{ marginBottom: 10 }}
+              error={error}
             >
               <TextArea
                 size="small"

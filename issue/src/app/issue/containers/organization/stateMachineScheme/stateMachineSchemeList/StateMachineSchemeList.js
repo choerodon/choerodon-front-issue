@@ -268,6 +268,17 @@ class StateMachineSchemeList extends Component {
       postData);
   };
 
+  checkName = async (rule, value, callback) => {
+    const { StateMachineSchemeStore, intl } = this.props;
+    const orgId = AppState.currentMenuType.organizationId;
+    const res = await StateMachineSchemeStore.checkName(orgId, value);
+    if (res) {
+      callback(intl.formatMessage({ id: 'priority.create.name.error' }));
+    } else {
+      callback();
+    }
+  };
+
   render() {
     const { StateMachineSchemeStore, intl, form } = this.props;
     const {
@@ -276,10 +287,7 @@ class StateMachineSchemeList extends Component {
       getStateMachineSchemeList,
     } = StateMachineSchemeStore;
 
-    // const { page, pageSize, singleData } = this.state;
     const { getFieldDecorator } = form;
-    const menu = AppState.currentMenuType;
-    const { type, id: projectId, organizationId: orgId } = menu;
     const formContent = (
       <div className="issue-region">
         <Form layout="vertical" className="issue-sidebar-form">
@@ -292,6 +300,8 @@ class StateMachineSchemeList extends Component {
                     whitespace: true,
                     max: 47,
                     message: intl.formatMessage({ id: 'required' }),
+                  }, {
+                    validator: this.checkName,
                   }],
               })(
                 <Input

@@ -358,6 +358,10 @@ class StateMachineSchemeStore {
   // 删除草稿
   deleteDraft = (orgId, schemeId) => axios.delete(`/issue/v1/organizations/${orgId}/state_machine_scheme/delete_draft/${schemeId}`);
 
+  checkName = (orgId, name) => axios.get(
+    `/issue/v1/organizations/${orgId}/state_machine_scheme/check_name?name=${name}`,
+  );
+
   handleProptError = (error) => {
     if (error && error.failed) {
       // Choerodon.prompt(error.message);

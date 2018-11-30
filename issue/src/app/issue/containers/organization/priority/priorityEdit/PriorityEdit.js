@@ -88,7 +88,6 @@ class PriorityEdit extends Component {
   };
 
   handleCloseColorPicker = () => {
-    const { displayColorPicker } = this.state;
     this.setState({
       displayColorPicker: false,
     });
@@ -102,6 +101,22 @@ class PriorityEdit extends Component {
       loading: false,
     });
   }
+
+  checkName = async (rule, value, callback) => {
+    const { PriorityStore, intl } = this.props;
+    const orgId = AppState.currentMenuType.organizationId;
+    const { editingPriority } = PriorityStore;
+    if (editingPriority.name === value) {
+      callback();
+    } else {
+      const res = await PriorityStore.checkName(orgId, value);
+      if (res) {
+        callback(intl.formatMessage({ id: 'priority.create.name.error' }));
+      } else {
+        callback();
+      }
+    }
+  };
 
   render() {
     const { priorityColor, displayColorPicker, loading } = this.state;
@@ -131,6 +146,9 @@ class PriorityEdit extends Component {
                     {
                       required: true,
                       message: intl.formatMessage({ id: 'required' }),
+                    },
+                    {
+                      validator: this.checkName,
                     },
                   ],
                   initialValue: editingPriority.name,

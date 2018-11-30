@@ -44,30 +44,44 @@ class ReadAndEdit extends Component {
   }
 
   render() {
+    const {
+      current,
+      thisType,
+      style,
+      line,
+      origin,
+      onInit,
+      callback,
+      readModeContent,
+      children,
+      onOk,
+      onCancel,
+      error,
+    } = this.props;
     return (
       <div
         role="none"
-        className={`issue-readAndEdit ${this.props.current !== this.props.thisType ? 'c7n-readAndEdit' : ''}`}
+        className={`issue-readAndEdit ${current !== thisType ? 'c7n-readAndEdit' : ''}`}
         style={{
-          ...this.props.style,
+          ...style,
           position: 'relative',
-          width: this.props.line ? '100%' : 'auto',
+          width: line ? '100%' : 'auto',
         }}
       >
         {
-          this.props.current !== this.props.thisType && (
+          current !== thisType && (
             <div
               role="none"
               onClick={() => {
                 this.setState({
                   type: 'edit',
-                  origin: this.props.origin,
+                  origin,
                 });
-                if (this.props.onInit) {
-                  this.props.onInit();
+                if (onInit) {
+                  onInit();
                 }
-                if (this.props.callback) {
-                  this.props.callback(this.props.thisType);
+                if (callback) {
+                  callback(thisType);
                 }
               }}
             >
@@ -81,19 +95,19 @@ class ReadAndEdit extends Component {
               >
                 <Icon type="mode_edit" />
               </span>
-              {this.props.readModeContent}
+              {readModeContent}
             </div>
           )
         }
         {
-          (this.props.current === this.props.thisType) && (
+          (current === thisType) && (
             <section>
-              {this.props.children}
+              {children}
             </section>
           )
         }
         {
-          (this.props.current === this.props.thisType) && (
+          (current === thisType) && (
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <div
                 style={{
@@ -112,9 +126,11 @@ class ReadAndEdit extends Component {
                   role="none"
                   onClick={(e) => {
                     e.stopPropagation();
-                    this.setState({ type: 'read' });
-                    this.props.onOk();
-                    this.props.callback(undefined);
+                    if (!error) {
+                      this.setState({ type: 'read' });
+                      onOk();
+                      callback(undefined);
+                    }
                   }
                   }
                 >
@@ -131,20 +147,23 @@ class ReadAndEdit extends Component {
                   role="none"
                   onClick={(e) => {
                     e.stopPropagation();
-                    this.props.onCancel(this.state.origin);
+                    onCancel(this.state.origin);
                     this.setState({
                       type: 'read',
-                      origin: this.props.origin,
+                      origin,
                     });
-                    this.props.callback(undefined);
-                  }
-                  }
+                    callback(undefined);
+                  }}
                 >
                   <Icon style={{ fontSize: '14px' }} type="close" />
                 </span>
               </div>
             </div>
           )
+        }
+        {error
+          ? <span style={{ color: '#d50000' }}>{error}</span>
+          : ''
         }
       </div>
     );
