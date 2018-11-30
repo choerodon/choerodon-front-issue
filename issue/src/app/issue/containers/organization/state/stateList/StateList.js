@@ -312,8 +312,6 @@ class StateList extends Component {
 
 
   tableChange = (pagination, filters, sorter, param) => {
-    const { StateStore } = this.props;
-    const orgId = AppState.currentMenuType.organizationId;
     const sort = {};
     if (sorter.column) {
       const { field, order } = sorter;
@@ -354,6 +352,22 @@ class StateList extends Component {
       pagination.pageSize, sorter.column ? sorter : undefined, searchParam);
   };
 
+  checkName = async (rule, value, callback) => {
+    const { type, editState } = this.state;
+    const { StateStore, intl } = this.props;
+    const orgId = AppState.currentMenuType.organizationId;
+    if (type === 'create' || value !== (editState && editState.name)) {
+      const res = await StateStore.checkName(orgId, value);
+      if (res) {
+        callback(intl.formatMessage({ id: 'priority.create.name.error' }));
+      } else {
+        callback();
+      }
+    } else {
+      callback();
+    }
+  };
+
   render() {
     const { StateStore, intl } = this.props;
     const {
@@ -373,6 +387,8 @@ class StateList extends Component {
                 whitespace: true,
                 max: 47,
                 message: intl.formatMessage({ id: 'state.name.required' }),
+              }, {
+                validator: this.checkName,
               }],
               initialValue: editState ? editState.name : '',
             })(

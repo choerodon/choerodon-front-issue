@@ -83,12 +83,10 @@ class PriorityCreate extends Component {
 
   checkName = async (rule, value, callback) => {
     // 名称检查
-    const { form, PriorityStore, intl } = this.props;
-    const { getFieldValue } = form;
-    const inputName = getFieldValue('name');
+    const { PriorityStore, intl } = this.props;
     const orgId = AppState.currentMenuType.organizationId;
-    const res = await PriorityStore.checkName(orgId, inputName);
-    if (!res) {
+    const res = await PriorityStore.checkName(orgId, value);
+    if (res) {
       callback(intl.formatMessage({ id: 'priority.create.name.error' }));
     } else {
       callback();

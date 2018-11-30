@@ -127,6 +127,10 @@ class StateMachineStore {
   deleteAllToNode = (orgId, id) => axios.delete(`/state/v1/organizations/${orgId}/state_machine_transforms/delete_type_all/${id}`)
     .then(data => this.handleProptError(data));
 
+  checkName = (orgId, name) => axios.get(
+    `/state/v1/organizations/${orgId}/state_machines/check_name?name=${name}`,
+  );
+
   handleProptError = (error) => {
     if (error && error.failed) {
       Choerodon.prompt(error.message);

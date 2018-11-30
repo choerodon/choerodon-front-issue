@@ -64,6 +64,7 @@ class EditStateMachine extends Component {
       deleteLoading: false,
       stateId: false,
       stateName: false,
+      error: false,
     };
     this.graph = null;
   }
@@ -1184,48 +1185,73 @@ class EditStateMachine extends Component {
 
   updateScheme = (code) => {
     const { StateMachineStore } = this.props;
-    const { objectVersionNumber, [code]: newValue, id } = this.state;
-    if (code === 'name' && !newValue) {
-      const {
-        name, description,
-      } = StateMachineStore.getStateMachine;
-      this.setState({
-        currentRae: undefined,
-        name,
-        description,
-      });
-    } else {
-      const menu = AppState.currentMenuType;
-      const {
-        organizationId: orgId,
-      } = menu;
-      const data = {
-        [code]: this.state[code],
-        objectVersionNumber,
-      };
-      StateMachineStore.updateStateMachine(orgId, id, data).then(() => {
-        this.refresh();
+    const {
+      objectVersionNumber,
+      [code]: newValue,
+      id,
+      error,
+    } = this.state;
+    if (!error) {
+      if (code === 'name' && !newValue) {
+        const {
+          name, description,
+        } = StateMachineStore.getStateMachine;
         this.setState({
           currentRae: undefined,
+          name,
+          description,
         });
-      });
+      } else {
+        const menu = AppState.currentMenuType;
+        const {
+          organizationId: orgId,
+        } = menu;
+        const data = {
+          [code]: this.state[code],
+          objectVersionNumber,
+        };
+        StateMachineStore.updateStateMachine(orgId, id, data).then(() => {
+          this.refresh();
+          this.setState({
+            currentRae: undefined,
+          });
+        });
+      }
     }
   };
 
   resetScheme = (origin, code) => {
     this.setState({
       [code]: origin,
+      error: false,
     });
   };
 
-  handleChange = (e, code) => {
+  handleChange = async (e, code) => {
+    const { StateMachineStore, intl } = this.props;
+    const menu = AppState.currentMenuType;
+    const {
+      organizationId: orgId,
+    } = menu;
+    const { name } = StateMachineStore.getStateMachine;
+    const newName = e.target.value;
+    let error = '';
     this.setState({
-      [code]: e.target.value,
+      [code]: newName,
+    });
+    if (name !== newName) {
+      const res = await StateMachineStore.checkName(orgId, newName);
+      if (res) {
+        error = intl.formatMessage({ id: 'priority.create.name.error' });
+      }
+    }
+    this.setState({
+      error,
     });
   };
 
   render() {
-    const { StateMachineStore, intl } = this.props;
+    const { intl } = this.props;
     const {
       stateMachineData,
       selectedCell,
@@ -1238,6 +1264,7 @@ class EditStateMachine extends Component {
       name: schemeName,
       description,
       deleteLoading,
+      error,
     } = this.state;
     const dataSource = nodeData && nodeData.slice();
     _.remove(dataSource, item => item.statusId === 0);
@@ -1374,6 +1401,7 @@ class EditStateMachine extends Component {
                   </div>
                 )}
                 style={{ marginBottom: 10 }}
+                error={error}
               >
                 <TextArea
                   size="small"

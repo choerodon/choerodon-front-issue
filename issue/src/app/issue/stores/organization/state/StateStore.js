@@ -64,6 +64,10 @@ class StateStore {
     }).catch(() => Promise.reject());
   };
 
+  checkName = (orgId, name) => axios.get(
+    `/state/v1/organizations/${orgId}/status/check_name?name=${name}`,
+  );
+
   loadStateById = (orgId, stateId) => axios.get(`/state/v1/organizations/${orgId}/status/${stateId}`);
 
   createState = (orgId, map) => axios.post(`/state/v1/organizations/${orgId}/status`, JSON.stringify(map));
