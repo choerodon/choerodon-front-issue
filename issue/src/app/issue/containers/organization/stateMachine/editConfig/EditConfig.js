@@ -111,7 +111,7 @@ class EditConfig extends Component {
                 <span className="icon icon-delete" />
               </Button>
             </Tooltip>
-            <Permission service={['devops-service.application.update']} >
+            <Permission service={[]} >
               <Tooltip placement="bottom" title={<div>{!record.synchro ? <FormattedMessage id="app.synch" /> : <React.Fragment>{record.active ? <FormattedMessage id="edit" /> : <FormattedMessage id="app.start" />}</React.Fragment>}</div>}>
                 <span />
               </Tooltip>
