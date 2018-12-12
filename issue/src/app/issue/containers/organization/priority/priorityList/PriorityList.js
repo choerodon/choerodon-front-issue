@@ -172,10 +172,10 @@ class PriorityList extends Component {
     return (
       <Page>
         <Header title={<FormattedMessage id="priority.title" />}>
-          <Button onClick={() => this.showSideBar('create')}>
-            <Icon type="add" />
-            <FormattedMessage id="priority.create" />
-          </Button>
+          {/* <Button onClick={() => this.showSideBar('create')}> */}
+            {/* <Icon type="add" /> */}
+            {/* <FormattedMessage id="priority.create" /> */}
+          {/* </Button> */}
           <Button onClick={this.refresh}>
             <Icon type="refresh" />
             <FormattedMessage id="refresh" />
