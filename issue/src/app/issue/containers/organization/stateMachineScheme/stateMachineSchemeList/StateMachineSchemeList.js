@@ -22,7 +22,7 @@ import {
 } from 'choerodon-front-boot';
 import '../../../main.scss';
 import './StateMachineSchemeList.scss';
-import TypeTag from "../../../../components/TypeTag/TypeTag";
+import TypeTag from '../../../../components/TypeTag/TypeTag';
 
 const { AppState } = stores;
 const prefixCls = 'issue-stateMachineScheme';
@@ -333,10 +333,10 @@ class StateMachineSchemeList extends Component {
     return (
       <Page>
         <Header title={<FormattedMessage id="stateMachineScheme.title" />}>
-          <Button onClick={() => this.showSideBar('create')}>
-            <i className="icon-add icon" />
-            <FormattedMessage id="stateMachineScheme.create" />
-          </Button>
+          {/* <Button onClick={() => this.showSideBar('create')}> */}
+            {/* <i className="icon-add icon" /> */}
+            {/* <FormattedMessage id="stateMachineScheme.create" /> */}
+          {/* </Button> */}
           <Button onClick={this.refresh}>
             <i className="icon-refresh icon" />
             <FormattedMessage id="refresh" />

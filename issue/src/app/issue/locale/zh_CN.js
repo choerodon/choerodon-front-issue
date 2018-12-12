@@ -335,10 +335,11 @@ const zh_CN = {
   'stateMachine.tab.graph': '图形',
   'stateMachine.tab.text': '文本',
   'stateMachine.des': '描述',
-  'stateMachine.state.delete': '删除状态',
+  'stateMachine.state.delete': '移除状态',
   'stateMachine.transfer.delete': '删除转换',
   'stateMachine.state': '状态',
   'stateMachine.state.add': '添加状态',
+  'stateMachine.state.edit': '更改状态',
   'stateMachine.transfer': '转换',
   'stateMachine.transfer.add': '添加转换',
   'stateMachine.transfer.display': '显示转换标签',
@@ -381,7 +382,7 @@ const zh_CN = {
   'stateMachine.draft': '草稿',
   'stateMachine.publish': '发布',
   'stateMachine.publish.success': '发布成功！',
-  'stateMachine.publish.info': '发布工作流草案失败',
-  'stateMachine.publish.des': '当前工作流草案无法删除，因为您的修改中移除了关联问题的状态，需要将问题转换到其他状态才能继续发布。',
+  'stateMachine.publish.info': '发布状态机草案失败',
+  'stateMachine.publish.des': '当前状态机草案无法删除，因为您的修改中移除了关联问题的状态，需要将问题转换到其他状态才能继续发布。',
 };
 export default zh_CN;

@@ -157,7 +157,7 @@ class StateList extends Component {
   showStateMachines = (data) => {
     const { intl } = this.props;
     this.modelRef = info({
-      title: `${data.name}关联的工作流`,
+      title: `${data.name}关联的状态机`,
       content: (
         <ul className="issue-state-ul">
           {

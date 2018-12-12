@@ -73,32 +73,30 @@ class IssueTypeList extends Component {
     key: 'action',
     render: (test, record) => (
       <div>
-        <Tooltip
-          placement="bottom"
-          title={<FormattedMessage id="edit" />}
-        >
-          <Button
-            disabled
-            size="small"
-            shape="circle"
-            onClick={this.showEdit.bind(this, record.id)}
-          >
-            <i className="icon icon-mode_edit" />
-          </Button>
-        </Tooltip>
-        <Tooltip
-          placement="bottom"
-          title={<FormattedMessage id="delete" />}
-        >
-          <Button
-            disabled
-            size="small"
-            shape="circle"
-            onClick={this.openRemove.bind(this, record)}
-          >
-            <i className="icon icon-delete" />
-          </Button>
-        </Tooltip>
+        {/* <Tooltip */}
+          {/* placement="bottom" */}
+          {/* title={<FormattedMessage id="edit" />} */}
+        {/* > */}
+          {/* <Button */}
+            {/* size="small" */}
+            {/* shape="circle" */}
+            {/* onClick={this.showEdit.bind(this, record.id)} */}
+          {/* > */}
+            {/* <i className="icon icon-mode_edit" /> */}
+          {/* </Button> */}
+        {/* </Tooltip> */}
+        {/* <Tooltip */}
+          {/* placement="bottom" */}
+          {/* title={<FormattedMessage id="delete" />} */}
+        {/* > */}
+          {/* <Button */}
+            {/* size="small" */}
+            {/* shape="circle" */}
+            {/* onClick={this.openRemove.bind(this, record)} */}
+          {/* > */}
+            {/* <i className="icon icon-delete" /> */}
+          {/* </Button> */}
+        {/* </Tooltip> */}
       </div>
     ),
   }]);
@@ -245,10 +243,10 @@ class IssueTypeList extends Component {
     return (
       <Page className="issue-region">
         <Header title={<FormattedMessage id="issueType.title" />}>
-          <Button disabled onClick={() => this.showCreate('create')}>
-            <i className="icon-add icon" />
-            <FormattedMessage id="issueType.create" />
-          </Button>
+          {/* <Button onClick={() => this.showCreate('create')}> */}
+            {/* <i className="icon-add icon" /> */}
+            {/* <FormattedMessage id="issueType.create" /> */}
+          {/* </Button> */}
           <Button onClick={this.refresh}>
             <i className="icon-refresh icon" />
             <FormattedMessage id="refresh" />

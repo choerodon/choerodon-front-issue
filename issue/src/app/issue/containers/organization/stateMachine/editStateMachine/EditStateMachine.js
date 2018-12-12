@@ -65,6 +65,7 @@ class EditStateMachine extends Component {
       stateId: false,
       stateName: false,
       error: false,
+      isEdit: false,
     };
     this.graph = null;
   }
@@ -549,6 +550,7 @@ class EditStateMachine extends Component {
           nodeData,
           stateId: false,
           stateName: false,
+          isEdit: false,
         });
       });
   };
@@ -587,6 +589,7 @@ class EditStateMachine extends Component {
             show: false,
             transferData,
             isLoading: false,
+            isEdit: false,
           });
         }
       });
@@ -609,6 +612,7 @@ class EditStateMachine extends Component {
   handleDbClick = (cell, type) => {
     this.setState({
       selectedCell: cell,
+      isEdit: true,
     });
     if (type === 'transfer') {
       this.setState({
@@ -639,6 +643,7 @@ class EditStateMachine extends Component {
                 show: false,
                 nodeData: nodes,
                 isLoading: false,
+                isEdit: false,
               });
             }
           });
@@ -673,6 +678,7 @@ class EditStateMachine extends Component {
               show: false,
               isLoading: false,
               transferData,
+              isEdit: false,
             });
           }
         });
@@ -735,6 +741,7 @@ class EditStateMachine extends Component {
                         show: false,
                         nodeData: nodes,
                         isLoading: false,
+                        isEdit: false,
                       });
                     }
                   });
@@ -778,6 +785,7 @@ class EditStateMachine extends Component {
                     show: false,
                     isLoading: false,
                     transferData,
+                    isEdit: false,
                   });
                 }
               });
@@ -1025,6 +1033,7 @@ class EditStateMachine extends Component {
       show: false,
       stateId: false,
       stateName: false,
+      isEdit: false,
     });
   };
 
@@ -1283,7 +1292,7 @@ class EditStateMachine extends Component {
       <div className="graph-card">
         <div className="graph-card-title">{selectedCell && selectedCell.value}
         </div>
-        <div className="graph-card-des"><FormattedMessage id="stateMachine.des" />: {selectedCell && selectedCell.des}{selectedCell && selectedCell.id}</div>
+        <div className="graph-card-des"><FormattedMessage id="stateMachine.des" />: {selectedCell && selectedCell.des}</div>
         {selectedCell && selectedCell.edge ? (
           <React.Fragment>
             <div>
@@ -1481,10 +1490,10 @@ class EditStateMachine extends Component {
           </Tabs>
         </Content>
         {this.state.show && <Sidebar
-          title={<FormattedMessage id={this.state.type === 'create' ? 'stateMachine.create' : 'stateMachine.edit'} />}
+          title={<FormattedMessage id={this.state.type === 'state' ? `stateMachine.state.${this.state.isEdit ? 'edit' : 'add'}` : `stateMachine.transfer.${this.state.isEdit ? 'edit' : 'add'}`} />}
           visible={this.state.show}
           onOk={this.handleSubmit}
-          okText={<FormattedMessage id={this.state.type === 'create' ? 'create' : 'save'} />}
+          okText={<FormattedMessage id={this.state.isEdit ? 'save' : 'create'} />}
           cancelText={<FormattedMessage id="cancel" />}
           confirmLoading={this.state.isLoading}
           onCancel={this.hideSidebar}

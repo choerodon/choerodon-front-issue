@@ -539,8 +539,6 @@ class Graph extends Component {
       // Enables rubberband selection
       new mxRubberband(graph);
 
-
-
       // 为graph创建的div
       const container = this.graphContainer;
 
@@ -764,7 +762,9 @@ class Graph extends Component {
         const source = evt.getProperty('source');
         const constraint = evt.getProperty('point');
         const style = edge.pStyle && edge.pStyle.split('exitPerimeter=1;');
-        // const styles = `exitX=${sourcePoint.point.x};exitY=${sourcePoint.point.y};exitPerimeter=1;entryX=${targetPoint.point.x};entryY=${targetPoint.point.y};entryPerimeter=1;`;
+        // const styles = `exitX=${sourcePoint.point.x};exitY=${sourcePoint.point.y};
+        // exitPerimeter=1;entryX=${targetPoint.point.x};
+        // entryY=${targetPoint.point.y};entryPerimeter=1;`;
         if (previous) {
           const { onReLink } = this.props;
           let styles;
@@ -826,7 +826,6 @@ class Graph extends Component {
 
       // const style = graph.getStylesheet().getDefaultEdgeStyle();
 
-      // ===========我也不知道有什么用的设置========
       graph.setHtmlLabels(true);
       // 新连接
       graph.setConnectable(true);

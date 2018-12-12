@@ -310,6 +310,7 @@ const enUS = {
   'stateMachine.transfer.delete': 'Delete Transfer',
   'stateMachine.state': 'State',
   'stateMachine.state.add': 'Add State',
+  'stateMachine.state.edit': 'Change State',
   'stateMachine.transfer': 'Transfer',
   'stateMachine.transfer.add': 'Add Transfer',
   'stateMachine.transfer.display': 'Display Transfer',
@@ -354,6 +355,6 @@ const enUS = {
   'stateMachine.publish': 'Publish',
   'stateMachine.publish.success': 'Publish Success!',
   'stateMachine.publish.info': 'Publish draft stateMachine fail',
-  'stateMachine.publish.des': '当前工作流草案无法删除，因为您的修改中移除了关联问题的状态，需要将问题转换到其他状态才能继续发布。',
+  'stateMachine.publish.des': 'The current state machine draft cannot be deleted because the state of the associated issue has been removed from your edits and the issue needs to be transitioned to another state in order to continue publishing.',
 };
 export default enUS;

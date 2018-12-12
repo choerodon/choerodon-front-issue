@@ -88,65 +88,65 @@ class IssueTypeSchemeList extends Component {
     key: 'action',
     render: (test, record) => (
       <div>
-        <Tooltip
-          placement="bottom"
-          title={<FormattedMessage id="edit" />}
-        >
-          <Button
-            disabled
-            size="small"
-            shape="circle"
-            onClick={this.showEdit.bind(this, record.id)}
-          >
-            <i className="icon icon-mode_edit" />
-          </Button>
-        </Tooltip>
-        <Tooltip
-          placement="bottom"
-          title={<FormattedMessage id="relation" />}
-        >
-          <Button
-            disabled
-            size="small"
-            shape="circle"
-            onClick={
-              () => {
-                const {
-                  name, id, organizationId, type,
-                } = AppState.currentMenuType;
-                const { history } = this.props;
-                history.push(`/issue/issue-type-schemes/ralation/${record.id}?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
-              }
-            }>
-            <Icon type="open_in_browser" />
-          </Button>
-        </Tooltip>
-        <Tooltip
-          placement="bottom"
-          title={<FormattedMessage id="copy" />}
-        >
-          <Button
-            disabled
-            size="small"
-            shape="circle"
-            onClick={this.showCopy.bind(this, record.id)}
-          >
-            <i className="icon icon-content_copy />" />
-          </Button>
-        </Tooltip>
-        <Tooltip
-          placement="bottom"
-          title={<FormattedMessage id="delete" />}
-        >
-          <Button
-            disabled
-            size="small"
-            shape="circle"
-            onClick={this.openRemove.bind(this, record)}
-          >
-            <i className="icon icon-delete" />
-          </Button>
-        </Tooltip>
+        {/* <Tooltip */}
+          {/* placement="bottom" */}
+          {/* title={<FormattedMessage id="edit" />} */}
+        {/* > */}
+          {/* <Button */}
+            {/* disabled */}
+            {/* size="small" */}
+            {/* shape="circle" */}
+            {/* onClick={this.showEdit.bind(this, record.id)} */}
+          {/* > */}
+            {/* <i className="icon icon-mode_edit" /> */}
+          {/* </Button> */}
+        {/* </Tooltip> */}
+        {/* <Tooltip */}
+          {/* placement="bottom" */}
+          {/* title={<FormattedMessage id="relation" />} */}
+        {/* > */}
+          {/* <Button */}
+            {/* disabled */}
+            {/* size="small" */}
+            {/* shape="circle" */}
+            {/* onClick={ */}
+              {/* () => { */}
+                {/* const { */}
+                  {/* name, id, organizationId, type, */}
+                {/* } = AppState.currentMenuType; */}
+                {/* const { history } = this.props; */}
+                {/* history.push(`/issue/issue-type-schemes/ralation/${record.id}?type=${type}&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`); */}
+              {/* } */}
+            {/* }> */}
+            {/* <Icon type="open_in_browser" /> */}
+          {/* </Button> */}
+        {/* </Tooltip> */}
+        {/* <Tooltip */}
+          {/* placement="bottom" */}
+          {/* title={<FormattedMessage id="copy" />} */}
+        {/* > */}
+          {/* <Button */}
+            {/* disabled */}
+            {/* size="small" */}
+            {/* shape="circle" */}
+            {/* onClick={this.showCopy.bind(this, record.id)} */}
+          {/* > */}
+            {/* <i className="icon icon-content_copy />" /> */}
+          {/* </Button> */}
+        {/* </Tooltip> */}
+        {/* <Tooltip */}
+          {/* placement="bottom" */}
+          {/* title={<FormattedMessage id="delete" />} */}
+        {/* > */}
+          {/* <Button */}
+            {/* disabled */}
+            {/* size="small" */}
+            {/* shape="circle" */}
+            {/* onClick={this.openRemove.bind(this, record)} */}
+          {/* > */}
+            {/* <i className="icon icon-delete" /> */}
+          {/* </Button> */}
+        {/* </Tooltip> */}
       </div>
     ),
   }]);
@@ -269,13 +269,12 @@ class IssueTypeSchemeList extends Component {
     return (
       <Page className="issue-region">
         <Header title={<FormattedMessage id="issueTypeScheme.title" />}>
-          <Button
-            disabled
-            onClick={() => this.showCreate('create')}
-          >
-            <i className="icon-add icon" />
-            <FormattedMessage id="issueTypeScheme.create" />
-          </Button>
+          {/* <Button */}
+            {/* onClick={() => this.showCreate('create')} */}
+          {/* > */}
+            {/* <i className="icon-add icon" /> */}
+            {/* <FormattedMessage id="issueTypeScheme.create" /> */}
+          {/* </Button> */}
           <Button onClick={this.refresh}>
             <i className="icon-refresh icon" />
             <FormattedMessage id="refresh" />

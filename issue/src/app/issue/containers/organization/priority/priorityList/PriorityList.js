@@ -105,16 +105,15 @@ class PriorityList extends Component {
               <Icon type="mode_edit" />
             </Button>
           </Tooltip>
-          <Tooltip placement="top" title={<FormattedMessage id="delete" />}>
-            <Button
-              disabled
-              shape="circle"
-              size="small"
-              onClick={this.handleDelete.bind(this, record.id)}
-            >
-              <Icon type="delete" />
-            </Button>
-          </Tooltip>
+          {/* <Tooltip placement="top" title={<FormattedMessage id="delete" />}> */}
+            {/* <Button */}
+              {/* shape="circle" */}
+              {/* size="small" */}
+              {/* onClick={this.handleDelete.bind(this, record.id)} */}
+            {/* > */}
+              {/* <Icon type="delete" /> */}
+            {/* </Button> */}
+          {/* </Tooltip> */}
         </div>
       ),
     },

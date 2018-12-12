@@ -80,12 +80,13 @@ class StateMachineList extends Component {
             <i className="icon icon-mode_edit" />
           </Button>
         </Tooltip>
-        {!(record && record.stateMachineSchemeDTOs && record.stateMachineSchemeDTOs.length) ?
-           <Tooltip placement="top" title={<FormattedMessage id="delete" />}>
-          <Button shape="circle" size="small" onClick={this.confirmDelete.bind(this, record)}>
-            <i className="icon icon-delete" />
-          </Button>
-        </Tooltip> : <div className="issue-del-space" />
+        {!(record && record.stateMachineSchemeDTOs && record.stateMachineSchemeDTOs.length)
+        && !record.default
+          ? <Tooltip placement="top" title={<FormattedMessage id="delete" />}>
+            <Button shape="circle" size="small" onClick={this.confirmDelete.bind(this, record)}>
+              <i className="icon icon-delete" />
+            </Button>
+          </Tooltip> : <div className="issue-del-space" />
         }
       </div>
     ),
