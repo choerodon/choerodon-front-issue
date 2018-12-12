@@ -88,6 +88,7 @@ const enUS = {
     'This problem type is already associated with another state machine. If you need to update this association, the previous results will be overwritten.',
   'stateMachineScheme.tips': 'Note: This state machine scheme is being used.You are editing #draft state machine# , if the revised draft needs to take effect, click #publish# .',
   'stateMachineScheme.publish': 'Publish',
+  'stateMachineScheme.announcing': 'Announcing',
   'stateMachineScheme.deleteDraft': 'Delete Draft',
   'stateMachineScheme.original': 'Show Original',
   'stateMachineScheme.draft': 'Edit Draft',

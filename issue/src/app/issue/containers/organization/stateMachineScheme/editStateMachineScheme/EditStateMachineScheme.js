@@ -633,12 +633,16 @@ class EditStateMachineScheme extends Component {
               {showStatus === 'draft'
                 ? <div>
                   <Button
+                    disabled={getStateMachine.deployStatus === 'doing'}
                     type="primary"
                     onClick={this.handlePublish}
                     funcType="raised"
                     className="issue-options-btn"
                   >
-                    <FormattedMessage id="stateMachineScheme.publish" />
+                    {getStateMachine.deployStatus === 'doing'
+                      ? <FormattedMessage id="stateMachineScheme.announcing" />
+                      : <FormattedMessage id="stateMachineScheme.publish" />
+                    }
                   </Button>
                   <Button
                     type="danger"

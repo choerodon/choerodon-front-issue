@@ -115,6 +115,7 @@ const zh_CN = {
   'stateMachineScheme.conflictInfo': '此问题类型已经关联其他状态机。你如果需要更新此关联，之前的结果将会被覆盖。',
   'stateMachineScheme.tips': '注意：此状态机方案正在被使用。你正在编辑 #状态机方案草稿# ，如果修改后的草稿需要生效，点击 #发布# 。',
   'stateMachineScheme.publish': '发布',
+  'stateMachineScheme.announcing': '发布中',
   'stateMachineScheme.deleteDraft': '删除草稿',
   'stateMachineScheme.original': '查看原件',
   'stateMachineScheme.draft': '编辑草稿',
