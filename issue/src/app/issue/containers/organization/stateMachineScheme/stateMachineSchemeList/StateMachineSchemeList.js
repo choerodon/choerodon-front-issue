@@ -81,7 +81,6 @@ class StateMachineSchemeList extends Component {
       title: <FormattedMessage id="stateMachineScheme.project" />,
       dataIndex: 'project',
       key: 'project',
-      filters: [],
       render: (text, record) => (
         record.projectDTOs && record.projectDTOs.length
           ? <ul className={`${prefixCls}-table-ul`}>
