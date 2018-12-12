@@ -20,14 +20,16 @@ service:
   enable: false
   type: ClusterIP
   port: 80
+  name: choerodon-front-issue
 
 ingress:
   enable: false
+  host: localhost
 
 env:
   open:
     PRO_API_HOST: api.example.com.cn
-    PRO_CLIENT_ID: example
+    PRO_CLIENT_ID: issue
     PRO_LOCAL: true
     PRO_TITLE_NAME: Choerodon
     PRO_HEADER_TITLE_NAME: Choerodon

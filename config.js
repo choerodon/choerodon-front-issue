@@ -9,7 +9,7 @@ const config = {
     cookieServer: '', //子域名token共享
     port: 9090,
     server: 'http://api.staging.saas.hand-china.com',
-    // server: 'http://10.211.102.55:8080', //士男
+    // server: 'http://10.211.102.55:8080', // sn
     dashboard: {},
   };
   
