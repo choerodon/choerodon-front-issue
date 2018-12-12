@@ -143,7 +143,7 @@ class PriorityCreate extends Component {
                 <Input
                   label={<FormattedMessage id="priority.name" />}
                   placeholder={intl.formatMessage({ id: 'priority.create.name.placeholder' })}
-                  maxLength={15}
+                  maxLength={10}
                 />,
               )
             }
