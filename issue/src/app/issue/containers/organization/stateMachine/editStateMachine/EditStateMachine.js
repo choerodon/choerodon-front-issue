@@ -610,6 +610,7 @@ class EditStateMachine extends Component {
 
   // DOUBLE CLICK NODE or TRANSFER
   handleDbClick = (cell, type) => {
+    const { stateMachineData } = this.state;
     this.setState({
       selectedCell: cell,
       isEdit: true,
@@ -619,8 +620,10 @@ class EditStateMachine extends Component {
         source: cell.source,
         target: cell.target,
       });
+      this.showSideBar(type, 'edit');
+    } else if (type === 'state' && stateMachineData.status === 'state_machine_create') {
+      this.showSideBar(type, 'edit');
     }
-    this.showSideBar(type, 'edit');
   };
 
   // ON DRAG NODE, UPDATE NODE'S POSITION

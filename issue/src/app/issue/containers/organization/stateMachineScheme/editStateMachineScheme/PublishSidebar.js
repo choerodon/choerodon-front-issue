@@ -27,7 +27,7 @@ class PublishSidebar extends Component {
   };
 
   handlePublish = () => {
-    const { store, schemeId, refresh } = this.props;
+    const { store, scheme, refresh } = this.props;
     const { transform } = this.state;
     const { organizationId } = AppState.currentMenuType;
     const publishData = store.getPublishData;
@@ -59,7 +59,9 @@ class PublishSidebar extends Component {
         oldStateMachineId: typeData.oldStateMachineId,
       });
     });
-    store.publishStateMachine(organizationId, schemeId, data).then((res) => {
+    store.publishStateMachine(
+      organizationId, scheme.id, scheme.objectVersionNumber, data,
+    ).then((res) => {
       if (res) {
         this.setState({
           transform: [],
