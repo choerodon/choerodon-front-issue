@@ -37,4 +37,4 @@
         Routes: /issue/priorities
         sort: 6
         permission:
-          - '	issue-service.priority.selectAll'
+          - 'issue-service.priority.selectAll'
