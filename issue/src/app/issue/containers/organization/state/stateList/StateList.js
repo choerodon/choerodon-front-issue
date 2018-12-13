@@ -358,7 +358,7 @@ class StateList extends Component {
     const orgId = AppState.currentMenuType.organizationId;
     if (type === 'create' || value !== (editState && editState.name)) {
       const res = await StateStore.checkName(orgId, value);
-      if (res) {
+      if (res && res.statusExist) {
         callback(intl.formatMessage({ id: 'priority.create.name.error' }));
       } else {
         callback();
