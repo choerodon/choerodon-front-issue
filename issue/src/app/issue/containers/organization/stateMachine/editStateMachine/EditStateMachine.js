@@ -368,6 +368,21 @@ class EditStateMachine extends Component {
     }
   };
 
+  checkName = async (rule, value, callback) => {
+    const { StateMachineStore, intl } = this.props;
+    const orgId = AppState.currentMenuType.organizationId;
+    if (value.trim()) {
+      const res = await StateMachineStore.checkStateName(orgId, value);
+      if (res && res.statusExist) {
+        callback(intl.formatMessage({ id: 'priority.create.name.error' }));
+      } else {
+        callback();
+      }
+    } else {
+      callback();
+    }
+  };
+
   getCreateForm = () => {
     const { form, intl } = this.props;
     const { getFieldDecorator } = form;
@@ -383,6 +398,8 @@ class EditStateMachine extends Component {
               whitespace: true,
               max: 47,
               message: intl.formatMessage({ id: 'state.name.required' }),
+            }, {
+              validator: this.checkName,
             }],
           })(
             <Input
