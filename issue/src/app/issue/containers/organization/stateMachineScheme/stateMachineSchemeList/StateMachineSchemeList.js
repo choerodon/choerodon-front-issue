@@ -103,6 +103,7 @@ class StateMachineSchemeList extends Component {
           </span>
         </div>
       ),
+      notDisplay: true,
       width: 500,
       dataIndex: 'related',
       key: 'related',

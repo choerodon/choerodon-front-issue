@@ -1315,15 +1315,15 @@ class EditStateMachine extends Component {
         <div className="graph-card-des"><FormattedMessage id="stateMachine.des" />: {selectedCell && selectedCell.des}</div>
         {selectedCell && selectedCell.edge ? (
           <React.Fragment>
-            <div>
-              <a><FormattedMessage id="stateMachine.condition" /></a>
-            </div>
-            <div>
-              <a><FormattedMessage id="stateMachine.verification" /></a>
-            </div>
-            <div>
-              <a><FormattedMessage id="stateMachine.processor" /></a>
-            </div>
+            {/* <div> */}
+              {/* <a><FormattedMessage id="stateMachine.condition" /></a> */}
+            {/* </div> */}
+            {/* <div> */}
+              {/* <a><FormattedMessage id="stateMachine.verification" /></a> */}
+            {/* </div> */}
+            {/* <div> */}
+              {/* <a><FormattedMessage id="stateMachine.processor" /></a> */}
+            {/* </div> */}
             <div className="graph-card-toolbar">
               <Button
                 className="graph-card-btn"
@@ -1426,7 +1426,6 @@ class EditStateMachine extends Component {
                 readModeContent={(
                   <div className={`${prefixCls}-header-name`}>
                     {schemeName}
-                    {status && status === 'state_machine_draft' && <FormattedMessage id="stateMachine.draft" />}
                   </div>
                 )}
                 style={{ marginBottom: 10 }}
@@ -1441,6 +1440,7 @@ class EditStateMachine extends Component {
                   autoize={{ minRows: 1, maxRows: 1 }}
                 />
               </ReadAndEdit>
+              {status && status === 'state_machine_draft' && <FormattedMessage id="stateMachine.draft" />}
               <ReadAndEdit
                 callback={this.changeRae}
                 thisType="description"
