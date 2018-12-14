@@ -344,6 +344,9 @@ class StateMachineSchemeList extends Component {
           </Button>
         </Header>
         <Content>
+          <div className="issue-stateMachineScheme-tip">
+            <FormattedMessage id="stateMachineScheme.tip" />
+          </div>
           <Table
             dataSource={getStateMachineSchemeList}
             rowClassName={`${prefixCls}-table-col`}

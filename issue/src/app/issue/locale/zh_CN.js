@@ -387,6 +387,7 @@ const zh_CN = {
   'stateMachine.publish.success': '发布成功！',
   'stateMachine.publish.info': '发布状态机草案失败',
   'stateMachineScheme.publish.warn': '当前方案已经被修改，请刷新后重试。',
+  'stateMachineScheme.tip': '状态机方案指的是，将状态机和问题类型组合形成的方案，并关联项目。',
   'stateMachine.publish.des': '当前状态机草案无法删除，因为您的修改中移除了关联问题的状态，需要将问题转换到其他状态才能继续发布。',
 };
 export default zh_CN;
