@@ -1440,7 +1440,6 @@ class EditStateMachine extends Component {
                   autoize={{ minRows: 1, maxRows: 1 }}
                 />
               </ReadAndEdit>
-              {status && status === 'state_machine_draft' && <FormattedMessage id="stateMachine.draft" />}
               <ReadAndEdit
                 callback={this.changeRae}
                 thisType="description"
