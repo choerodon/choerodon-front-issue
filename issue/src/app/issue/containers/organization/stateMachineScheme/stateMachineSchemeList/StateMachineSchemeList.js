@@ -68,6 +68,7 @@ class StateMachineSchemeList extends Component {
       title: <FormattedMessage id="stateMachineScheme.name" />,
       dataIndex: 'name',
       key: 'name',
+      className: 'issue-table-ellipsis',
       filters: [],
     },
     {
@@ -83,11 +84,11 @@ class StateMachineSchemeList extends Component {
       key: 'project',
       render: (text, record) => (
         record.projectDTOs && record.projectDTOs.length
-          ? <ul className={`${prefixCls}-table-ul`}>
+          ? <div className="issue-table-ellipsis"><ul className={`${prefixCls}-table-ul`}>
             {record.projectDTOs.map(
               project => (<li>{project ? project.name : ''}</li>),
             )}
-          </ul>
+          </ul></div>
           : <div>-</div>
       ),
     },

@@ -180,7 +180,7 @@ class EditStateMachine extends Component {
                   required: true,
                   message: intl.formatMessage({ id: 'required' }),
                 }],
-                initialValue: { key: stateId },
+                initialValue: stateId ? { key: stateId } : '',
               })(
                 <Select
                   style={{ width: 520 }}
@@ -731,7 +731,7 @@ class EditStateMachine extends Component {
 
     this.props.form.validateFieldsAndScroll((err, data) => {
       if (!err) {
-        if (type === 'state') {
+        if (type === 'state' && data.state && data.state.key) {
           const { name } = data.state.label ? data.state.label.props : stateName;
           if (state === 'add') {
             this.addStateMachineNode(data);
