@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { observer } from 'mobx-react';
 import {
-  Select, Icon, Modal, Button, Table, Spin,
+  Select, Icon, Modal, Button, Table, Spin, message,
 } from 'choerodon-ui';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { stores } from 'choerodon-front-boot';
@@ -27,7 +27,9 @@ class PublishSidebar extends Component {
   };
 
   handlePublish = () => {
-    const { store, scheme, refresh } = this.props;
+    const {
+      store, scheme, refresh, intl,
+    } = this.props;
     const { transform } = this.state;
     const { organizationId } = AppState.currentMenuType;
     const publishData = store.getPublishData;
@@ -63,6 +65,11 @@ class PublishSidebar extends Component {
       organizationId, scheme.id, scheme.objectVersionNumber, data,
     ).then((res) => {
       if (res) {
+        if (res.failed) {
+          message.warn(intl.formatMessage({
+            id: 'stateMachineScheme.publish.warn',
+          }));
+        }
         this.setState({
           transform: [],
         });

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import {
-  Table, Button, Modal, Form, Select, Input, Tooltip, Tabs, Checkbox, Popconfirm, Spin,
+  Table, Button, Modal, Form, Select, Input, Tooltip, Tabs, Checkbox, Popconfirm, Spin, message,
 } from 'choerodon-ui';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import {
@@ -1102,7 +1102,7 @@ class EditStateMachine extends Component {
         publishLoading: false,
       });
       if (data) {
-        Choerodon.prompt(intl.formatMessage({ id: 'stateMachine.publish.success' }));
+        Choerodon.prompt(intl.formatMessage({ id: 'stateMachine.publish.success' }), 'success');
         history.push(`/issue/state-machines/edit/${stateMachineData.id}/state_machine_active?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
       } else {
         info({
@@ -1496,7 +1496,7 @@ class EditStateMachine extends Component {
           title={<FormattedMessage id={this.state.type === 'state' ? `stateMachine.state.${this.state.isEdit ? 'edit' : 'add'}` : `stateMachine.transfer.${this.state.isEdit ? 'edit' : 'add'}`} />}
           visible={this.state.show}
           onOk={this.handleSubmit}
-          okText={<FormattedMessage id={this.state.isEdit ? 'save' : 'create'} />}
+          okText={<FormattedMessage id={this.state.isEdit ? 'save' : 'add'} />}
           cancelText={<FormattedMessage id="cancel" />}
           confirmLoading={this.state.isLoading}
           onCancel={this.hideSidebar}

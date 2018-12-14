@@ -356,6 +356,7 @@ const enUS = {
   'stateMachine.publish': 'Publish',
   'stateMachine.publish.success': 'Publish Success!',
   'stateMachine.publish.info': 'Publish draft stateMachine fail',
+  'stateMachineScheme.publish.warn': 'The current scheme has been modified, please refresh and try again.',
   'stateMachine.publish.des': 'The current state machine draft cannot be deleted because the state of the associated issue has been removed from your edits and the issue needs to be transitioned to another state in order to continue publishing.',
 };
 export default enUS;
