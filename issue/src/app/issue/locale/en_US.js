@@ -20,6 +20,7 @@ const enUS = {
 
   'issueType.title': 'Issue Type',
   'issueType.create': 'Create Type',
+  'issueType.tip': '问题类型是将敏捷服务和测试服务中的问题类型进行统一管理。',
   'issueType.name': 'Name',
   'issueType.res': 'Description',
   'issueType.scheme': 'Related Schemes',
@@ -37,6 +38,7 @@ const enUS = {
 
   'issueTypeScheme.title': 'Issue Type Scheme',
   'issueTypeScheme.create': 'Create Scheme',
+  'issueTypeScheme.tip': '问题类型方案是将一些问题类型组合在一起，并关联给一个项目来使用，当你创建一个新的项目时，平台会为每个项目初始化一套默认的敏捷服务和测试服务的问题类型方案。',
   'issueTypeScheme.edit': 'Edit Scheme',
   'issueTypeScheme.copy': 'Copy Scheme',
   'issueTypeScheme.name': 'Name',
@@ -321,7 +323,7 @@ const enUS = {
   'stateMachine.transfer.target': 'Target State',
   'stateMachine.transfer.page': 'Page',
   'stateMachine.list.tip':
-    '如果要删除一个状态机，你必须把它从状态机方案中解除关联。',
+    '只有未关联状态机方案的状态机才能删除。',
   'stateMachine.transfer.edit': 'Edit Transfer',
   'stateMachine.transfer.delete.tip': '请选择你需要删除的转换。',
   'stateMachine.delete': 'Delete State Machine',
@@ -356,6 +358,8 @@ const enUS = {
   'stateMachine.publish': 'Publish',
   'stateMachine.publish.success': 'Publish Success!',
   'stateMachine.publish.info': 'Publish draft stateMachine fail',
+  'stateMachineScheme.publish.warn': 'The current scheme has been modified, please refresh and try again.',
+  'stateMachineScheme.tip': '状态机方案指的是，将状态机和问题类型组合形成的方案，并关联项目。',
   'stateMachine.publish.des': 'The current state machine draft cannot be deleted because the state of the associated issue has been removed from your edits and the issue needs to be transitioned to another state in order to continue publishing.',
 };
 export default enUS;

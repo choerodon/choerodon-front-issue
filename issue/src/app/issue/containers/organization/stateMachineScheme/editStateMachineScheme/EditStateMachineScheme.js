@@ -771,7 +771,7 @@ class EditStateMachineScheme extends Component {
             </Sidebar>
           )}
           <PublishSidebar
-            schemeId={schemeId}
+            scheme={getStateMachine}
             store={StateMachineSchemeStore}
             refresh={this.refresh}
           />

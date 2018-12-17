@@ -131,6 +131,10 @@ class StateMachineStore {
     `/state/v1/organizations/${orgId}/state_machines/check_name?name=${name}`,
   );
 
+  checkStateName = (orgId, name) => axios.get(
+    `/state/v1/organizations/${orgId}/status/check_name?name=${name}`,
+  );
+
   handleProptError = (error) => {
     if (error && error.failed) {
       Choerodon.prompt(error.message);

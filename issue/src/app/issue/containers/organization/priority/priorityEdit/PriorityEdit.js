@@ -206,7 +206,7 @@ class PriorityEdit extends Component {
                   initialValue: !!editingPriority.default,
                 },
               )(
-                <Checkbox>设置为默认优先级</Checkbox>,
+                <Checkbox disabled={!!editingPriority.default}>设置为默认优先级</Checkbox>,
               )
             }
           </FormItem>

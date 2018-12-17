@@ -339,7 +339,7 @@ class StateMachineSchemeStore {
     .then(data => this.handleProptError(data));
 
   // 发布方案
-  publishStateMachine = (orgId, schemeId, data) => axios.post(`/issue/v1/organizations/${orgId}/state_machine_scheme/deploy/${schemeId}`, data);
+  publishStateMachine = (orgId, schemeId, objId, data) => axios.post(`/issue/v1/organizations/${orgId}/state_machine_scheme/deploy/${schemeId}?objectVersionNumber=${objId}`, data);
 
   // 检查发布
   checkPublishStateMachine = (orgId, schemeId) => axios.get(`/issue/v1/organizations/${orgId}/state_machine_scheme/check_deploy/${schemeId}`).then((data) => {

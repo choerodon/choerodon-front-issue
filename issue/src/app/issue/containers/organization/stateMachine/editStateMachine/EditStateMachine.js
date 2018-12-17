@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import {
-  Table, Button, Modal, Form, Select, Input, Tooltip, Tabs, Checkbox, Popconfirm, Spin,
+  Table, Button, Modal, Form, Select, Input, Tooltip, Tabs, Checkbox, Popconfirm, Spin, message,
 } from 'choerodon-ui';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import {
@@ -180,7 +180,7 @@ class EditStateMachine extends Component {
                   required: true,
                   message: intl.formatMessage({ id: 'required' }),
                 }],
-                initialValue: { key: stateId },
+                initialValue: stateId ? { key: stateId } : '',
               })(
                 <Select
                   style={{ width: 520 }}
@@ -368,6 +368,21 @@ class EditStateMachine extends Component {
     }
   };
 
+  checkName = async (rule, value, callback) => {
+    const { StateMachineStore, intl } = this.props;
+    const orgId = AppState.currentMenuType.organizationId;
+    if (value.trim()) {
+      const res = await StateMachineStore.checkStateName(orgId, value);
+      if (res && res.statusExist) {
+        callback(intl.formatMessage({ id: 'priority.create.name.error' }));
+      } else {
+        callback();
+      }
+    } else {
+      callback();
+    }
+  };
+
   getCreateForm = () => {
     const { form, intl } = this.props;
     const { getFieldDecorator } = form;
@@ -383,6 +398,8 @@ class EditStateMachine extends Component {
               whitespace: true,
               max: 47,
               message: intl.formatMessage({ id: 'state.name.required' }),
+            }, {
+              validator: this.checkName,
             }],
           })(
             <Input
@@ -610,6 +627,7 @@ class EditStateMachine extends Component {
 
   // DOUBLE CLICK NODE or TRANSFER
   handleDbClick = (cell, type) => {
+    const { stateMachineData } = this.state;
     this.setState({
       selectedCell: cell,
       isEdit: true,
@@ -619,8 +637,10 @@ class EditStateMachine extends Component {
         source: cell.source,
         target: cell.target,
       });
+      this.showSideBar(type, 'edit');
+    } else if (type === 'state' && stateMachineData.status === 'state_machine_create') {
+      this.showSideBar(type, 'edit');
     }
-    this.showSideBar(type, 'edit');
   };
 
   // ON DRAG NODE, UPDATE NODE'S POSITION
@@ -711,7 +731,7 @@ class EditStateMachine extends Component {
 
     this.props.form.validateFieldsAndScroll((err, data) => {
       if (!err) {
-        if (type === 'state') {
+        if (type === 'state' && data.state && data.state.key) {
           const { name } = data.state.label ? data.state.label.props : stateName;
           if (state === 'add') {
             this.addStateMachineNode(data);
@@ -1099,7 +1119,7 @@ class EditStateMachine extends Component {
         publishLoading: false,
       });
       if (data) {
-        Choerodon.prompt(intl.formatMessage({ id: 'stateMachine.publish.success' }));
+        Choerodon.prompt(intl.formatMessage({ id: 'stateMachine.publish.success' }), 'success');
         history.push(`/issue/state-machines/edit/${stateMachineData.id}/state_machine_active?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
       } else {
         info({
@@ -1295,15 +1315,15 @@ class EditStateMachine extends Component {
         <div className="graph-card-des"><FormattedMessage id="stateMachine.des" />: {selectedCell && selectedCell.des}</div>
         {selectedCell && selectedCell.edge ? (
           <React.Fragment>
-            <div>
-              <a><FormattedMessage id="stateMachine.condition" /></a>
-            </div>
-            <div>
-              <a><FormattedMessage id="stateMachine.verification" /></a>
-            </div>
-            <div>
-              <a><FormattedMessage id="stateMachine.processor" /></a>
-            </div>
+            {/* <div> */}
+              {/* <a><FormattedMessage id="stateMachine.condition" /></a> */}
+            {/* </div> */}
+            {/* <div> */}
+              {/* <a><FormattedMessage id="stateMachine.verification" /></a> */}
+            {/* </div> */}
+            {/* <div> */}
+              {/* <a><FormattedMessage id="stateMachine.processor" /></a> */}
+            {/* </div> */}
             <div className="graph-card-toolbar">
               <Button
                 className="graph-card-btn"
@@ -1406,7 +1426,6 @@ class EditStateMachine extends Component {
                 readModeContent={(
                   <div className={`${prefixCls}-header-name`}>
                     {schemeName}
-                    {status && status === 'state_machine_draft' && <FormattedMessage id="stateMachine.draft" />}
                   </div>
                 )}
                 style={{ marginBottom: 10 }}
@@ -1493,7 +1512,7 @@ class EditStateMachine extends Component {
           title={<FormattedMessage id={this.state.type === 'state' ? `stateMachine.state.${this.state.isEdit ? 'edit' : 'add'}` : `stateMachine.transfer.${this.state.isEdit ? 'edit' : 'add'}`} />}
           visible={this.state.show}
           onOk={this.handleSubmit}
-          okText={<FormattedMessage id={this.state.isEdit ? 'save' : 'create'} />}
+          okText={<FormattedMessage id={this.state.isEdit ? 'save' : 'add'} />}
           cancelText={<FormattedMessage id="cancel" />}
           confirmLoading={this.state.isLoading}
           onCancel={this.hideSidebar}

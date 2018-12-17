@@ -267,7 +267,7 @@ class StateList extends Component {
           StateStore.createState(orgId, postData)
             .then((res) => {
               if (res && res.failed) {
-                Choerodon.prompt(res.message);
+                console.log(res.message);
               } else {
                 this.loadState(page, pageSize, sorter, tableParam);
                 this.setState({
@@ -280,7 +280,7 @@ class StateList extends Component {
                 submitting: false,
               });
             }).catch((error) => {
-              Choerodon.prompt(error.response.data.message);
+              console.log(error.response.data.message);
               this.setState({
                 submitting: false,
               });
@@ -353,12 +353,21 @@ class StateList extends Component {
   };
 
   checkName = async (rule, value, callback) => {
+    if (!value) {
+      callback();
+    }
     const { type, editState } = this.state;
     const { StateStore, intl } = this.props;
     const orgId = AppState.currentMenuType.organizationId;
     if (type === 'create' || value !== (editState && editState.name)) {
+      this.setState({
+        submitting: true,
+      });
       const res = await StateStore.checkName(orgId, value);
-      if (res) {
+      this.setState({
+        submitting: false,
+      });
+      if (res && res.statusExist) {
         callback(intl.formatMessage({ id: 'priority.create.name.error' }));
       } else {
         callback();

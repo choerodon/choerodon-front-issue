@@ -253,6 +253,9 @@ class IssueTypeList extends Component {
           </Button>
         </Header>
         <Content>
+          <div className="issue-issueType-des">
+            <FormattedMessage id="issueType.tip" />
+          </div>
           <Table
             dataSource={IssueTypeStore.getIssueTypes}
             columns={this.getColumn()}
