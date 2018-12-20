@@ -541,12 +541,10 @@ class EditStateMachine extends Component {
     const { organizationId, stateMachineData } = this.state;
     const { StateMachineStore } = this.props;
     const node = {
-      height: 50,
       positionX: 150,
       positionY: 0,
       statusId: data.state.key,
       stateMachineId: stateMachineData.id,
-      width: 100,
     };
     this.setState({
       isLoading: true,
@@ -647,7 +645,8 @@ class EditStateMachine extends Component {
   handleOnMove = (cell) => {
     const { nodeData } = this.state;
     if (nodeData && nodeData.length) {
-      const node = _.find(nodeData, item => item.id.toString() === cell.nodeId.toString());
+      const node = _.find(nodeData, item => (item.id && item.id.toString())
+        === (cell.nodeId && cell.nodeId.toString()));
       if (node) {
         const data = {
           ...node,
@@ -962,7 +961,8 @@ class EditStateMachine extends Component {
               this.graph.removeCells();
             }
             if (this.changeStyle(targetNode, transferData, cell.source)) {
-              targetNode.setStyle('strokeColor=red');
+              const currentStyle = targetNode.getStyle();
+              targetNode.setStyle(`${currentStyle}strokeColor=red;`);
               this.graph.refresh();
             }
             _.remove(transferData,
@@ -1158,7 +1158,7 @@ class EditStateMachine extends Component {
       StateMachineStore.deleteAllToNode(organizationId, selectedCell.allStatusTransformId)
         .then(() => {
           const cells = [];
-          cells.push(this.graph.getCell(`all${selectedCell.allStatusTransformId}`));
+          cells.push(this.graph.getCell(`all${selectedCell.nodeId}`));
           cells.push(this.graph.getCell(`t${selectedCell.allStatusTransformId}`));
           _.remove(transferData, item => item.id === selectedCell.allStatusTransformId);
           selectedCell.allStatusTransformId = null;
@@ -1166,6 +1166,11 @@ class EditStateMachine extends Component {
             transferData,
           });
           this.graph.removeCells(cells);
+          if (this.changeStyle(selectedCell, transferData, selectedCell.source)) {
+            const currentStyle = selectedCell.getStyle();
+            selectedCell.setStyle(`${currentStyle}strokeColor=red;`);
+            this.graph.refresh();
+          }
         });
     }
   };
