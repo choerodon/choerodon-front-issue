@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, Checkbox, Modal, Select } from 'choerodon-ui';
+import { Form } from 'choerodon-ui';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import _ from 'lodash';
 import { Content, Header, Page, Permission, stores } from 'choerodon-front-boot';
@@ -36,11 +36,6 @@ import {
 import './Graph.less';
 import Pointer from '../../assets/images/point.gif';
 
-const { AppState } = stores;
-const { Option } = Select;
-const { TextArea } = Input;
-const FormItem = Form.Item;
-const { Sidebar } = Modal;
 const edgeStyle = 'edgeStyle=orthogonalEdgeStyle;jettySize=20;rounded=0;html=1;strokeColor=#868585;labelBackgroundColor=#fff;strokeWidth=1;';
 const focusStyle = 'edgeStyle=orthogonalEdgeStyle;jettySize=20;rounded=0;html=1;strokeColor=#000;strokeWidth=2;labelBackgroundColor=#fff;';
 
@@ -55,6 +50,12 @@ const formItemLayout = {
   },
 };
 
+const statusColor = {
+  todo: '#ffb100',
+  doing: '#4d90fe',
+  done: '#00bfa5',
+};
+
 class Graph extends Component {
   constructor(props) {
     super(props);
@@ -67,7 +68,7 @@ class Graph extends Component {
       cardVisible: false,
       selectCell: {},
       maxId: 0,
-      showLineLabel: false,
+      noLabel: true,
       source: false,
       target: false,
       initial: true,
@@ -101,7 +102,7 @@ class Graph extends Component {
    * @param graph
    */
   setStyle = (graph) => {
-    const { showLineLabel } = this.state;
+    const { noLabel } = this.state;
 
     // 获取连线样式对象
     const styleEdge = graph.getStylesheet().getDefaultEdgeStyle();
@@ -112,7 +113,7 @@ class Graph extends Component {
     // 线宽
     styleEdge.strokeWidth = 2;
     // 是否在连线上显示label
-    styleEdge[mxConstants.STYLE_NOLABEL] = showLineLabel;
+    styleEdge[mxConstants.STYLE_NOLABEL] = noLabel;
     styleEdge[mxConstants.STYLE_FONTCOLOR] = '#000000';
 
     // 功能暂时不明确
@@ -125,14 +126,14 @@ class Graph extends Component {
     // 节点字号
     styleNode[mxConstants.STYLE_FONTSTYLE] = 0;
     // 颜色
-    styleNode[mxConstants.STYLE_FONTCOLOR] = '#000000';
+    styleNode[mxConstants.STYLE_FONTCOLOR] = '#FFF';
     // 填充色
     styleNode[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
     // 边框颜色
-    styleNode[mxConstants.STYLE_STROKECOLOR] = '#000000';
+    styleNode[mxConstants.STYLE_STROKECOLOR] = '#FFF';
     // 边框宽度
-    styleNode[mxConstants.STYLE_STROKEWIDTH] = 2;
-    // 选中后边框宽度
+    // styleNode[mxConstants.STYLE_STROKEWIDTH] = 2;
+    // 选中后
     mxConstants.VERTEX_SELECTION_STROKEWIDTH = 2;
     mxConstants.VERTEX_SELECTION_COLOR = '#1295FF';
 
@@ -185,7 +186,15 @@ class Graph extends Component {
     graph.getModel().beginUpdate();
     let cell;
     try {
-      cell = graph.insertVertex(parent, `n${values.id}`, values.statusDTO && values.statusDTO.name, 150, 0, 100, 50, 'strokeColor=red');
+      cell = graph.insertVertex(
+        parent,
+        `n${values.id}`,
+        values.statusDTO && values.statusDTO.name,
+        150, 0, 62, 26,
+        `strokeColor=red;fillColor=${statusColor[values.statusDTO.type]
+          ? statusColor[values.statusDTO.type]
+          : '#E3E3E3'}`,
+      );
       cell.stateId = values.statusId;
       cell.nodeId = values.id;
       cell.status = values.type;
@@ -221,10 +230,11 @@ class Graph extends Component {
     try {
       if (values.type === 'transform_all') {
         source = graph.insertVertex(
-          parent, `all${values.id}`,
-          'all',
-          target.geometry.x + target.geometry.width + 100, target.geometry.y + target.geometry.height / 2 - 10, 40, 20,
-          'fillColor=#000;fontColor=#fff;',
+          parent, `all${targetId}`,
+          '全部',
+          target.geometry.x + target.geometry.width + 50,
+          target.geometry.y + target.geometry.height / 2 - 10, 40, 20,
+          'fillColor=#4A4A4A;fontColor=#fff;',
         );
         source.status = 'node_all';
         source.setConnectable(false);
@@ -238,6 +248,10 @@ class Graph extends Component {
       cell.transferId = values.id;
       cell.pStyle = style;
       cell.allStatusTransformId = values.allStatusTransformId;
+      if (source.nodeId !== target.nodeId && target) {
+        const currentStyle = target.getStyle();
+        target.setStyle(`${currentStyle}strokeColor=#FFF;`);
+      }
       changedEdges.push(cell);
       this.setState({
         changedEdges,
@@ -300,13 +314,18 @@ class Graph extends Component {
               statusId,
               id,
               type: status,
+              statusDTO,
             } = item;
 
             const vet = graph.insertVertex(
               parent, `n${id}`,
               (item.statusDTO && item.statusDTO.name) || '',
               x, y, width, height,
-              status === 'node_start' ? 'shape=ellipse;' : 'shape=rectangle;strokeColor=red;',
+              status === 'node_start'
+                ? 'shape=ellipse;fillColor=#FFB100;strokeColor=#FFF'
+                : `shape=rectangle;fillColor=${statusDTO && statusDTO.type && statusColor[statusDTO.type]
+                  ? statusColor[statusDTO.type]
+                  : '#E3E3E3'};strokeColor=red;`,
             );
 
             if (status === 'node_start') {
@@ -346,25 +365,26 @@ class Graph extends Component {
             if (type === 'transform_all') {
               const endNode = vertexes[endNodeId];
               const all = graph.insertVertex(
-                parent, `all${id}`,
-                'all',
-                endNode.geometry.x + endNode.geometry.width + 100, endNode.geometry.y + endNode.geometry.height / 2 - 10, 40, 20,
-                'fillColor=#000;fontColor=#fff;',
+                parent, `all${endNodeId}`,
+                '全部',
+                endNode.geometry.x + endNode.geometry.width + 50,
+                endNode.geometry.y + endNode.geometry.height / 2 - 10, 40, 20,
+                'fillColor=#4A4A4A;fontColor=#fff;',
               );
               all.status = 'node_all';
               // all.setEnabled(false);
               all.setConnectable(false);
-              ed = graph.insertEdge(parent, `t${id}`, name || 'open', all, targetElement, `${edgeStyle}${style || ''}`);
+              ed = graph.insertEdge(parent, `t${id}`, name ? '' : 'open', all, targetElement, `${edgeStyle}${style || ''}`);
             } else {
               ed = graph.insertEdge(parent, `t${id}`, name || 'open', sourceElement, targetElement, `${edgeStyle}${style || ''}`);
             }
-            // const ed = graph.insertEdge(parent, `t${id}`, name || 'open', sourceElement, targetElement, `${edgeStyle}${style || ''}`);
             ed.des = item.description;
             ed.status = item.type;
             ed.transferId = id;
             ed.pStyle = style;
             if (startNodeId !== endNodeId && targetElement) {
-              targetElement.setStyle('strokeColor=#000');
+              const currentStyle = targetElement.getStyle();
+              targetElement.setStyle(`${currentStyle}strokeColor=#FFF;`);
             }
           });
         }
@@ -465,12 +485,12 @@ class Graph extends Component {
   removeCells = (cells) => {
     const { graph } = this.editor;
     graph.removeCells(cells, true);
-  }
+  };
 
   refresh = () => {
     const { graph } = this.editor;
     graph.refresh();
-  }
+  };
 
   /**
    * 初始化mxGraph
@@ -520,7 +540,7 @@ class Graph extends Component {
           }
 
           // In case the edge style must be changed during the preview:
-          this.edgeState.style['edgeStyle'] = 'orthogonalEdgeStyle';
+          this.edgeState.style.edgeStyle = 'orthogonalEdgeStyle';
           // And to use the new edge style in the new edge inserted into the graph,
           // update the cell style as follows:
           this.edgeState.cell.style = mxUtils.setStyle(this.edgeState.cell.style, 'edgeStyle', this.edgeState.style['edgeStyle']);
@@ -578,6 +598,28 @@ class Graph extends Component {
         mxConnectionHandlerMouseMove.apply(this, arguments);
       };
 
+      // 全部标签不允许拖动，只随着状态移动
+      const mxCellsMoved = mxGraph.prototype.cellsMoved;
+      mxGraph.prototype.cellsMoved = function cellsMoved(
+        cells, dx, dy, disconnect, constrain, extend,
+      ) {
+        if (cells && cells.length && cells[0].status !== 'node_all') {
+          if (!disconnect) {
+            const cellAll = cells[0].parent.children
+              .filter(cell => cell.status === 'node_all' && cell.id === `all${cells[0].nodeId}`);
+            if (cellAll && cellAll.length) {
+              // 当退出编辑，再进入页面，拖动node会触发多次cellsMoved，会导致全部被移动多次，原因不明
+              // 先这样限制一下
+              if (cells.find(cell => cell.status === 'node_all' && cell.id === cellAll[0].id)) {
+                return mxCellsMoved.apply(this, arguments);
+              }
+              cells.push(cellAll[0]);
+            }
+          }
+          return mxCellsMoved.apply(this, arguments);
+        }
+      };
+
       const mxConnectionHandlerGetSourcePerimeterPoint = mxConnectionHandler.prototype.getSourcePerimeterPoint;
       mxConnectionHandler.prototype.getSourcePerimeterPoint = function getSourcePerimeterPoint(state, pt, me) {
         let result = null;
@@ -618,7 +660,9 @@ class Graph extends Component {
       if (enable) {
         // 自定义连线函
         const that = this;
-        mxConnectionHandler.prototype.insertEdge = function insertEdge(parent, id, value, source, target) {
+        mxConnectionHandler.prototype.insertEdge = function insertEdge(
+          parent, id, value, source, target,
+        ) {
           let sourcePoint = null;
           if (this.sourceConstraint) {
             sourcePoint = this.sourceConstraint;
@@ -629,7 +673,8 @@ class Graph extends Component {
           }
           const style = `exitX=${sourcePoint.point.x};exitY=${sourcePoint.point.y};exitPerimeter=1;entryX=${targetPoint.point.x};entryY=${targetPoint.point.y};entryPerimeter=1;`;
           if (onLink && (source.stateId || source.stateId === 0)) {
-            target.setStyle('strokeColor=#000');
+            const currentStyle = target.getStyle();
+            target.setStyle(`${currentStyle}strokeColor=#FFF;`);
             onLink(source, target, style);
           }
           that.setState({
@@ -748,10 +793,11 @@ class Graph extends Component {
 
       graph.addListener(mxEvent.CELLS_MOVED, (sender, evt) => {
         const cells = evt.getProperty('cells');
-        if (cells && cells.length === 1) {
+        const moveCell = cells.filter(cell => cell.status !== 'node_all');
+        if (moveCell && moveCell.length === 1) {
           const { onMove } = this.props;
           if (onMove) {
-            onMove(cells[0]);
+            onMove(moveCell[0]);
           }
         }
       });
@@ -762,9 +808,6 @@ class Graph extends Component {
         const source = evt.getProperty('source');
         const constraint = evt.getProperty('point');
         const style = edge.pStyle && edge.pStyle.split('exitPerimeter=1;');
-        // const styles = `exitX=${sourcePoint.point.x};exitY=${sourcePoint.point.y};
-        // exitPerimeter=1;entryX=${targetPoint.point.x};
-        // entryY=${targetPoint.point.y};entryPerimeter=1;`;
         if (previous) {
           const { onReLink } = this.props;
           let styles;
