@@ -192,8 +192,8 @@ class Graph extends Component {
         values.statusDTO && values.statusDTO.name,
         150, 0, 62, 26,
         `strokeColor=red;fillColor=${statusColor[values.statusDTO.type]
-          ? statusColor[values.statusDTO.type]
-          : '#E3E3E3'}`,
+          ? `${statusColor[values.statusDTO.type]};`
+          : '#E3E3E3;'}`,
       );
       cell.stateId = values.statusId;
       cell.nodeId = values.id;
@@ -322,9 +322,9 @@ class Graph extends Component {
               (item.statusDTO && item.statusDTO.name) || '',
               x, y, width, height,
               status === 'node_start'
-                ? 'shape=ellipse;fillColor=#FFB100;strokeColor=#FFF'
+                ? 'shape=ellipse;fillColor=#FFB100;strokeColor=#FFF;'
                 : `shape=rectangle;fillColor=${statusDTO && statusDTO.type && statusColor[statusDTO.type]
-                  ? statusColor[statusDTO.type]
+                  ? `${statusColor[statusDTO.type]};`
                   : '#E3E3E3'};strokeColor=red;`,
             );
 
