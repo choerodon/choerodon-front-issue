@@ -1310,7 +1310,7 @@ class EditStateMachine extends Component {
       <React.Fragment>
         <Button onClick={() => this.toolbarAdd('state')} className="graph-toolbar-button" icon="add"><FormattedMessage id="stateMachine.state.add" /></Button>
         <Button onClick={() => this.toolbarAdd('transfer')} className="graph-toolbar-button" icon="add"><FormattedMessage id="stateMachine.transfer.add" /></Button>
-        <Checkbox defaultChecked onClick={this.handleCheckChange} className="graph-toolbar-checkbox"><FormattedMessage id="stateMachine.transfer.display" /></Checkbox>
+        <Checkbox onClick={this.handleCheckChange} className="graph-toolbar-checkbox"><FormattedMessage id="stateMachine.transfer.display" /></Checkbox>
       </React.Fragment>
     );
     const graphExtra = (
