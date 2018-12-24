@@ -195,7 +195,7 @@ class Graph extends Component {
           ? `${statusColor[values.statusDTO.type]};`
           : '#E3E3E3;'}`,
       );
-      cell.stateId = values.statusId;
+      cell.statusId = values.statusId;
       cell.nodeId = values.id;
       cell.status = values.type;
       cell.des = values.statusDTO && values.statusDTO.description;
@@ -238,15 +238,17 @@ class Graph extends Component {
         );
         source.status = 'node_all';
         source.setConnectable(false);
-        cell = graph.insertEdge(parent, `t${values.id}`, values.name, source, target, `${focusStyle}${style || ''}`);
+        const allEdgeStyle = 'entryX=1;entryY=0.5;entryPerimeter=1;exitX=0;exitY=0.5;exitPerimeter=1;';
+        cell = graph.insertEdge(parent, `t${values.id}`, values.name, source, target, `${focusStyle}${allEdgeStyle}`);
+        cell.pStyle = allEdgeStyle;
       } else {
         cell = graph.insertEdge(parent, `t${values.id}`, values.name, source, target, `${focusStyle}${style || ''}`);
+        cell.pStyle = style;
       }
       this.setState({ maxId: maxId + 1 });
       cell.des = values.description;
       cell.status = values.type;
       cell.transferId = values.id;
-      cell.pStyle = style;
       cell.allStatusTransformId = values.allStatusTransformId;
       if (source.nodeId !== target.nodeId && target) {
         const currentStyle = target.getStyle();
@@ -336,7 +338,7 @@ class Graph extends Component {
               vet.setConnectable(false);
             }
             vertexes[id] = vet;
-            vet.stateId = statusId;
+            vet.statusId = statusId;
             vet.nodeId = id;
             vet.status = status;
             vet.allStatusTransformId = item.allStatusTransformId;
@@ -374,14 +376,16 @@ class Graph extends Component {
               all.status = 'node_all';
               // all.setEnabled(false);
               all.setConnectable(false);
-              ed = graph.insertEdge(parent, `t${id}`, name ? '' : 'open', all, targetElement, `${edgeStyle}${style || ''}`);
+              const allEdgeStyle = 'entryX=1;entryY=0.5;entryPerimeter=1;exitX=0;exitY=0.5;exitPerimeter=1;';
+              ed = graph.insertEdge(parent, `t${id}`, name ? '' : 'open', all, targetElement, `${edgeStyle}${allEdgeStyle}`);
+              ed.pStyle = allEdgeStyle;
             } else {
               ed = graph.insertEdge(parent, `t${id}`, name || 'open', sourceElement, targetElement, `${edgeStyle}${style || ''}`);
+              ed.pStyle = style;
             }
             ed.des = item.description;
             ed.status = item.type;
             ed.transferId = id;
-            ed.pStyle = style;
             if (startNodeId !== endNodeId && targetElement) {
               const currentStyle = targetElement.getStyle();
               targetElement.setStyle(`${currentStyle}strokeColor=#FFF;`);
@@ -672,9 +676,9 @@ class Graph extends Component {
             targetPoint = this.constraintHandler.currentConstraint;
           }
           const style = `exitX=${sourcePoint.point.x};exitY=${sourcePoint.point.y};exitPerimeter=1;entryX=${targetPoint.point.x};entryY=${targetPoint.point.y};entryPerimeter=1;`;
-          if (onLink && (source.stateId || source.stateId === 0)) {
-            const currentStyle = target.getStyle();
-            target.setStyle(`${currentStyle}strokeColor=#FFF;`);
+          if (onLink && (source.statusId || source.statusId === 0)) {
+            // const currentStyle = target.getStyle();
+            // target.setStyle(`${currentStyle}strokeColor=#FFF;`);
             onLink(source, target, style);
           }
           that.setState({
@@ -904,10 +908,6 @@ class Graph extends Component {
     new mxOutline(graph, this.outlineContainer);
   };
 
-  /**
-   * removeCells
-   * @returns {XML}
-   */
   render() {
     return (
       <div className="graph">

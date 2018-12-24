@@ -62,7 +62,7 @@ class EditStateMachine extends Component {
       name: '',
       description: '',
       deleteLoading: false,
-      stateId: false,
+      statusId: false,
       stateName: false,
       error: false,
       isEdit: false,
@@ -164,7 +164,7 @@ class EditStateMachine extends Component {
       source,
       target,
       selectedCell,
-      stateId,
+      statusId,
     } = this.state;
     const { form, intl } = this.props;
     const { getFieldDecorator } = form;
@@ -180,7 +180,7 @@ class EditStateMachine extends Component {
                   required: true,
                   message: intl.formatMessage({ id: 'required' }),
                 }],
-                initialValue: stateId ? { key: stateId } : '',
+                initialValue: statusId ? { key: statusId } : '',
               })(
                 <Select
                   style={{ width: 520 }}
@@ -218,7 +218,7 @@ class EditStateMachine extends Component {
                     required: true,
                     message: intl.formatMessage({ id: 'required' }),
                   }],
-                  initialValue: source ? source.stateId || source.stateId === 0 ? source.stateId.toString() : 'all' : '',
+                  initialValue: source ? source.statusId || source.statusId === 0 ? source.statusId.toString() : 'all' : '',
                 })(
                   <Select
                     style={{ width: 520 }}
@@ -228,7 +228,7 @@ class EditStateMachine extends Component {
                     disabled={source !== false}
                   >
                     {
-                      source.stateId === 0 && (
+                      source.statusId === 0 && (
                         <Option
                           value="0"
                           key="0"
@@ -239,7 +239,7 @@ class EditStateMachine extends Component {
 
                     }
                     {
-                      source && !source.stateId && (
+                      source && !source.statusId && (
                         <Option
                           value="all"
                           key="all"
@@ -270,7 +270,7 @@ class EditStateMachine extends Component {
                     required: true,
                     message: intl.formatMessage({ id: 'required' }),
                   }],
-                  initialValue: target ? target.stateId.toString() : '',
+                  initialValue: target ? target.statusId.toString() : '',
                 })(
                   <Select
                     style={{ width: 520 }}
@@ -563,7 +563,7 @@ class EditStateMachine extends Component {
           show: false,
           isLoading: false,
           nodeData,
-          stateId: false,
+          statusId: false,
           stateName: false,
           isEdit: false,
         });
@@ -731,7 +731,7 @@ class EditStateMachine extends Component {
     this.props.form.validateFieldsAndScroll((err, data) => {
       if (!err) {
         if (type === 'state' && data.state && data.state.key) {
-          const { name } = data.state.label ? data.state.label.props : stateName;
+          const { name } = data.state.label ? data.state.label.props : { name: stateName };
           if (state === 'add') {
             this.addStateMachineNode(data);
           } else {
@@ -845,7 +845,7 @@ class EditStateMachine extends Component {
     } = this.state;
     const that = this;
     StateMachineStore.checkDeleteNode(
-      organizationId, cell.stateId, stateMachineData.id,
+      organizationId, cell.statusId, stateMachineData.id,
     ).then((data) => {
       if (data && !data.failed) {
         if (data.canDelete) {
@@ -923,7 +923,15 @@ class EditStateMachine extends Component {
         if (data && !data.failed) {
           if (cell.allStatusTransformId) {
             const cells = [];
-            cells.push(this.graph.getCell(`all${cell.allStatusTransformId}`));
+            // 移除全部转换和标签
+            if (cell.edges && cell.edges.length) {
+              cell.edges.forEach((item) => {
+                if (item.status === 'transform_all') {
+                  cells.push(item.source);
+                }
+              });
+            }
+            // cells.push(this.graph.getCell(`all${cell.allStatusTransformId}`));
             this.graph.removeCells(cells);
             _.remove(transferData, item => item.id === cell.allStatusTransformId);
           }
@@ -1051,7 +1059,7 @@ class EditStateMachine extends Component {
   hideSidebar = () => {
     this.setState({
       show: false,
-      stateId: false,
+      statusId: false,
       stateName: false,
       isEdit: false,
     });
@@ -1194,7 +1202,7 @@ class EditStateMachine extends Component {
               this.setState({
                 createShow: false,
                 show: true,
-                stateId: res.id,
+                statusId: res.id,
                 stateName: res.name,
               });
             }
