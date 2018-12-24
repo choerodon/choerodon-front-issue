@@ -923,7 +923,15 @@ class EditStateMachine extends Component {
         if (data && !data.failed) {
           if (cell.allStatusTransformId) {
             const cells = [];
-            cells.push(this.graph.getCell(`all${cell.allStatusTransformId}`));
+            // 移除全部转换和标签
+            if (cell.edges && cell.edges.length) {
+              cell.edges.forEach((item) => {
+                if (item.status === 'transform_all') {
+                  cells.push(item.source);
+                }
+              });
+            }
+            // cells.push(this.graph.getCell(`all${cell.allStatusTransformId}`));
             this.graph.removeCells(cells);
             _.remove(transferData, item => item.id === cell.allStatusTransformId);
           }

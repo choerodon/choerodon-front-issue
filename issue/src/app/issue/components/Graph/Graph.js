@@ -908,10 +908,6 @@ class Graph extends Component {
     new mxOutline(graph, this.outlineContainer);
   };
 
-  /**
-   * removeCells
-   * @returns {XML}
-   */
   render() {
     return (
       <div className="graph">
