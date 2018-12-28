@@ -68,7 +68,7 @@ class Graph extends Component {
       cardVisible: false,
       selectCell: {},
       maxId: 0,
-      noLabel: true,
+      noLabel: false,
       source: false,
       target: false,
       initial: true,
@@ -917,7 +917,7 @@ class Graph extends Component {
         <div
           className="graph-container"
           style={{
-            height: `calc(100vh - ${this.props.higher ? '300px' : '395px'})`,
+            height: this.props.high,
           }}
           ref={(container) => { this.graphContainer = container; }}
           id="graphContainer"

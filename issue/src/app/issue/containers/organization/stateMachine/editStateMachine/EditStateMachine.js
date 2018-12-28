@@ -35,6 +35,12 @@ const formItemLayout = {
   },
 };
 
+const statusColor = {
+  todo: '#ffb100',
+  doing: '#4d90fe',
+  done: '#00bfa5',
+};
+
 @observer
 class EditStateMachine extends Component {
   constructor(props) {
@@ -82,8 +88,14 @@ class EditStateMachine extends Component {
       dataIndex: 'statusDTO',
       key: 'statusDTO',
       width: 300,
-      render: text => text && (
-        <div className={`${prefixCls}-text-node`}>{text.name}</div>
+      render: (text, record) => text && (
+        <div
+          className={`${prefixCls}-text-node`}
+          style={{
+            backgroundColor: record.statusDTO
+            && record.statusDTO.type && statusColor[record.statusDTO.type],
+          }}
+        >{text.name}</div>
       ),
     }, {
       title: <FormattedMessage id="stateMachine.transfer" />,
@@ -97,7 +109,14 @@ class EditStateMachine extends Component {
               <div className={`${prefixCls}-text-transfer-item`} key={item.id}>
                 {`${item.name}  >>>`} {
                   nodeData && nodeData.map(node => node.id === item.endNodeId && (
-                    <div className={`${prefixCls}-text-node`} key={`${item.id}-${node.id}`}>
+                    <div
+                      className={`${prefixCls}-text-node`}
+                      key={`${item.id}-${node.id}`}
+                      style={{
+                        backgroundColor: node.statusDTO
+                        && node.statusDTO.type && statusColor[node.statusDTO.type],
+                      }}
+                    >
                       {node.statusDTO && node.statusDTO.name}
                     </div>
                   ))
@@ -1326,7 +1345,7 @@ class EditStateMachine extends Component {
       <React.Fragment>
         <Button onClick={() => this.toolbarAdd('state')} className="graph-toolbar-button" icon="add"><FormattedMessage id="stateMachine.state.add" /></Button>
         <Button onClick={() => this.toolbarAdd('transfer')} className="graph-toolbar-button" icon="add"><FormattedMessage id="stateMachine.transfer.add" /></Button>
-        <Checkbox onClick={this.handleCheckChange} className="graph-toolbar-checkbox"><FormattedMessage id="stateMachine.transfer.display" /></Checkbox>
+        <Checkbox defaultChecked onClick={this.handleCheckChange} className="graph-toolbar-checkbox"><FormattedMessage id="stateMachine.transfer.display" /></Checkbox>
       </React.Fragment>
     );
     const graphExtra = (
@@ -1388,9 +1407,21 @@ class EditStateMachine extends Component {
       </div>);
 
     const operations = <Button
+      className={`${prefixCls}-button`}
       icon={displayHeader ? 'vertical_align_top' : 'vertical_align_bottom'}
       onClick={this.changeDisplayHeader}
     />;
+
+    // 状态机流程图高度
+    let graphHigh = 'calc(100vh - 395px)';
+    if (!displayHeader) {
+      graphHigh = 'calc(100vh - 255px)';
+    } else if (status === 'state_machine_create') {
+      graphHigh = 'calc(100vh - 330px)';
+    } else if (status === 'state_machine_active') {
+      graphHigh = 'calc(100vh - 370px)';
+    }
+
     return (
       <Page>
         <Header
@@ -1509,7 +1540,7 @@ class EditStateMachine extends Component {
                     onMove={this.handleOnMove}
                     onReLink={this.handleReLink}
                     enable={this.state.enable}
-                    higher={!displayHeader}
+                    high={graphHigh}
                   />
                 </Spin>
               )}
