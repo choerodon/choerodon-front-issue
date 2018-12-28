@@ -77,6 +77,9 @@
       }
     }
   }
+  &-button.ant-btn > .icon {
+    margin-right: 0;
+  }
 }
 .graph-card {
   &-title {
