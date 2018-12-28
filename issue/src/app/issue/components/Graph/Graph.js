@@ -914,7 +914,14 @@ class Graph extends Component {
         <div className="graph-toolbar">
           {this.props.header}
         </div>
-        <div className="graph-container" ref={(container) => { this.graphContainer = container; }} id="graphContainer" />
+        <div
+          className="graph-container"
+          style={{
+            height: `calc(100vh - ${this.props.higher ? '300px' : '395px'})`,
+          }}
+          ref={(container) => { this.graphContainer = container; }}
+          id="graphContainer"
+        />
         {this.props.extra}
         <div
           id="outlineContainer"

@@ -66,6 +66,7 @@ class EditStateMachine extends Component {
       stateName: false,
       error: false,
       isEdit: false,
+      displayHeader: true,
     };
     this.graph = null;
   }
@@ -1292,6 +1293,12 @@ class EditStateMachine extends Component {
     });
   };
 
+  changeDisplayHeader = () => {
+    this.setState({
+      displayHeader: !this.state.displayHeader,
+    });
+  };
+
   render() {
     const { intl } = this.props;
     const {
@@ -1307,6 +1314,7 @@ class EditStateMachine extends Component {
       description,
       deleteLoading,
       error,
+      displayHeader,
     } = this.state;
     const dataSource = nodeData && nodeData.slice();
     _.remove(dataSource, item => item.statusId === 0);
@@ -1378,6 +1386,11 @@ class EditStateMachine extends Component {
             </React.Fragment>
           )}
       </div>);
+
+    const operations = <Button
+      icon={displayHeader ? 'vertical_align_top' : 'vertical_align_bottom'}
+      onClick={this.changeDisplayHeader}
+    />;
     return (
       <Page>
         <Header
@@ -1393,7 +1406,7 @@ class EditStateMachine extends Component {
           </Button>
         </Header>
         <Content>
-          <div className={`${prefixCls}-header`}>
+          <div className={`${prefixCls}-header`} style={{ display: displayHeader ? 'block' : 'none' }}>
             {status && status === 'state_machine_active' && (
               <div className={`${prefixCls}-header-tip`}>
                 <span className="icon icon-warning" />
@@ -1481,7 +1494,7 @@ class EditStateMachine extends Component {
               </ReadAndEdit>
             </div>
           </div>
-          <Tabs defaultActiveKey="graph">
+          <Tabs defaultActiveKey="graph" tabBarExtraContent={operations}>
             <TabPane tab={<FormattedMessage id="stateMachine.tab.graph" />} key="graph">
               {nodeData && nodeData.length && (
                 <Spin spinning={loading}>
@@ -1496,6 +1509,7 @@ class EditStateMachine extends Component {
                     onMove={this.handleOnMove}
                     onReLink={this.handleReLink}
                     enable={this.state.enable}
+                    higher={!displayHeader}
                   />
                 </Spin>
               )}
