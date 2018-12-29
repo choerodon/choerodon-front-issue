@@ -73,6 +73,7 @@ class EditStateMachine extends Component {
       error: false,
       isEdit: false,
       displayHeader: true,
+      isLoading: false,
     };
     this.graph = null;
   }
@@ -1082,6 +1083,7 @@ class EditStateMachine extends Component {
       statusId: false,
       stateName: false,
       isEdit: false,
+      isLoading: false,
     });
   };
 
