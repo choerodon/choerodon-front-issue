@@ -309,10 +309,23 @@ class StateMachineList extends Component {
     return (
       <Page>
         <Header title={<FormattedMessage id="stateMachine.title" />}>
-          <Button onClick={() => this.showSideBar('create')}>
-            <i className="icon-add icon" />
-            <FormattedMessage id="stateMachine.create" />
-          </Button>
+          {statesMachineList && statesMachineList.length === 0
+            ? <Tooltip placement="bottom" title="请创建项目后再创建状态机">
+              <Button
+                disabled
+              >
+                <i className="icon-add icon" />
+                <FormattedMessage id="stateMachine.create" />
+              </Button>
+            </Tooltip>
+            : <Button
+              onClick={() => this.showSideBar('create')}
+              disabled
+            >
+              <i className="icon-add icon" />
+              <FormattedMessage id="stateMachine.create" />
+            </Button>
+          }
           <Button onClick={this.refresh}>
             <i className="icon-refresh icon" />
             <FormattedMessage id="refresh" />
