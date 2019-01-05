@@ -215,6 +215,7 @@ class EditStateMachine extends Component {
                       value={s.id}
                       key={String(s.id)}
                     >
+                      <div className="issue-state-machine-block" style={{ backgroundColor: s.type ? statusColor[s.type] : '#FFF' }} />
                       <span id={s.id} name={s.name} style={{ display: 'inline-block', width: '100%' }}>{s.name}</span>
                     </Option>
                   ))}
@@ -276,6 +277,7 @@ class EditStateMachine extends Component {
                           value={dto.statusDTO.id.toString()}
                           key={dto.statusDTO.toString()}
                         >
+                          <div className="issue-state-machine-block" style={{ backgroundColor: dto.statusDTO.type ? statusColor[dto.statusDTO.type] : '#FFF' }} />
                           <span id={dto.id} name={dto.statusDTO.name} style={{ display: 'inline-block', width: '100%' }}>{dto.statusDTO.name}</span>
                         </Option>
                       ))}
@@ -307,6 +309,7 @@ class EditStateMachine extends Component {
                           value={dto.statusDTO.id.toString()}
                           key={dto.statusDTO.toString()}
                         >
+                          <div className="issue-state-machine-block" style={{ backgroundColor: dto.statusDTO.type ? statusColor[dto.statusDTO.type] : '#FFF' }} />
                           <span id={dto.statusDTO.id} name={dto.statusDTO.name} style={{ display: 'inline-block', width: '100%' }}>{dto.statusDTO.name}</span>
                         </Option>
                       ))}
