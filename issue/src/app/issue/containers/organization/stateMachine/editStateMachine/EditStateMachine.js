@@ -326,7 +326,7 @@ class EditStateMachine extends Component {
                     required: true,
                     message: intl.formatMessage({ id: 'required' }),
                   }],
-                  initialValue: selectedCell && selectedCell.edge ? selectedCell.value : '',
+                  initialValue: selectedCell && selectedCell.edge ? selectedCell.name : '',
                 })(
                   <Input
                     style={{ width: 520 }}
@@ -755,7 +755,8 @@ class EditStateMachine extends Component {
     this.props.form.validateFieldsAndScroll((err, data) => {
       if (!err) {
         if (type === 'state' && data.state && data.state.key) {
-          const { name } = data.state.label ? data.state.label.props : { name: stateName };
+          const { name } = data.state.label && data.state.label.length
+            ? data.state.label[1].props : { name: stateName };
           if (state === 'add') {
             this.addStateMachineNode(data);
           } else {
@@ -820,7 +821,9 @@ class EditStateMachine extends Component {
                 if (item && item.failed) {
                   Choerodon.prompt(item.message);
                 } else {
-                  selectedCell.setValue(item.name);
+                  // 全部转换不展示标签
+                  selectedCell.setValue(selectedCell.status === 'transform_all' ? '' : item.name);
+                  selectedCell.name = item.name;
                   selectedCell.des = item.description;
                   this.graph.refresh();
                   transferData[index] = item;

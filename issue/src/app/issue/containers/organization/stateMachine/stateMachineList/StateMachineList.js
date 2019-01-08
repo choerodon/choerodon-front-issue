@@ -320,7 +320,6 @@ class StateMachineList extends Component {
             </Tooltip>
             : <Button
               onClick={() => this.showSideBar('create')}
-              disabled
             >
               <i className="icon-add icon" />
               <FormattedMessage id="stateMachine.create" />

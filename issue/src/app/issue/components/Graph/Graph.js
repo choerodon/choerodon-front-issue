@@ -239,13 +239,14 @@ class Graph extends Component {
         source.status = 'node_all';
         source.setConnectable(false);
         const allEdgeStyle = 'entryX=1;entryY=0.5;entryPerimeter=1;exitX=0;exitY=0.5;exitPerimeter=1;';
-        cell = graph.insertEdge(parent, `t${values.id}`, values.name, source, target, `${focusStyle}${allEdgeStyle}`);
+        cell = graph.insertEdge(parent, `t${values.id}`, '', source, target, `${focusStyle}${allEdgeStyle}`);
         cell.pStyle = allEdgeStyle;
       } else {
         cell = graph.insertEdge(parent, `t${values.id}`, values.name, source, target, `${focusStyle}${style || ''}`);
         cell.pStyle = style;
       }
       this.setState({ maxId: maxId + 1 });
+      cell.name = values.name;
       cell.des = values.description;
       cell.status = values.type;
       cell.transferId = values.id;
@@ -286,6 +287,24 @@ class Graph extends Component {
   };
 
   /**
+   * 动态计算状态名称宽度
+   * @param val
+   * @returns {number}
+   */
+  getByteLen = (val) => {
+    let len = 0;
+    for (let i = 0; i < val.length; i += 1) {
+      const a = val.charAt(i);
+      if (a.match(/[^\x00-\xff]/ig) !== null) { // \x00-\xff→GBK双字节编码范围
+        len += 15;
+      } else {
+        len += 10;
+      }
+    }
+    return len;
+  };
+
+  /**
    * 从JSON中加载
    * @param graph
    * @param parent
@@ -300,7 +319,7 @@ class Graph extends Component {
     //   return null;
     // };
     graph.getModel().beginUpdate();
-    let maxId = 0;
+    const maxId = 0;
     const vertexes = [];
     const highlight = {};
     try {
@@ -318,11 +337,15 @@ class Graph extends Component {
               type: status,
               statusDTO,
             } = item;
-
+            // 根据状态名称计算节点宽度
+            const textWidth = (item.statusDTO
+              && item.statusDTO.name
+              && this.getByteLen(item.statusDTO.name)) || 0;
+            const statusWidth = textWidth > width ? textWidth : width;
             const vet = graph.insertVertex(
               parent, `n${id}`,
               (item.statusDTO && item.statusDTO.name) || '',
-              x, y, width, height,
+              x, y, statusWidth, height,
               status === 'node_start'
                 ? 'shape=ellipse;fillColor=#FFB100;strokeColor=#FFF;'
                 : `shape=rectangle;fillColor=${statusDTO && statusDTO.type && statusColor[statusDTO.type]
@@ -358,6 +381,7 @@ class Graph extends Component {
               name,
               style,
               type,
+              description,
             } = item;
             const sourceElement = vertexes[startNodeId];
             const targetElement = vertexes[endNodeId];
@@ -377,14 +401,15 @@ class Graph extends Component {
               // all.setEnabled(false);
               all.setConnectable(false);
               const allEdgeStyle = 'entryX=1;entryY=0.5;entryPerimeter=1;exitX=0;exitY=0.5;exitPerimeter=1;';
-              ed = graph.insertEdge(parent, `t${id}`, name ? '' : 'open', all, targetElement, `${edgeStyle}${allEdgeStyle}`);
+              ed = graph.insertEdge(parent, `t${id}`, '', all, targetElement, `${edgeStyle}${allEdgeStyle}`);
               ed.pStyle = allEdgeStyle;
             } else {
               ed = graph.insertEdge(parent, `t${id}`, name || 'open', sourceElement, targetElement, `${edgeStyle}${style || ''}`);
               ed.pStyle = style;
             }
-            ed.des = item.description;
-            ed.status = item.type;
+            ed.name = name;
+            ed.des = description;
+            ed.status = type;
             ed.transferId = id;
             if (startNodeId !== endNodeId && targetElement) {
               const currentStyle = targetElement.getStyle();
