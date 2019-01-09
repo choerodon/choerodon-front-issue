@@ -17,3 +17,5 @@ dist
 src/app
 .yo-rc.json
 package-lock.json
+# 默认配置
+config.default.js
