@@ -343,10 +343,10 @@ class StateMachineSchemeList extends Component {
             <FormattedMessage id="refresh" />
           </Button>
         </Header>
-        <Content>
-          <div className="issue-stateMachineScheme-tip">
-            <FormattedMessage id="stateMachineScheme.tip" />
-          </div>
+        <Content
+          description={intl.formatMessage({ id: 'stateMachineScheme.tip' })}
+          link="https://choerodon.io/zh/docs/user-guide/system-configuration/issue-configuration/state-machine-setup/state-machine-scheme/"
+        >
           <Table
             dataSource={getStateMachineSchemeList}
             rowClassName={`${prefixCls}-table-col`}

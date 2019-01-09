@@ -32,6 +32,7 @@ import {
   mxGraphModel,
   mxEventObject,
 } from 'mxgraph-js';
+import { getByteLen } from '../../common/utils';
 
 import './Graph.less';
 import Pointer from '../../assets/images/point.gif';
@@ -287,24 +288,6 @@ class Graph extends Component {
   };
 
   /**
-   * 动态计算状态名称宽度
-   * @param val
-   * @returns {number}
-   */
-  getByteLen = (val) => {
-    let len = 0;
-    for (let i = 0; i < val.length; i += 1) {
-      const a = val.charAt(i);
-      if (a.match(/[^\x00-\xff]/ig) !== null) { // \x00-\xff→GBK双字节编码范围
-        len += 15;
-      } else {
-        len += 10;
-      }
-    }
-    return len;
-  };
-
-  /**
    * 从JSON中加载
    * @param graph
    * @param parent
@@ -340,7 +323,7 @@ class Graph extends Component {
             // 根据状态名称计算节点宽度
             const textWidth = (item.statusDTO
               && item.statusDTO.name
-              && this.getByteLen(item.statusDTO.name)) || 0;
+              && getByteLen(item.statusDTO.name)) || 0;
             const statusWidth = textWidth > width ? textWidth : width;
             const vet = graph.insertVertex(
               parent, `n${id}`,
@@ -362,6 +345,7 @@ class Graph extends Component {
             }
             vertexes[id] = vet;
             vet.statusId = statusId;
+            vet.originWide = width;
             vet.nodeId = id;
             vet.status = status;
             vet.allStatusTransformId = item.allStatusTransformId;

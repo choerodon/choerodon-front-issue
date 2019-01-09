@@ -12,6 +12,7 @@ import _ from 'lodash';
 import Graph from '../../../../components/Graph';
 import StateStore from '../../../../stores/organization/state';
 import ReadAndEdit from '../../../../components/ReadAndEdit';
+import { getByteLen } from '../../../../common/utils';
 import '../../../main.scss';
 import './EditStateMachine.scss';
 
@@ -329,6 +330,7 @@ class EditStateMachine extends Component {
                   initialValue: selectedCell && selectedCell.edge ? selectedCell.name : '',
                 })(
                   <Input
+                    maxLength={15}
                     style={{ width: 520 }}
                     label={<FormattedMessage id="stateMachine.transfer.name" />}
                   />,
@@ -342,6 +344,7 @@ class EditStateMachine extends Component {
                   initialValue: selectedCell && selectedCell.edge ? selectedCell.des : '',
                 })(
                   <TextArea
+                    maxLength={45}
                     style={{ width: 520 }}
                     label={<FormattedMessage id="stateMachine.transfer.des" />}
                   />,
@@ -431,6 +434,7 @@ class EditStateMachine extends Component {
               autoFocus
               label={<FormattedMessage id="state.name" />}
               size="default"
+              maxLength={15}
             />,
           )}
         </FormItem>
@@ -442,6 +446,7 @@ class EditStateMachine extends Component {
             <TextArea
               style={{ width: 520 }}
               label={<FormattedMessage id="state.des" />}
+              maxLength={45}
             />,
           )}
         </FormItem>
@@ -750,6 +755,7 @@ class EditStateMachine extends Component {
       selectedCell,
       edgeStyle,
       stateName,
+      stateType,
     } = this.state;
 
     this.props.form.validateFieldsAndScroll((err, data) => {
@@ -779,6 +785,19 @@ class EditStateMachine extends Component {
                     } else {
                       selectedCell.setValue(name);
                       selectedCell.statusId = data.state.key;
+                      // originWide为默认宽度
+                      const newWide = getByteLen(name) > selectedCell.originWide
+                        ? getByteLen(name) : selectedCell.originWide;
+                      selectedCell.geometry.width = newWide;
+                      let fillColor = stateType && statusColor[stateType];
+                      if (data.state.label) {
+                        fillColor = data.state.label
+                          && data.state.label.length
+                          && data.state.label[0]
+                          && data.state.label[0].props.style.backgroundColor;
+                      }
+                      const currentStyle = selectedCell.getStyle();
+                      selectedCell.setStyle(`${currentStyle}fillColor=${fillColor};`);
                       this.graph.refresh();
                       this.setState({
                         selectedCell,
@@ -786,6 +805,9 @@ class EditStateMachine extends Component {
                         nodeData: nodes,
                         isLoading: false,
                         isEdit: false,
+                        statusId: false,
+                        stateName: false,
+                        stateType: false,
                       });
                     }
                   });
@@ -1088,6 +1110,7 @@ class EditStateMachine extends Component {
       show: false,
       statusId: false,
       stateName: false,
+      stateType: false,
       isEdit: false,
       isLoading: false,
     });
@@ -1232,6 +1255,7 @@ class EditStateMachine extends Component {
                 show: true,
                 statusId: res.id,
                 stateName: res.name,
+                stateType: res.type,
               });
             }
             this.setState({

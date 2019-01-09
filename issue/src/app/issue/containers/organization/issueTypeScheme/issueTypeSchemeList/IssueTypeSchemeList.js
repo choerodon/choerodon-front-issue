@@ -280,10 +280,10 @@ class IssueTypeSchemeList extends Component {
             <FormattedMessage id="refresh" />
           </Button>
         </Header>
-        <Content>
-          <p className="issue-issueTypeScheme-list-tip">
-            <FormattedMessage id="issueTypeScheme.tip" />
-          </p>
+        <Content
+          description={intl.formatMessage({ id: 'issueTypeScheme.tip' })}
+          link="https://choerodon.io/zh/docs/user-guide/system-configuration/issue-configuration/issue-type-setup/"
+        >
           <Table
             dataSource={IssueTypeSchemeStore.getSchemeList}
             columns={this.getColumn()}
