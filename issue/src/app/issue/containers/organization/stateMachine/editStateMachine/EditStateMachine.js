@@ -783,6 +783,7 @@ class EditStateMachine extends Component {
                     if (nodes && nodes.failed) {
                       Choerodon.prompt(nodes.message);
                     } else {
+                      // 更新当前状态
                       selectedCell.setValue(name);
                       selectedCell.statusId = data.state.key;
                       // originWide为默认宽度
@@ -798,6 +799,13 @@ class EditStateMachine extends Component {
                       }
                       const currentStyle = selectedCell.getStyle();
                       selectedCell.setStyle(`${currentStyle}fillColor=${fillColor};`);
+                      // 更新全部标签位置
+                      if (selectedCell.edges && selectedCell.edges.length) {
+                        const edges = selectedCell.edges.filter(edge => edge.status === 'transform_all');
+                        edges.forEach((edge) => {
+                          edge.source.geometry.x = selectedCell.geometry.x + newWide + 50;
+                        });
+                      }
                       this.graph.refresh();
                       this.setState({
                         selectedCell,
