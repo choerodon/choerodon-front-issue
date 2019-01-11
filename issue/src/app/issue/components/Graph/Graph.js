@@ -926,7 +926,7 @@ class Graph extends Component {
         <div
           className="graph-container"
           style={{
-            height: this.props.high,
+            height: this.props.height,
           }}
           ref={(container) => { this.graphContainer = container; }}
           id="graphContainer"

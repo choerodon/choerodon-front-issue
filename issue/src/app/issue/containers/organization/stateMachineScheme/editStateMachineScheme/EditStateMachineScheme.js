@@ -129,13 +129,19 @@ class EditStateMachineScheme extends Component {
   };
 
   handleNextStep = () => {
-    const { StateMachineSchemeStore } = this.props;
+    const {
+      StateMachineSchemeStore, form,
+    } = this.props;
     const { schemeId } = this.state;
-    StateMachineSchemeStore.setIsAddVisible(false);
-    StateMachineSchemeStore.setIsConnectVisible(true);
     const { organizationId } = AppState.currentMenuType;
-    StateMachineSchemeStore.loadAllIssueType(organizationId, schemeId);
-    StateMachineSchemeStore.setSelectedIssueTypeId([]);
+    form.validateFieldsAndScroll((err, data) => {
+      if (!err) {
+        StateMachineSchemeStore.setIsAddVisible(false);
+        StateMachineSchemeStore.setIsConnectVisible(true);
+        StateMachineSchemeStore.loadAllIssueType(organizationId, schemeId);
+        StateMachineSchemeStore.setSelectedIssueTypeId([]);
+      }
+    });
   };
 
   handlePreStep = () => {
@@ -280,7 +286,13 @@ class EditStateMachineScheme extends Component {
         <Form>
           <FormItem {...formItemLayout} className="issue-sidebar-form">
             {getFieldDecorator('stateMachine', {
-              initialValue: '0',
+              initialValue: allStateMachine.length ? '0' : null,
+              rules: [
+                {
+                  required: true,
+                  message: intl.formatMessage({ id: 'required' }),
+                },
+              ],
             })(
               <Select
                 label={intl.formatMessage({
@@ -310,6 +322,7 @@ class EditStateMachineScheme extends Component {
                 edge: StateMachineSchemeStore.getTransferData,
               }
             }
+            height='calc(100vh - 300px)'
           />
         </Spin>
       </Fragment>

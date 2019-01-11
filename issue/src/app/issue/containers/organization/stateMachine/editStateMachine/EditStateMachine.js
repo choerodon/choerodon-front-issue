@@ -1572,7 +1572,7 @@ class EditStateMachine extends Component {
                     onMove={this.handleOnMove}
                     onReLink={this.handleReLink}
                     enable={this.state.enable}
-                    high={graphHigh}
+                    height={graphHigh}
                   />
                 </Spin>
               )}
