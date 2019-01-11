@@ -187,11 +187,15 @@ class Graph extends Component {
     graph.getModel().beginUpdate();
     let cell;
     try {
+      const textWidth = (values.statusDTO
+        && values.statusDTO.name
+        && getByteLen(values.statusDTO.name)) || 0;
+      const statusWidth = textWidth > 62 ? textWidth : 62;
       cell = graph.insertVertex(
         parent,
         `n${values.id}`,
         values.statusDTO && values.statusDTO.name,
-        150, 0, 62, 26,
+        150, 0, statusWidth, 26,
         `strokeColor=red;fillColor=${statusColor[values.statusDTO.type]
           ? `${statusColor[values.statusDTO.type]};`
           : '#E3E3E3;'}`,
