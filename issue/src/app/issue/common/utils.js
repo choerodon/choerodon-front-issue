@@ -38,3 +38,38 @@ export function setSessionStorage(key, item) {
 export function removeSessionStorage(key) {
   return sessionStorage.removeItem(key);
 }
+
+/**
+ * 动态计算名称宽度
+ * @param val
+ * @returns {number}
+ */
+export function getByteLen(val) {
+  let len = 0;
+  for (let i = 0; i < val.length; i += 1) {
+    const a = val.charAt(i);
+    if (a.match(/[^\x00-\xff]/ig) !== null) { // \x00-\xff→GBK双字节编码范围
+      len += 15;
+    } else {
+      len += 10;
+    }
+  }
+  return len;
+}
+
+/**
+ * 解析url
+ * @param url
+ * @returns {{}}
+ */
+export function getRequest(url) {
+  const theRequest = {};
+  if (url.indexOf('?') !== -1) {
+    const str = url.split('?')[1];
+    const strs = str.split('&');
+    for (let i = 0; i < strs.length; i += 1) {
+      theRequest[strs[i].split('=')[0]] = decodeURI(strs[i].split('=')[1]);
+    }
+  }
+  return theRequest;
+}

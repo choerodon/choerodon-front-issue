@@ -24,6 +24,7 @@ import TypeTag from '../../../../components/TypeTag/TypeTag';
 import Tips from '../../../../components/Tips';
 import PublishSidebar from './PublishSidebar';
 import ReadAndEdit from '../../../../components/ReadAndEdit';
+import { getRequest } from '../../../../common/utils';
 
 const { Sidebar } = Modal;
 const FormItem = Form.Item;
@@ -57,14 +58,18 @@ class EditStateMachineScheme extends Component {
       description: '',
       loading: false,
       error: false,
+      from: false,
     };
   }
 
   componentDidMount() {
     const { organizationId } = AppState.currentMenuType;
-    const { StateMachineSchemeStore } = this.props;
+    const { StateMachineSchemeStore, location } = this.props;
     this.loadStateMachine();
     StateMachineSchemeStore.loadAllStateMachine(organizationId);
+    this.setState({
+      from: getRequest(location.search).fromMachine,
+    });
   }
 
   loadStateMachine = (isDraft = true) => {
@@ -124,13 +129,19 @@ class EditStateMachineScheme extends Component {
   };
 
   handleNextStep = () => {
-    const { StateMachineSchemeStore } = this.props;
+    const {
+      StateMachineSchemeStore, form,
+    } = this.props;
     const { schemeId } = this.state;
-    StateMachineSchemeStore.setIsAddVisible(false);
-    StateMachineSchemeStore.setIsConnectVisible(true);
     const { organizationId } = AppState.currentMenuType;
-    StateMachineSchemeStore.loadAllIssueType(organizationId, schemeId);
-    StateMachineSchemeStore.setSelectedIssueTypeId([]);
+    form.validateFieldsAndScroll((err, data) => {
+      if (!err) {
+        StateMachineSchemeStore.setIsAddVisible(false);
+        StateMachineSchemeStore.setIsConnectVisible(true);
+        StateMachineSchemeStore.loadAllIssueType(organizationId, schemeId);
+        StateMachineSchemeStore.setSelectedIssueTypeId([]);
+      }
+    });
   };
 
   handlePreStep = () => {
@@ -275,7 +286,13 @@ class EditStateMachineScheme extends Component {
         <Form>
           <FormItem {...formItemLayout} className="issue-sidebar-form">
             {getFieldDecorator('stateMachine', {
-              initialValue: '0',
+              initialValue: allStateMachine.length ? '0' : null,
+              rules: [
+                {
+                  required: true,
+                  message: intl.formatMessage({ id: 'required' }),
+                },
+              ],
             })(
               <Select
                 label={intl.formatMessage({
@@ -305,6 +322,7 @@ class EditStateMachineScheme extends Component {
                 edge: StateMachineSchemeStore.getTransferData,
               }
             }
+            height='calc(100vh - 300px)'
           />
         </Spin>
       </Fragment>
@@ -604,6 +622,7 @@ class EditStateMachineScheme extends Component {
       name: schemeName,
       description,
       error,
+      from,
     } = this.state;
     const {
       getStateMachine,
@@ -616,7 +635,10 @@ class EditStateMachineScheme extends Component {
       <Page>
         <Header
           title={<FormattedMessage id="stateMachineScheme.edit" />}
-          backPath={`/issue/state-machine-schemes?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`}
+          backPath={from
+            ? `/issue/state-machines?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`
+            : `/issue/state-machine-schemes?type=${type}&id=${projectId}&name=${encodeURIComponent(name)}&organizationId=${orgId}`
+          }
         >
           <Button onClick={this.refresh} funcType="flat">
             <i className="icon-refresh icon" />

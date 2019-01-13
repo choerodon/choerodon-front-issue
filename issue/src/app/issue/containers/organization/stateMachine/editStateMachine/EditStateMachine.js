@@ -12,6 +12,7 @@ import _ from 'lodash';
 import Graph from '../../../../components/Graph';
 import StateStore from '../../../../stores/organization/state';
 import ReadAndEdit from '../../../../components/ReadAndEdit';
+import { getByteLen } from '../../../../common/utils';
 import '../../../main.scss';
 import './EditStateMachine.scss';
 
@@ -326,9 +327,10 @@ class EditStateMachine extends Component {
                     required: true,
                     message: intl.formatMessage({ id: 'required' }),
                   }],
-                  initialValue: selectedCell && selectedCell.edge ? selectedCell.value : '',
+                  initialValue: selectedCell && selectedCell.edge ? selectedCell.name : '',
                 })(
                   <Input
+                    maxLength={15}
                     style={{ width: 520 }}
                     label={<FormattedMessage id="stateMachine.transfer.name" />}
                   />,
@@ -342,6 +344,7 @@ class EditStateMachine extends Component {
                   initialValue: selectedCell && selectedCell.edge ? selectedCell.des : '',
                 })(
                   <TextArea
+                    maxLength={45}
                     style={{ width: 520 }}
                     label={<FormattedMessage id="stateMachine.transfer.des" />}
                   />,
@@ -431,6 +434,7 @@ class EditStateMachine extends Component {
               autoFocus
               label={<FormattedMessage id="state.name" />}
               size="default"
+              maxLength={15}
             />,
           )}
         </FormItem>
@@ -442,6 +446,7 @@ class EditStateMachine extends Component {
             <TextArea
               style={{ width: 520 }}
               label={<FormattedMessage id="state.des" />}
+              maxLength={45}
             />,
           )}
         </FormItem>
@@ -750,12 +755,14 @@ class EditStateMachine extends Component {
       selectedCell,
       edgeStyle,
       stateName,
+      stateType,
     } = this.state;
 
     this.props.form.validateFieldsAndScroll((err, data) => {
       if (!err) {
         if (type === 'state' && data.state && data.state.key) {
-          const { name } = data.state.label ? data.state.label.props : { name: stateName };
+          const { name } = data.state.label && data.state.label.length
+            ? data.state.label[1].props : { name: stateName };
           if (state === 'add') {
             this.addStateMachineNode(data);
           } else {
@@ -776,8 +783,29 @@ class EditStateMachine extends Component {
                     if (nodes && nodes.failed) {
                       Choerodon.prompt(nodes.message);
                     } else {
+                      // 更新当前状态
                       selectedCell.setValue(name);
                       selectedCell.statusId = data.state.key;
+                      // originWide为默认宽度
+                      const newWide = getByteLen(name) > selectedCell.originWide
+                        ? getByteLen(name) : selectedCell.originWide;
+                      selectedCell.geometry.width = newWide;
+                      let fillColor = stateType && statusColor[stateType];
+                      if (data.state.label) {
+                        fillColor = data.state.label
+                          && data.state.label.length
+                          && data.state.label[0]
+                          && data.state.label[0].props.style.backgroundColor;
+                      }
+                      const currentStyle = selectedCell.getStyle();
+                      selectedCell.setStyle(`${currentStyle}fillColor=${fillColor};`);
+                      // 更新全部标签位置
+                      if (selectedCell.edges && selectedCell.edges.length) {
+                        const edges = selectedCell.edges.filter(edge => edge.status === 'transform_all');
+                        edges.forEach((edge) => {
+                          edge.source.geometry.x = selectedCell.geometry.x + newWide + 50;
+                        });
+                      }
                       this.graph.refresh();
                       this.setState({
                         selectedCell,
@@ -785,6 +813,9 @@ class EditStateMachine extends Component {
                         nodeData: nodes,
                         isLoading: false,
                         isEdit: false,
+                        statusId: false,
+                        stateName: false,
+                        stateType: false,
                       });
                     }
                   });
@@ -820,7 +851,9 @@ class EditStateMachine extends Component {
                 if (item && item.failed) {
                   Choerodon.prompt(item.message);
                 } else {
-                  selectedCell.setValue(item.name);
+                  // 全部转换不展示标签
+                  selectedCell.setValue(selectedCell.status === 'transform_all' ? '' : item.name);
+                  selectedCell.name = item.name;
                   selectedCell.des = item.description;
                   this.graph.refresh();
                   transferData[index] = item;
@@ -1085,6 +1118,7 @@ class EditStateMachine extends Component {
       show: false,
       statusId: false,
       stateName: false,
+      stateType: false,
       isEdit: false,
       isLoading: false,
     });
@@ -1229,6 +1263,7 @@ class EditStateMachine extends Component {
                 show: true,
                 statusId: res.id,
                 stateName: res.name,
+                stateType: res.type,
               });
             }
             this.setState({
@@ -1545,7 +1580,7 @@ class EditStateMachine extends Component {
                     onMove={this.handleOnMove}
                     onReLink={this.handleReLink}
                     enable={this.state.enable}
-                    high={graphHigh}
+                    height={graphHigh}
                   />
                 </Spin>
               )}

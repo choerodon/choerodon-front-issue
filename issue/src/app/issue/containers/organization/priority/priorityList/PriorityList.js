@@ -182,10 +182,10 @@ class PriorityList extends Component {
           </Button>
         </Header>
 
-        <Content>
-          <p className="tips">
-            <FormattedMessage id="priority.list.tip" />
-          </p>
+        <Content
+          description={intl.formatMessage({ id: 'priority.list.tip' })}
+          link="https://choerodon.io/zh/docs/user-guide/system-configuration/issue-configuration/issue-properties/issue-priority/"
+        >
           <Table
             filterBarPlaceholder={intl.formatMessage({ id: 'filter' })}
             columns={this.getColumns()}

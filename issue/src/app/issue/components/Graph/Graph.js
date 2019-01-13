@@ -32,6 +32,7 @@ import {
   mxGraphModel,
   mxEventObject,
 } from 'mxgraph-js';
+import { getByteLen } from '../../common/utils';
 
 import './Graph.less';
 import Pointer from '../../assets/images/point.gif';
@@ -186,11 +187,15 @@ class Graph extends Component {
     graph.getModel().beginUpdate();
     let cell;
     try {
+      const textWidth = (values.statusDTO
+        && values.statusDTO.name
+        && getByteLen(values.statusDTO.name)) || 0;
+      const statusWidth = textWidth > 62 ? textWidth : 62;
       cell = graph.insertVertex(
         parent,
         `n${values.id}`,
         values.statusDTO && values.statusDTO.name,
-        150, 0, 62, 26,
+        150, 0, statusWidth, 26,
         `strokeColor=red;fillColor=${statusColor[values.statusDTO.type]
           ? `${statusColor[values.statusDTO.type]};`
           : '#E3E3E3;'}`,
@@ -239,13 +244,14 @@ class Graph extends Component {
         source.status = 'node_all';
         source.setConnectable(false);
         const allEdgeStyle = 'entryX=1;entryY=0.5;entryPerimeter=1;exitX=0;exitY=0.5;exitPerimeter=1;';
-        cell = graph.insertEdge(parent, `t${values.id}`, values.name, source, target, `${focusStyle}${allEdgeStyle}`);
+        cell = graph.insertEdge(parent, `t${values.id}`, '', source, target, `${focusStyle}${allEdgeStyle}`);
         cell.pStyle = allEdgeStyle;
       } else {
         cell = graph.insertEdge(parent, `t${values.id}`, values.name, source, target, `${focusStyle}${style || ''}`);
         cell.pStyle = style;
       }
       this.setState({ maxId: maxId + 1 });
+      cell.name = values.name;
       cell.des = values.description;
       cell.status = values.type;
       cell.transferId = values.id;
@@ -300,7 +306,7 @@ class Graph extends Component {
     //   return null;
     // };
     graph.getModel().beginUpdate();
-    let maxId = 0;
+    const maxId = 0;
     const vertexes = [];
     const highlight = {};
     try {
@@ -318,11 +324,15 @@ class Graph extends Component {
               type: status,
               statusDTO,
             } = item;
-
+            // 根据状态名称计算节点宽度
+            const textWidth = (item.statusDTO
+              && item.statusDTO.name
+              && getByteLen(item.statusDTO.name)) || 0;
+            const statusWidth = textWidth > width ? textWidth : width;
             const vet = graph.insertVertex(
               parent, `n${id}`,
               (item.statusDTO && item.statusDTO.name) || '',
-              x, y, width, height,
+              x, y, statusWidth, height,
               status === 'node_start'
                 ? 'shape=ellipse;fillColor=#FFB100;strokeColor=#FFF;'
                 : `shape=rectangle;fillColor=${statusDTO && statusDTO.type && statusColor[statusDTO.type]
@@ -339,6 +349,7 @@ class Graph extends Component {
             }
             vertexes[id] = vet;
             vet.statusId = statusId;
+            vet.originWide = width;
             vet.nodeId = id;
             vet.status = status;
             vet.allStatusTransformId = item.allStatusTransformId;
@@ -358,6 +369,7 @@ class Graph extends Component {
               name,
               style,
               type,
+              description,
             } = item;
             const sourceElement = vertexes[startNodeId];
             const targetElement = vertexes[endNodeId];
@@ -377,14 +389,15 @@ class Graph extends Component {
               // all.setEnabled(false);
               all.setConnectable(false);
               const allEdgeStyle = 'entryX=1;entryY=0.5;entryPerimeter=1;exitX=0;exitY=0.5;exitPerimeter=1;';
-              ed = graph.insertEdge(parent, `t${id}`, name ? '' : 'open', all, targetElement, `${edgeStyle}${allEdgeStyle}`);
+              ed = graph.insertEdge(parent, `t${id}`, '', all, targetElement, `${edgeStyle}${allEdgeStyle}`);
               ed.pStyle = allEdgeStyle;
             } else {
               ed = graph.insertEdge(parent, `t${id}`, name || 'open', sourceElement, targetElement, `${edgeStyle}${style || ''}`);
               ed.pStyle = style;
             }
-            ed.des = item.description;
-            ed.status = item.type;
+            ed.name = name;
+            ed.des = description;
+            ed.status = type;
             ed.transferId = id;
             if (startNodeId !== endNodeId && targetElement) {
               const currentStyle = targetElement.getStyle();
@@ -917,7 +930,7 @@ class Graph extends Component {
         <div
           className="graph-container"
           style={{
-            height: this.props.high,
+            height: this.props.height,
           }}
           ref={(container) => { this.graphContainer = container; }}
           id="graphContainer"

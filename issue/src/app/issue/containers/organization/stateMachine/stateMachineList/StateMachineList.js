@@ -115,9 +115,9 @@ class StateMachineList extends Component {
   };
 
   handleSchemeClick = (schemeId) => {
-    const { StateMachineStore, intl, history } = this.props;
+    const { history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/issue/state-machine-schemes/edit/${schemeId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/state-machine-schemes/edit/${schemeId}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}&fromMachine=true`);
   };
 
   loadStateMachine = (page = 0, size = 10, sort = { field: 'id', order: 'desc' }, param = {}) => {
@@ -320,7 +320,6 @@ class StateMachineList extends Component {
             </Tooltip>
             : <Button
               onClick={() => this.showSideBar('create')}
-              disabled
             >
               <i className="icon-add icon" />
               <FormattedMessage id="stateMachine.create" />
@@ -331,10 +330,10 @@ class StateMachineList extends Component {
             <FormattedMessage id="refresh" />
           </Button>
         </Header>
-        <Content>
-          <div className={`${prefixCls}-tip`}>
-            <FormattedMessage id="stateMachine.list.tip" />
-          </div>
+        <Content
+          description={intl.formatMessage({ id: 'stateMachine.list.tip' })}
+          link="https://choerodon.io/zh/docs/user-guide/system-configuration/issue-configuration/state-machine-setup/state-machine/"
+        >
           <Table
             dataSource={statesMachineList}
             columns={this.getColumn()}

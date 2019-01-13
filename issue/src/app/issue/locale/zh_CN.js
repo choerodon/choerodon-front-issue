@@ -351,7 +351,7 @@ const zh_CN = {
   'stateMachine.transfer.source': '起始状态',
   'stateMachine.transfer.target': '目标状态',
   'stateMachine.transfer.page': '页面',
-  'stateMachine.list.tip': '只有未关联状态机方案的状态机才能删除。',
+  'stateMachine.list.tip': '只有未关联状态机方案的状态机才能被删除。',
   'stateMachine.transfer.edit': '编辑转换',
   'stateMachine.transfer.delete.tip': '请选择你需要删除的转换。',
   'stateMachine.delete': '删除状态机',
@@ -387,7 +387,7 @@ const zh_CN = {
   'stateMachine.publish.success': '发布成功！',
   'stateMachine.publish.info': '发布状态机草案失败',
   'stateMachineScheme.publish.warn': '当前方案已经被修改，请刷新后重试。',
-  'stateMachineScheme.tip': '状态机方案指的是，将状态机和问题类型组合形成的方案，并关联项目。',
+  'stateMachineScheme.tip': '状态机方案指的是，将状态机和问题类型组合形成并关联项目的方案。',
   'stateMachine.publish.des': '当前状态机草案无法删除，因为您的修改中移除了关联问题的状态，需要将问题转换到其他状态才能继续发布。',
 };
 export default zh_CN;
