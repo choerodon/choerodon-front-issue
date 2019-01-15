@@ -122,6 +122,10 @@ class Graph extends Component {
 
     // 获取状态节点样式对象
     const styleNode = graph.getStylesheet().getDefaultVertexStyle();
+    // 连线距节点的空隙
+    // styleNode[mxConstants.STYLE_PERIMETER_SPACING] = 2;
+    // 圆角
+    styleNode[mxConstants.STYLE_ROUNDED] = true;
     // 节点字号
     styleNode[mxConstants.STYLE_FONTSIZE] = '13';
     // 节点字号
