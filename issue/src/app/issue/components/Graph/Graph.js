@@ -534,22 +534,28 @@ class Graph extends Component {
       // 定义状态节点上的连线图标
       // mxConnectionHandler.prototype.connectImage = new mxImage(Connector, 20, 20);
       // Snaps to fixed points
-      mxConstraintHandler.prototype.intersects = (icon, point, source, existingEdge) => (!source || existingEdge) || mxUtils.intersects(icon.bounds, point);
+      mxConstraintHandler.prototype.intersects = (icon, point, source, existingEdge) => (
+        !source || existingEdge) || mxUtils.intersects(icon.bounds, point);
       mxConstraintHandler.prototype.pointImage = new mxImage(Pointer, 5, 5);
 
+      /**
+       * 连线时触发，设置离鼠标位置最近的point
+       * @type {mxConnectionHandler.updateEdgeState|*}
+       */
       const mxConnectionHandlerUpdateEdgeState = mxConnectionHandler.prototype.updateEdgeState;
       mxConnectionHandler.prototype.updateEdgeState = function updateEdgeState(pt, constraint) {
-        if (pt != null && this.previous != null) {
+        // 由于连线问题，禁用
+        if (!this.sourceConstraint && pt !== null && this.previous !== null) {
           const constraints = this.graph.getAllConnectionConstraints(this.previous);
           let nearestConstraint = null;
           let dist = null;
 
           for (let i = 0; i < constraints.length; i += 1) {
             const cp = this.graph.getConnectionPoint(this.previous, constraints[i]);
-            if (cp != null) {
+            if (cp !== null) {
               const tmp = (cp.x - pt.x) * (cp.x - pt.x) + (cp.y - pt.y) * (cp.y - pt.y);
 
-              if (dist == null || tmp < dist) {
+              if (dist === null || tmp < dist) {
                 nearestConstraint = constraints[i];
                 dist = tmp;
               }
@@ -600,22 +606,26 @@ class Graph extends Component {
       graph.getAllConnectionConstraints = function getAllConnectionConstraints(terminal) {
         if (terminal != null && this.model.isVertex(terminal.cell)) {
           return [new mxConnectionConstraint(new mxPoint(0, 0), true),
-          new mxConnectionConstraint(new mxPoint(0.5, 0), true),
-          new mxConnectionConstraint(new mxPoint(1, 0), true),
-          new mxConnectionConstraint(new mxPoint(0, 0.5), true),
-          new mxConnectionConstraint(new mxPoint(1, 0.5), true),
-          new mxConnectionConstraint(new mxPoint(0, 1), true),
-          new mxConnectionConstraint(new mxPoint(0.5, 1), true),
-          new mxConnectionConstraint(new mxPoint(1, 1), true)];
+            new mxConnectionConstraint(new mxPoint(0.5, 0), true),
+            new mxConnectionConstraint(new mxPoint(1, 0), true),
+            new mxConnectionConstraint(new mxPoint(0, 0.5), true),
+            new mxConnectionConstraint(new mxPoint(1, 0.5), true),
+            new mxConnectionConstraint(new mxPoint(0, 1), true),
+            new mxConnectionConstraint(new mxPoint(0.5, 1), true),
+            new mxConnectionConstraint(new mxPoint(1, 1), true)];
         }
 
         return null;
       };
 
+      /**
+       * 移动鼠标，清空this.sourceConstraint,由updateEdgeState控制
+       * @type {mxConnectionHandler.mouseMove|*}
+       */
       const mxConnectionHandlerMouseMove = mxConnectionHandler.prototype.mouseMove;
       mxConnectionHandler.prototype.mouseMove = function mouseMove(sender, me) {
-        this.sourceConstraint = null;
-
+        // 由于控制point会导致连线混乱，先禁掉控制
+        // this.sourceConstraint = null;
         mxConnectionHandlerMouseMove.apply(this, arguments);
       };
 
@@ -641,11 +651,20 @@ class Graph extends Component {
         }
       };
 
-      const mxConnectionHandlerGetSourcePerimeterPoint = mxConnectionHandler.prototype.getSourcePerimeterPoint;
-      mxConnectionHandler.prototype.getSourcePerimeterPoint = function getSourcePerimeterPoint(state, pt, me) {
+      /**
+       * 获取离鼠标位置最新的point
+       * @type {mxConnectionHandler.getSourcePerimeterPoint|*}
+       */
+      const mxConnectionHandlerGetSourcePerimeterPoint = mxConnectionHandler
+        .prototype.getSourcePerimeterPoint;
+      mxConnectionHandler.prototype.getSourcePerimeterPoint = function getSourcePerimeterPoint(
+        state,
+        pt,
+        me,
+      ) {
         let result = null;
-
-        if (this.previous != null && pt != null) {
+        // 由于控制point会导致连线混乱，先禁掉控制
+        if (!this.sourceConstraint && this.previous !== null && pt !== null) {
           const constraints = this.graph.getAllConnectionConstraints(this.previous);
           let nearestConstraint = null;
           let nearest = null;
@@ -654,10 +673,10 @@ class Graph extends Component {
           for (let i = 0; i < constraints.length; i += 1) {
             const cp = this.graph.getConnectionPoint(this.previous, constraints[i]);
 
-            if (cp != null) {
+            if (cp !== null) {
               const tmp = (cp.x - pt.x) * (cp.x - pt.x) + (cp.y - pt.y) * (cp.y - pt.y);
 
-              if (dist == null || tmp < dist) {
+              if (dist === null || tmp < dist) {
                 nearestConstraint = constraints[i];
                 nearest = cp;
                 dist = tmp;
@@ -665,13 +684,13 @@ class Graph extends Component {
             }
           }
 
-          if (nearestConstraint != null) {
+          if (nearestConstraint !== null) {
             this.sourceConstraint = nearestConstraint;
             result = nearest;
           }
         }
 
-        if (result == null) {
+        if (result === null) {
           result = mxConnectionHandlerGetSourcePerimeterPoint.apply(this, arguments);
         }
 
