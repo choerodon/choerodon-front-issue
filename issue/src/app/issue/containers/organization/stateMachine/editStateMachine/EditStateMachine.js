@@ -75,6 +75,8 @@ class EditStateMachine extends Component {
       isEdit: false,
       displayHeader: true,
       isLoading: false,
+      selectedDeleteId: false,
+      isSelect: true,
     };
     this.graph = null;
   }
@@ -398,7 +400,7 @@ class EditStateMachine extends Component {
   checkName = async (rule, value, callback) => {
     const { StateMachineStore, intl } = this.props;
     const orgId = AppState.currentMenuType.organizationId;
-    if (value.trim()) {
+    if (value && value.trim()) {
       const res = await StateMachineStore.checkStateName(orgId, value);
       if (res && res.statusExist) {
         callback(intl.formatMessage({ id: 'priority.create.name.error' }));
@@ -1072,17 +1074,25 @@ class EditStateMachine extends Component {
       deleteVisible: false,
       deleteId: null,
       deleteDraftVisible: false,
+      selectedDeleteId: false,
+      isSelect: true,
     });
   };
 
   handleDeleteTransfer = () => {
     const { selectedDeleteId } = this.state;
-    const cell = this.graph.getCell(`t${selectedDeleteId}`);
-    this.setState({
-      selectedCell: cell,
-    }, () => {
-      this.removeCell(cell);
-    });
+    if (selectedDeleteId) {
+      const cell = this.graph.getCell(`t${selectedDeleteId}`);
+      this.setState({
+        selectedCell: cell,
+      }, () => {
+        this.removeCell(cell);
+      });
+    } else {
+      this.setState({
+        isSelect: false,
+      });
+    }
   };
 
   toolbarAdd = (type) => {
@@ -1374,6 +1384,7 @@ class EditStateMachine extends Component {
       deleteLoading,
       error,
       displayHeader,
+      isSelect,
     } = this.state;
     const dataSource = nodeData && nodeData.slice();
     _.remove(dataSource, item => item.statusId === 0);
@@ -1641,13 +1652,22 @@ class EditStateMachine extends Component {
               style={{ width: '100%' }}
               dropdownMatchSelectWidth
               size="default"
-              onChange={value => this.setState({ selectedDeleteId: value })}
+              onChange={value => this.setState({ selectedDeleteId: value, isSelect: true })}
             >
               {this.state.deleteList
               && this.state.deleteList.length
               && this.state.deleteList
                 .map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
             </Select>
+            <div
+              style={{
+                display: isSelect ? 'none' : 'block',
+                color: '#d50000',
+                fontSize: 13,
+              }}
+            >
+              <FormattedMessage id="stateMachine.transfer.deleteTip" />
+            </div>
           </Modal>
         )}
         {this.state.deleteDraftVisible && (
