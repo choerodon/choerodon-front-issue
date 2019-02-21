@@ -328,6 +328,8 @@ class EditStateMachine extends Component {
                   rules: [{
                     required: true,
                     message: intl.formatMessage({ id: 'required' }),
+                  }, {
+                    validator: this.checkTransferName,
                   }],
                   initialValue: selectedCell && selectedCell.edge ? selectedCell.name : '',
                 })(
@@ -406,6 +408,36 @@ class EditStateMachine extends Component {
         callback(intl.formatMessage({ id: 'priority.create.name.error' }));
       } else {
         callback();
+      }
+    } else {
+      callback();
+    }
+  };
+
+  checkTransferName = async (rule, value, callback) => {
+    const { id, nodeData, selectedCell } = this.state;
+    const { StateMachineStore, intl, form } = this.props;
+    const startNodeId = form.getFieldValue('startNodeId');
+    const endNodeId = form.getFieldValue('endNodeId');
+    const orgId = AppState.currentMenuType.organizationId;
+    if (startNodeId && endNodeId && value && value.trim()) {
+      if (selectedCell && value === selectedCell.name) {
+        callback();
+      } else {
+        const source = _.find(nodeData, item => item.statusId.toString() === startNodeId);
+        const target = _.find(nodeData, item => item.statusId.toString() === endNodeId);
+        const res = await StateMachineStore.checkTransferName(
+          orgId,
+          source.id,
+          target.id,
+          id,
+          value,
+        );
+        if (res) {
+          callback();
+        } else {
+          callback(intl.formatMessage({ id: 'priority.create.name.error' }));
+        }
       }
     } else {
       callback();
@@ -759,8 +791,9 @@ class EditStateMachine extends Component {
       stateName,
       stateType,
     } = this.state;
-
-    this.props.form.validateFieldsAndScroll((err, data) => {
+    const { form } = this.props;
+    form.validateFields(['name'], { force: true });
+    form.validateFieldsAndScroll((err, data) => {
       if (!err) {
         if (type === 'state' && data.state && data.state.key) {
           const { name } = data.state.label && data.state.label.length
