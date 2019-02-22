@@ -59,6 +59,7 @@ class EditStateMachineScheme extends Component {
       loading: false,
       error: false,
       from: false,
+      machineId: false,
     };
   }
 
@@ -126,6 +127,9 @@ class EditStateMachineScheme extends Component {
   handleCancleAddStateMachine = () => {
     const { StateMachineSchemeStore } = this.props;
     StateMachineSchemeStore.setIsAddVisible(false);
+    this.setState({
+      machineId: false,
+    });
   };
 
   handleNextStep = () => {
@@ -155,6 +159,9 @@ class EditStateMachineScheme extends Component {
     StateMachineSchemeStore.setSchemeDTOs([]);
     StateMachineSchemeStore.setIsAddVisible(false);
     StateMachineSchemeStore.setIsConnectVisible(false);
+    this.setState({
+      machineId: false,
+    });
   };
 
   handleFinishConnectStateMachine = (schemeDTOs) => {
@@ -199,6 +206,7 @@ class EditStateMachineScheme extends Component {
       .filter(data => stateMachineIds.indexOf(data.id) === -1);
     const item = allStateMachine[value];
     this.setState({
+      machineId: String(value),
       stateMachineId: item.id,
     });
     this.loadGraphData(item);
@@ -235,6 +243,7 @@ class EditStateMachineScheme extends Component {
     ).then(() => {
       this.setState({
         loading: false,
+        machineId: false,
       });
       this.handleFinishConnectStateMachine(schemeDTOs);
       this.refresh();
@@ -276,7 +285,7 @@ class EditStateMachineScheme extends Component {
 
   renderAddStateMachineForm = () => {
     const { StateMachineSchemeStore, form, intl } = this.props;
-    const { stateMachineIds } = this.state;
+    const { stateMachineIds, machineId } = this.state;
     const { getFieldDecorator } = form;
     const allStateMachine = StateMachineSchemeStore
       .getAllStateMachine.filter(data => stateMachineIds.indexOf(data.id) === -1);
@@ -286,7 +295,7 @@ class EditStateMachineScheme extends Component {
         <Form>
           <FormItem {...formItemLayout} className="issue-sidebar-form">
             {getFieldDecorator('stateMachine', {
-              initialValue: allStateMachine.length ? '0' : null,
+              initialValue: machineId || (allStateMachine.length ? '0' : null),
               rules: [
                 {
                   required: true,

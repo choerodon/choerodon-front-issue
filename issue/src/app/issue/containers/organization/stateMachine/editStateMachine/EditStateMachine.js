@@ -420,7 +420,7 @@ class EditStateMachine extends Component {
     const startNodeId = form.getFieldValue('startNodeId');
     const endNodeId = form.getFieldValue('endNodeId');
     const orgId = AppState.currentMenuType.organizationId;
-    if (startNodeId && endNodeId && value && value.trim()) {
+    if (startNodeId && startNodeId !== 'all' && endNodeId && value && value.trim()) {
       if (selectedCell && value === selectedCell.name) {
         callback();
       } else {
