@@ -135,6 +135,10 @@ class StateMachineStore {
     `/state/v1/organizations/${orgId}/status/check_name?name=${name}`,
   );
 
+  checkTransferName = (orgId, startNodeId, endNodeId, id, name) => axios.get(
+    `/state/v1/organizations/${orgId}/state_machine_transforms/check_name?startNodeId=${startNodeId}&endNodeId=${endNodeId}&stateMachineId=${id}&name=${name}`,
+  );
+
   handleProptError = (error) => {
     if (error && error.failed) {
       Choerodon.prompt(error.message);

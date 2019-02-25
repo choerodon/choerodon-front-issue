@@ -75,6 +75,8 @@ class EditStateMachine extends Component {
       isEdit: false,
       displayHeader: true,
       isLoading: false,
+      selectedDeleteId: false,
+      isSelect: true,
     };
     this.graph = null;
   }
@@ -326,6 +328,8 @@ class EditStateMachine extends Component {
                   rules: [{
                     required: true,
                     message: intl.formatMessage({ id: 'required' }),
+                  }, {
+                    validator: this.checkTransferName,
                   }],
                   initialValue: selectedCell && selectedCell.edge ? selectedCell.name : '',
                 })(
@@ -398,12 +402,42 @@ class EditStateMachine extends Component {
   checkName = async (rule, value, callback) => {
     const { StateMachineStore, intl } = this.props;
     const orgId = AppState.currentMenuType.organizationId;
-    if (value.trim()) {
+    if (value && value.trim()) {
       const res = await StateMachineStore.checkStateName(orgId, value);
       if (res && res.statusExist) {
         callback(intl.formatMessage({ id: 'priority.create.name.error' }));
       } else {
         callback();
+      }
+    } else {
+      callback();
+    }
+  };
+
+  checkTransferName = async (rule, value, callback) => {
+    const { id, nodeData, selectedCell } = this.state;
+    const { StateMachineStore, intl, form } = this.props;
+    const startNodeId = form.getFieldValue('startNodeId');
+    const endNodeId = form.getFieldValue('endNodeId');
+    const orgId = AppState.currentMenuType.organizationId;
+    if (startNodeId && startNodeId !== 'all' && endNodeId && value && value.trim()) {
+      if (selectedCell && value === selectedCell.name) {
+        callback();
+      } else {
+        const source = _.find(nodeData, item => item.statusId.toString() === startNodeId);
+        const target = _.find(nodeData, item => item.statusId.toString() === endNodeId);
+        const res = await StateMachineStore.checkTransferName(
+          orgId,
+          source.id,
+          target.id,
+          id,
+          value,
+        );
+        if (res) {
+          callback();
+        } else {
+          callback(intl.formatMessage({ id: 'priority.create.name.error' }));
+        }
       }
     } else {
       callback();
@@ -757,8 +791,9 @@ class EditStateMachine extends Component {
       stateName,
       stateType,
     } = this.state;
-
-    this.props.form.validateFieldsAndScroll((err, data) => {
+    const { form } = this.props;
+    form.validateFields(['name'], { force: true });
+    form.validateFieldsAndScroll((err, data) => {
       if (!err) {
         if (type === 'state' && data.state && data.state.key) {
           const { name } = data.state.label && data.state.label.length
@@ -1072,17 +1107,25 @@ class EditStateMachine extends Component {
       deleteVisible: false,
       deleteId: null,
       deleteDraftVisible: false,
+      selectedDeleteId: false,
+      isSelect: true,
     });
   };
 
   handleDeleteTransfer = () => {
     const { selectedDeleteId } = this.state;
-    const cell = this.graph.getCell(`t${selectedDeleteId}`);
-    this.setState({
-      selectedCell: cell,
-    }, () => {
-      this.removeCell(cell);
-    });
+    if (selectedDeleteId) {
+      const cell = this.graph.getCell(`t${selectedDeleteId}`);
+      this.setState({
+        selectedCell: cell,
+      }, () => {
+        this.removeCell(cell);
+      });
+    } else {
+      this.setState({
+        isSelect: false,
+      });
+    }
   };
 
   toolbarAdd = (type) => {
@@ -1374,6 +1417,7 @@ class EditStateMachine extends Component {
       deleteLoading,
       error,
       displayHeader,
+      isSelect,
     } = this.state;
     const dataSource = nodeData && nodeData.slice();
     _.remove(dataSource, item => item.statusId === 0);
@@ -1641,13 +1685,22 @@ class EditStateMachine extends Component {
               style={{ width: '100%' }}
               dropdownMatchSelectWidth
               size="default"
-              onChange={value => this.setState({ selectedDeleteId: value })}
+              onChange={value => this.setState({ selectedDeleteId: value, isSelect: true })}
             >
               {this.state.deleteList
               && this.state.deleteList.length
               && this.state.deleteList
                 .map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
             </Select>
+            <div
+              style={{
+                display: isSelect ? 'none' : 'block',
+                color: '#d50000',
+                fontSize: 13,
+              }}
+            >
+              <FormattedMessage id="stateMachine.transfer.deleteTip" />
+            </div>
           </Modal>
         )}
         {this.state.deleteDraftVisible && (
