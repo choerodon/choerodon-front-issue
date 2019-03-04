@@ -13,13 +13,14 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
 import PriorityCreate from '../priorityCreate';
 import PriorityEdit from '../priorityEdit';
-import DeletePriorityModal from '../deletePriorityModal';
 import BodyRow from './bodyRow';
 
 import '../../../main.scss';
 import './PriorityList.scss';
 
+const { Option } = Select;
 const { AppState } = stores;
+const { confirm } = Modal;
 
 const ColorBlock = ({ color }) => (
   <div
@@ -34,6 +35,13 @@ const ColorBlock = ({ color }) => (
 @injectIntl
 @observer
 class PriorityList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      priorityId: false,
+    };
+  }
+
   components = {
     body: {
       row: BodyRow,
@@ -50,6 +58,9 @@ class PriorityList extends Component {
     const { PriorityStore } = this.props;
     const { getPriorityList } = PriorityStore;
     const dragRow = getPriorityList[dragIndex];
+    if (!dragRow.enable) {
+      return;
+    }
 
     const priorityListAfterDrag = update(getPriorityList, {
       $splice: [[dragIndex, 1], [hoverIndex, 0, dragRow]],
@@ -70,6 +81,7 @@ class PriorityList extends Component {
       title: <FormattedMessage id="priority.name" />,
       dataIndex: 'name',
       key: 'name',
+      width: 170,
       render: (text, record) => {
         if (record.default) {
           return `${text} ${this.props.intl.formatMessage({ id: 'priority.default' })}`;
@@ -82,11 +94,13 @@ class PriorityList extends Component {
       title: <FormattedMessage id="priority.des" />,
       dataIndex: 'description',
       key: 'des',
+      width: 650,
     },
     {
       title: <FormattedMessage id="priority.color" />,
       dataIndex: 'colour',
       key: 'color',
+      width: 100,
       render: (text, record) => (
         <ColorBlock color={text} />
       ),
@@ -94,6 +108,7 @@ class PriorityList extends Component {
     {
       title: '',
       className: 'operations',
+      width: 120,
       render: (text, record) => (
         <div>
           <Tooltip placement="top" title={<FormattedMessage id="edit" />}>
@@ -105,15 +120,24 @@ class PriorityList extends Component {
               <Icon type="mode_edit" />
             </Button>
           </Tooltip>
-          {/* <Tooltip placement="top" title={<FormattedMessage id="delete" />}> */}
-            {/* <Button */}
-              {/* shape="circle" */}
-              {/* size="small" */}
-              {/* onClick={this.handleDelete.bind(this, record.id)} */}
-            {/* > */}
-              {/* <Icon type="delete" /> */}
-            {/* </Button> */}
-          {/* </Tooltip> */}
+          <Tooltip placement="top" title={<FormattedMessage id={record.enable ? 'disable' : 'enable'} />}>
+            <Button
+              shape="circle"
+              size="small"
+              onClick={this.handleChangeEnable.bind(this, record)}
+            >
+              <Icon type={record.enable ? 'remove_circle_outline' : 'finished'} />
+            </Button>
+          </Tooltip>
+          <Tooltip placement="top" title={<FormattedMessage id="delete" />}>
+            <Button
+              shape="circle"
+              size="small"
+              onClick={this.handleDelete.bind(this, record)}
+            >
+              <Icon type="delete" />
+            </Button>
+          </Tooltip>
         </div>
       ),
     },
@@ -125,14 +149,109 @@ class PriorityList extends Component {
     this.showSideBar('edit');
   };
 
-  handleDelete = async (priorityId) => {
+  handleSelectChange = (id) => {
+    this.setState({
+      priorityId: id,
+    });
+  };
+
+  handleDelete = async (priority) => {
+    const { priorityId } = this.state;
+    const { intl, PriorityStore } = this.props;
+    const orgId = AppState.currentMenuType.organizationId;
+    const that = this;
+    const count = await PriorityStore.checkDelete(orgId, priority.id);
+    const priorityList = PriorityStore.getPriorityList.filter(item => item.id !== priority.id);
+    confirm({
+      title: intl.formatMessage({ id: 'priority.delete.title' }),
+      content: <div>
+        <div style={{ marginBottom: 10 }}>
+          {`${intl.formatMessage({ id: 'priority.delete.title' })}：${priority.name}`}
+        </div>
+        {count !== 0
+          && <div style={{ marginBottom: 10 }}>
+          <Icon
+            type="error"
+            style={{
+              verticalAlign: 'top',
+              color: 'red',
+              marginRight: 5,
+            }}
+          />
+          {intl.formatMessage({ id: 'priority.delete.used.tip.prefix' })}
+          <span style={{ color: 'red' }}>{count}</span>
+          {intl.formatMessage({ id: 'priority.delete.used.tip.suffix' })}
+        </div>
+        }
+        <div style={{ marginBottom: 15 }}>
+          {intl.formatMessage({ id: 'priority.delete.notice' })}
+          {count !== 0 && intl.formatMessage({ id: 'priority.delete.used.notice' })}
+        </div>
+        {count !== 0
+          && <div>
+          <Select
+            label={intl.formatMessage({ id: 'priority.title' })}
+            placeholder={intl.formatMessage({ id: 'priority.delete.chooseNewPriority.placeholder' })}
+            onChange={this.handleSelectChange}
+            style={{ width: 470 }}
+            defaultValue={priorityList[0].id}
+          >
+            {priorityList.map(
+              item => <Option value={item.id}>{item.name}</Option>,
+            )
+            }
+          </Select>
+        </div>
+        }
+      </div>,
+      width: 520,
+      onOk() {
+        that.deletePriority(priority.id, priorityList[0].id);
+      },
+      onCancel() {},
+    });
+  };
+
+  deletePriority = async (id, defaultId) => {
     const { PriorityStore } = this.props;
+    const { priorityId } = this.state;
+    const orgId = AppState.currentMenuType.organizationId;
     try {
-      // await PriorityStore.checkDeletingPriorityRelatedEventsCount();
-      PriorityStore.setOnDeletingPriority(true);
-      PriorityStore.setDeletingPriorityId(priorityId);
+      await PriorityStore.deletePriorityById(orgId, id, priorityId || defaultId);
+      PriorityStore.loadPriorityList(orgId);
     } catch (err) {
-      message.error('删除校验失败');
+      message.error('删除失败');
+    }
+  };
+
+  handleChangeEnable = (priority) => {
+    const { intl } = this.props;
+    if (priority.enable) {
+      const that = this;
+      confirm({
+        title: intl.formatMessage({ id: 'priority.disable.title' }),
+        content: <div>
+          <div style={{ marginBottom: 10 }}>{intl.formatMessage({ id: 'priority.disable.title' })}: {priority.name}</div>
+          <div>{intl.formatMessage({ id: 'priority.disable.notice' })}</div>
+        </div>,
+        onOk() {
+          that.enablePriority(priority);
+        },
+        onCancel() {},
+      });
+    } else {
+      this.enablePriority(priority);
+    }
+  };
+
+  enablePriority = async (priority) => {
+    const { PriorityStore } = this.props;
+    const orgId = AppState.currentMenuType.organizationId;
+    try {
+      await PriorityStore.enablePriority(orgId, priority.id, !priority.enable);
+      PriorityStore.loadPriorityList(orgId);
+    } catch (err) {
+      message.error('修改状态失败');
     }
   };
 
@@ -172,10 +291,10 @@ class PriorityList extends Component {
     return (
       <Page>
         <Header title={<FormattedMessage id="priority.title" />}>
-          {/* <Button onClick={() => this.showSideBar('create')}> */}
-            {/* <Icon type="add" /> */}
-            {/* <FormattedMessage id="priority.create" /> */}
-          {/* </Button> */}
+          <Button onClick={() => this.showSideBar('create')}>
+            <Icon type="add" />
+            <FormattedMessage id="priority.create" />
+          </Button>
           <Button onClick={this.refresh}>
             <Icon type="refresh" />
             <FormattedMessage id="refresh" />
@@ -198,6 +317,7 @@ class PriorityList extends Component {
               index,
               moveRow: this.moveRow,
             })}
+            rowClassName={(record, index) => (!record.enable && 'issue-priority-disable')}
           />
 
           {
@@ -205,9 +325,6 @@ class PriorityList extends Component {
           }
           {
             onEditingPriority ? <PriorityEdit PriorityStore={PriorityStore} /> : null
-          }
-          {
-            onDeletingPriority ? <DeletePriorityModal PriorityStore={PriorityStore} /> : null
           }
         </Content>
       </Page>
