@@ -18,6 +18,8 @@ const zh_CN = {
   createFailed: '创建失败',
   editFailed: '编辑失败',
   deleteFailed: '删除失败',
+  disable: '停用',
+  enable: '启用',
 
   // 问题类型
   'issueType.title': '问题类型',
@@ -213,6 +215,12 @@ const zh_CN = {
     '注意：将会从所有使用的事件单中删除这个优先级。请你为受影响的事件单选择一个新的优先级。',
   'priority.delete.chooseNewPriority.placeholder': '请选择一个新的优先级',
   'priority.default': '（默认）',
+  'priority.delete.notice': '注意：将会从所有使用的问题中删除这个优先级。',
+  'priority.delete.used.notice': '请你为受影响的问题选择一个新的优先级。',
+  'priority.delete.used.tip.prefix': '当前有 ',
+  'priority.delete.used.tip.suffix': ' 个问题正在使用此优先级。',
+  'priority.disable.title': '停用优先级',
+  'priority.disable.notice': '注意：停用后你的问题将无法选择到此优先级。',
 
   // 页面
   'page.title': '页面',

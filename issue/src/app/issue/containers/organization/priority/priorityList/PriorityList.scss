@@ -1,7 +1,7 @@
 .color-block {
   width: 16px;
   height: 16px;
-  border-radius: 2px;
+  border-radius: 3px;
 }
 
 .operations {
@@ -26,3 +26,14 @@ tr.drop-over-upward td {
 tr.drop-over-upward {
   box-shadow: 0 0 3px 3px rgb(212, 183, 170);
 }
+
+.issue-priority-disable {
+  background: #F5F5F5;
+  td {
+    opacity: 0.5;
+  }
+  .operations {
+    opacity: 1;
+  }
+}
+

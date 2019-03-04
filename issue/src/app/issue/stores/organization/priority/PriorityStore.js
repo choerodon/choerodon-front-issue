@@ -13,19 +13,6 @@ class PriorityStore {
 
   @observable onEditingPriority = false;
 
-  @observable onDeletingPriority = false;
-
-  @observable deletingPriorityId = null;
-
-  @observable editingPriorityId = null;
-
-  // 正在删除的优先级相关的事件单数量
-  @observable deletingPriorityRelatedEventsCount = 0;
-
-  @computed get deletingPriority() {
-    return this.priorityList.find(item => item.id === this.deletingPriorityId);
-  }
-
   @computed get editingPriority() {
     return this.priorityList.find(item => item.id === this.editingPriorityId);
   }
@@ -56,34 +43,11 @@ class PriorityStore {
   }
 
   @action
-  setOnDeletingPriority(state) {
-    this.onDeletingPriority = state;
-  }
-
-  @action
-  setDeletingPriorityId(id) {
-    this.deletingPriorityId = id;
-  }
-
-  @action
   setEditingPriorityId(id) {
     this.editingPriorityId = id;
   }
 
-  @action
-  async checkDeletingPriorityRelatedEventsCount() {
-    try {
-      const res = await axios.post('');
-      runInAction(
-        () => {
-          this.deletingPriorityRelatedEventsCount = res;
-          this.setOnDeletingPriority(true);
-        },
-      );
-    } catch (err) {
-      throw err;
-    }
-  }
+  checkDelete = (orgId, priorityId) => axios.get(`/issue/v1/organizations/${orgId}/priority/check_delete/${priorityId}`);
 
   @action
   loadPriorityList = async (orgId) => {
@@ -105,7 +69,7 @@ class PriorityStore {
         },
       );
     }
-  }
+  };
 
   loadAllPriority = async (orgId) => {
     const URL = `/issue/v1/organizations/${orgId}/priority`;
@@ -120,7 +84,7 @@ class PriorityStore {
     } catch (err) {
       throw err;
     }
-  }
+  };
 
   checkName = (orgId, name) => axios.get(
     `/issue/v1/organizations/${orgId}/priority/check_name?name=${name}`,
@@ -130,11 +94,13 @@ class PriorityStore {
 
   createPriority = (orgId, priority) => axios.post(`/issue/v1/organizations/${orgId}/priority`, priority);
 
-  deletePriorityById = (orgId, priorityId) => axios.delete(
-    `/issue/v1/organizations/${orgId}/priority/${priorityId}`,
+  deletePriorityById = (orgId, priorityId, changePriorityId) => axios.delete(
+    `/issue/v1/organizations/${orgId}/priority/delete/${priorityId}${changePriorityId ? `?changePriorityId=${changePriorityId}` : ''}`,
   );
 
   deleteAndChooseNewPriority = (orgId, prePriorityId, newPriorityId) => axios.post('');
+
+  enablePriority = (orgId, id, enable) => axios.get(`/issue/v1/organizations/${orgId}/priority/enable/${id}?enable=${enable}`);
 
   reOrder = orgId => axios.put(
     `/issue/v1/organizations/${orgId}/priority/sequence`,

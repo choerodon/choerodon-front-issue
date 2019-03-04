@@ -17,6 +17,8 @@ const enUS = {
   editFailed: 'Edit Failed',
   deleteFailed: 'Delete Failed',
   required: 'This field is required',
+  disable: 'Disable',
+  enable: 'Enable',
 
   'issueType.title': 'Issue Type',
   'issueType.create': 'Create Type',
@@ -185,6 +187,12 @@ const enUS = {
   'priority.delete.used,notice': 'Note: This priority will be removed from all used event tickets.Please select a new priority for the affected event list.',
   'priority.delete.chooseNewPriority.placeholder': 'Please choose a new priority',
   'priority.default': '(Default)',
+  'priority.delete.notice': 'Note: This priority will be removed from all used issues.',
+  'priority.delete.used.notice': 'Please choose a new priority for the affected issue.',
+  'priority.delete.used.tip.prefix': 'There are currently ',
+  'priority.delete.used.tip.suffix': ' issues that are using this priority.',
+  'priority.disable.title': 'Disable Priority',
+  'priority.disable.notice': 'Note: Your issue will not be able to choose this priority after disable.',
 
   // 问题类型页面方案
   'issueTypeScreenSchemes.title': '问题类型页面方案',
