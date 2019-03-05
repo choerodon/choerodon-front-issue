@@ -345,4 +345,4 @@ class PriorityList extends Component {
   }
 }
 
-export default PriorityList;
+export default injectIntl(PriorityList);
