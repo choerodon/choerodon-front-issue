@@ -65,6 +65,10 @@ class PriorityEdit extends Component {
             loading: false,
           });
         }
+      } else {
+        this.setState({
+          loading: false,
+        });
       }
     });
     this.hideSidebar();

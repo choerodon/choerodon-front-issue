@@ -53,6 +53,10 @@ class PriorityCreate extends Component {
             loading: false,
           });
         }
+      } else {
+        this.setState({
+          loading: false,
+        });
       }
     });
   };
@@ -75,7 +79,6 @@ class PriorityCreate extends Component {
   };
 
   handleCloseColorPicker = () => {
-    const { displayColorPicker } = this.state;
     this.setState({
       displayColorPicker: false,
     });
@@ -95,14 +98,13 @@ class PriorityCreate extends Component {
 
   hideSidebar() {
     const { PriorityStore, form } = this.props;
-    PriorityStore.setOnCreatingPriority(false);
-
     form.resetFields();
     this.setState({
       priorityColor: '#0062B1',
       displayColorPicker: false,
       loading: false,
     });
+    PriorityStore.setOnCreatingPriority(false);
   }
 
   render() {
