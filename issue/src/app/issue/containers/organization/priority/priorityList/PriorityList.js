@@ -164,7 +164,6 @@ class PriorityList extends Component {
   };
 
   handleDelete = async (priority) => {
-    const { priorityId } = this.state;
     const { intl, PriorityStore } = this.props;
     const orgId = AppState.currentMenuType.organizationId;
     const that = this;
@@ -215,8 +214,15 @@ class PriorityList extends Component {
       width: 520,
       onOk() {
         that.deletePriority(priority.id, priorityList[0].id);
+        that.setState({
+          priorityId: false,
+        });
       },
-      onCancel() {},
+      onCancel() {
+        that.setState({
+          priorityId: false,
+        });
+      },
     });
   };
 
