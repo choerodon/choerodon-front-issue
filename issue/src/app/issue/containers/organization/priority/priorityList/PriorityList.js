@@ -68,7 +68,9 @@ class PriorityList extends Component {
 
     PriorityStore.setPriorityList(priorityListAfterDrag);
     // 更新顺序
-    PriorityStore.reOrder(orgId);
+    PriorityStore.reOrder(orgId).then(() => {
+      PriorityStore.loadPriorityList(orgId);
+    });
   };
 
   refresh = () => {
@@ -76,72 +78,78 @@ class PriorityList extends Component {
     this.loadPriorityList(orgId);
   };
 
-  getColumns = () => [
-    {
-      title: <FormattedMessage id="priority.name" />,
-      dataIndex: 'name',
-      key: 'name',
-      width: 170,
-      render: (text, record) => {
-        if (record.default) {
-          return `${text} ${this.props.intl.formatMessage({ id: 'priority.default' })}`;
-        } else {
-          return text;
-        }
+  getColumns = () => {
+    const { PriorityStore } = this.props;
+    const enableList = PriorityStore.getPriorityList.filter(item => item.enable);
+    return [
+      {
+        title: <FormattedMessage id="priority.name" />,
+        dataIndex: 'name',
+        key: 'name',
+        width: 170,
+        render: (text, record) => {
+          if (record.default) {
+            return `${text} ${this.props.intl.formatMessage({ id: 'priority.default' })}`;
+          } else {
+            return text;
+          }
+        },
       },
-    },
-    {
-      title: <FormattedMessage id="priority.des" />,
-      dataIndex: 'description',
-      key: 'des',
-      width: 650,
-    },
-    {
-      title: <FormattedMessage id="priority.color" />,
-      dataIndex: 'colour',
-      key: 'color',
-      width: 100,
-      render: (text, record) => (
-        <ColorBlock color={text} />
-      ),
-    },
-    {
-      title: '',
-      className: 'operations',
-      width: 120,
-      render: (text, record) => (
-        <div>
-          <Tooltip placement="top" title={<FormattedMessage id="edit" />}>
-            <Button
-              shape="circle"
-              size="small"
-              onClick={this.handleEdit.bind(this, record.id)}
-            >
-              <Icon type="mode_edit" />
-            </Button>
-          </Tooltip>
-          <Tooltip placement="top" title={<FormattedMessage id={record.enable ? 'disable' : 'enable'} />}>
-            <Button
-              shape="circle"
-              size="small"
-              onClick={this.handleChangeEnable.bind(this, record)}
-            >
-              <Icon type={record.enable ? 'remove_circle_outline' : 'finished'} />
-            </Button>
-          </Tooltip>
-          <Tooltip placement="top" title={<FormattedMessage id="delete" />}>
-            <Button
-              shape="circle"
-              size="small"
-              onClick={this.handleDelete.bind(this, record)}
-            >
-              <Icon type="delete" />
-            </Button>
-          </Tooltip>
-        </div>
-      ),
-    },
-  ];
+      {
+        title: <FormattedMessage id="priority.des" />,
+        dataIndex: 'description',
+        key: 'des',
+        width: 650,
+      },
+      {
+        title: <FormattedMessage id="priority.color" />,
+        dataIndex: 'colour',
+        key: 'color',
+        width: 100,
+        render: (text, record) => (
+          <ColorBlock color={text} />
+        ),
+      },
+      {
+        title: '',
+        className: 'operations',
+        width: 120,
+        render: (text, record) => (
+          <div>
+            <Tooltip placement="top" title={<FormattedMessage id="edit" />}>
+              <Button
+                shape="circle"
+                size="small"
+                onClick={this.handleEdit.bind(this, record.id)}
+              >
+                <Icon type="mode_edit" />
+              </Button>
+            </Tooltip>
+            <Tooltip placement="top" title={<FormattedMessage id={record.enable ? 'disable' : 'enable'} />}>
+              <Button
+                shape="circle"
+                size="small"
+                onClick={this.handleChangeEnable.bind(this, record)}
+                disabled={record.enable && enableList && enableList.length === 1}
+              >
+                <Icon type={record.enable ? 'remove_circle_outline' : 'finished'} />
+              </Button>
+            </Tooltip>
+            <Tooltip placement="top" title={<FormattedMessage id="delete" />}>
+              <Button
+                shape="circle"
+                size="small"
+                onClick={this.handleDelete.bind(this, record)}
+                disabled={record.enable && enableList && enableList.length === 1}
+              >
+                <Icon type="delete" />
+              </Button>
+            </Tooltip>
+          </div>
+        ),
+      },
+    ];
+  };
 
   handleEdit = (priorityId) => {
     const { PriorityStore } = this.props;
@@ -197,7 +205,7 @@ class PriorityList extends Component {
             defaultValue={priorityList[0].id}
           >
             {priorityList.map(
-              item => <Option value={item.id}>{item.name}</Option>,
+              item => <Option value={item.id} key={String(item.id)}>{item.name}</Option>,
             )
             }
           </Select>
@@ -283,7 +291,6 @@ class PriorityList extends Component {
     const {
       getPriorityList,
       onLoadingList,
-      onDeletingPriority,
       onEditingPriority,
       onCreatingPriority,
     } = PriorityStore;
@@ -317,7 +324,7 @@ class PriorityList extends Component {
               index,
               moveRow: this.moveRow,
             })}
-            rowClassName={(record, index) => (!record.enable && 'issue-priority-disable')}
+            rowClassName={(record, index) => (!record.enable ? 'issue-priority-disable' : '')}
           />
 
           {
