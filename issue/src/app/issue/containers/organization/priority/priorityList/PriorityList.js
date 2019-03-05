@@ -223,6 +223,8 @@ class PriorityList extends Component {
           priorityId: false,
         });
       },
+      okText: '删除',
+      cancelText: '取消',
     });
   };
 
@@ -252,6 +254,8 @@ class PriorityList extends Component {
           that.enablePriority(priority);
         },
         onCancel() {},
+        okText: '确认',
+        cancelText: '取消',
       });
     } else {
       this.enablePriority(priority);
