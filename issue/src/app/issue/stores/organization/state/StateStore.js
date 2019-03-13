@@ -4,32 +4,9 @@ import querystring from 'query-string';
 
 @store('StateStore')
 class StateStore {
-  @observable stageOptionsData = [];
-
   @observable stateList = [];
 
   @observable isLoading = false;
-
-  @action setStageOptionsData() {
-    this.stageOptionsData = [{
-      code: 'todo',
-      name: '待处理',
-      colour: '#ffb100',
-    }, {
-      code: 'doing',
-      name: '处理中',
-      colour: '#4d90fe',
-    }, {
-      code: 'done',
-      name: '完成',
-      colour: '#00bfa5',
-    }];
-  }
-
-  @computed get getStageOptionsData() {
-    this.setStageOptionsData();
-    return this.stageOptionsData.slice();
-  }
 
   @computed get getStateList() {
     return this.stateList;

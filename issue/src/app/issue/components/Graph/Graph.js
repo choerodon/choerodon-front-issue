@@ -32,7 +32,7 @@ import {
   mxGraphModel,
   mxEventObject,
 } from 'mxgraph-js';
-import { getByteLen } from '../../common/utils';
+import { getByteLen, getStageMap } from '../../common/utils';
 
 import './Graph.less';
 import Pointer from '../../assets/images/point.gif';
@@ -51,11 +51,7 @@ const formItemLayout = {
   },
 };
 
-const statusColor = {
-  todo: '#ffb100',
-  doing: '#4d90fe',
-  done: '#00bfa5',
-};
+const statusColor = getStageMap();
 
 class Graph extends Component {
   constructor(props) {
@@ -200,8 +196,8 @@ class Graph extends Component {
         `n${values.id}`,
         values.statusDTO && values.statusDTO.name,
         150, 0, statusWidth, 26,
-        `strokeColor=red;fillColor=${statusColor[values.statusDTO.type]
-          ? `${statusColor[values.statusDTO.type]};`
+        `strokeColor=red;fillColor=${statusColor[values.statusDTO.type].colour
+          ? `${statusColor[values.statusDTO.type].colour};`
           : '#E3E3E3;'}`,
       );
       cell.statusId = values.statusId;
@@ -339,8 +335,8 @@ class Graph extends Component {
               x, y, statusWidth, height,
               status === 'node_start'
                 ? 'shape=ellipse;fillColor=#FFB100;strokeColor=#FFF;'
-                : `shape=rectangle;fillColor=${statusDTO && statusDTO.type && statusColor[statusDTO.type]
-                  ? `${statusColor[statusDTO.type]};`
+                : `shape=rectangle;fillColor=${statusDTO && statusDTO.type && statusColor[statusDTO.type].colour
+                  ? `${statusColor[statusDTO.type].colour};`
                   : '#E3E3E3'};strokeColor=red;`,
             );
 

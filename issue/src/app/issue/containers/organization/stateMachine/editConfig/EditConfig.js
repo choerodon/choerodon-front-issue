@@ -735,7 +735,6 @@ class EditConfig extends Component {
       loading,
       isLoading,
     } = this.state;
-    const { singleData, getStageOptionsData } = StateMachineStore;
     const menu = AppState.currentMenuType;
     const {
       type,

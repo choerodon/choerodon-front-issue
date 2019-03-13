@@ -8,6 +8,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import {
   Content, Header, Page, Permission, stores,
 } from 'choerodon-front-boot';
+import { getStageMap, getStageList } from '../../../../common/utils';
 import Tips from '../../../../components/Tips';
 import '../../../main.scss';
 import './StateList.scss';
@@ -29,32 +30,8 @@ const formItemLayout = {
 };
 const prefixCls = 'issue-state';
 
-const stageOptions = {
-  todo: {
-    id: 'todo',
-    code: 'todo',
-    name: '待处理',
-    colour: '#ffb100',
-  },
-  doing: {
-    id: 'doing',
-    code: 'doing',
-    name: '处理中',
-    colour: '#4d90fe',
-  },
-  done: {
-    id: 'done',
-    code: 'done',
-    name: '完成',
-    colour: '#00bfa5',
-  },
-  none: {
-    id: 'none',
-    code: 'none',
-    name: '无阶段',
-    colour: '#EFEFEF',
-  },
-};
+const stageMap = getStageMap();
+const stageList = getStageList();
 
 @observer
 class StateList extends Component {
@@ -92,20 +69,11 @@ class StateList extends Component {
     title: <FormattedMessage id="state.stage" />,
     dataIndex: 'type',
     key: 'type',
-    filters: [{
-      text: '待处理',
-      value: 'todo',
-    }, {
-      text: '处理中',
-      value: 'doing',
-    }, {
-      text: '完成',
-      value: 'done',
-    }],
+    filters: stageList.filter(s => s.code !== 'none').map(s => ({ text: s.name, value: s.code })),
     render: record => (
       <div>
-        <div className="issue-state-block" style={{ backgroundColor: stageOptions[record].colour }} />
-        <span>{stageOptions[record].name}</span>
+        <div className="issue-state-block" style={{ backgroundColor: stageMap[record].colour }} />
+        <span style={{ verticalAlign: 'middle' }}>{stageMap[record].name}</span>
       </div>
     ),
   }, {
@@ -135,7 +103,7 @@ class StateList extends Component {
             <i className="icon icon-mode_edit" />
           </Button>
         </Tooltip>
-        {record.stateMachineInfoList && record.stateMachineInfoList.length
+        {record.code || (record.stateMachineInfoList && record.stateMachineInfoList.length)
           ? <div className="issue-del-space" />
           : <Tooltip placement="top" title={<FormattedMessage id="delete" />}>
             <Button shape="circle" size="small" onClick={this.confirmDelete.bind(this, record)}>
@@ -280,7 +248,6 @@ class StateList extends Component {
                 submitting: false,
               });
             }).catch((error) => {
-              console.log(error.response.data.message);
               this.setState({
                 submitting: false,
               });
@@ -383,7 +350,6 @@ class StateList extends Component {
       statesList = [], deleteName, editState, page, pageSize, total,
     } = this.state;
     const { getFieldDecorator } = this.props.form;
-    const { getStageOptionsData } = StateStore;
     const formContent = (
       <div className="issue-region">
         <Form layout="vertical" className="issue-sidebar-form">
@@ -441,8 +407,7 @@ class StateList extends Component {
                 dropdownMatchSelectWidth
                 size="default"
               >
-                {getStageOptionsData && getStageOptionsData.length > 0
-                && getStageOptionsData.map(stage => (
+                {stageList.map(stage => (
                   <Option
                     value={stage.code}
                     key={stage.code}

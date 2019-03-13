@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import './StatusTag.scss';
+import { getStageMap } from '../../common/utils';
 
-const STATUS = {
-  todo: '#ffb100',
-  doing: '#4d90fe',
-  done: '#00bfa5',
-};
+const stageMap = getStageMap();
 
 class StatusTag extends Component {
   render() {
@@ -17,7 +14,7 @@ class StatusTag extends Component {
       <div
         className="c7n-statusTag"
         style={{
-          background: (data && STATUS[data.type]) || 'transparent',
+          background: (data && stageMap[data.type] && stageMap[data.type].colour) || 'transparent',
           ...style,
         }}
       >
