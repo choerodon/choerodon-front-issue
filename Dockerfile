@@ -13,8 +13,8 @@ ADD issue/dist /usr/share/nginx/html
 COPY issue/issue-structure/issue-enterpoint.sh /usr/share/nginx/html
 COPY menu.yml /usr/share/nginx/html/menu.yml
 COPY issue/node_modules/choerodon-front-boot/structure/menu /usr/share/nginx/html/menu
-RUN chmod 777 /usr/share/nginx/html/enterpoint.sh
-ENTRYPOINT ["/usr/share/nginx/html/enterpoint.sh"]
+RUN chmod 777 /usr/share/nginx/html/issue-enterpoint.sh
+ENTRYPOINT ["/usr/share/nginx/html/issue-enterpoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
 
 EXPOSE 80
