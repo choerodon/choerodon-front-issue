@@ -12,7 +12,7 @@ import _ from 'lodash';
 import Graph from '../../../../components/Graph';
 import StateStore from '../../../../stores/organization/state';
 import ReadAndEdit from '../../../../components/ReadAndEdit';
-import { getByteLen } from '../../../../common/utils';
+import { getByteLen, getStageMap, getStageList } from '../../../../common/utils';
 import '../../../main.scss';
 import './EditStateMachine.scss';
 
@@ -36,11 +36,8 @@ const formItemLayout = {
   },
 };
 
-const statusColor = {
-  todo: '#ffb100',
-  doing: '#4d90fe',
-  done: '#00bfa5',
-};
+const statusColor = getStageMap();
+const stageList = getStageList();
 
 @observer
 class EditStateMachine extends Component {
@@ -97,7 +94,7 @@ class EditStateMachine extends Component {
           className={`${prefixCls}-text-node`}
           style={{
             backgroundColor: record.statusDTO
-            && record.statusDTO.type && statusColor[record.statusDTO.type],
+            && record.statusDTO.type && statusColor[record.statusDTO.type].colour,
           }}
         >{text.name}</div>
       ),
@@ -118,7 +115,7 @@ class EditStateMachine extends Component {
                       key={`${item.id}-${node.id}`}
                       style={{
                         backgroundColor: node.statusDTO
-                        && node.statusDTO.type && statusColor[node.statusDTO.type],
+                        && node.statusDTO.type && statusColor[node.statusDTO.type].colour,
                       }}
                     >
                       {node.statusDTO && node.statusDTO.name}
@@ -218,8 +215,8 @@ class EditStateMachine extends Component {
                       value={s.id}
                       key={String(s.id)}
                     >
-                      <div className="issue-state-machine-block" style={{ backgroundColor: s.type ? statusColor[s.type] : '#FFF' }} />
-                      <span id={s.id} name={s.name} style={{ display: 'inline-block', width: '100%' }}>{s.name}</span>
+                      <div className="issue-state-machine-block" style={{ backgroundColor: s.type ? statusColor[s.type].colour : '#FFF' }} />
+                      <span id={s.id} name={s.name} style={{ display: 'inline-block', width: '100%', verticalAlign: 'middle' }}>{s.name}</span>
                     </Option>
                   ))}
                 </Select>,
@@ -280,7 +277,7 @@ class EditStateMachine extends Component {
                           value={dto.statusDTO.id.toString()}
                           key={dto.statusDTO.toString()}
                         >
-                          <div className="issue-state-machine-block" style={{ backgroundColor: dto.statusDTO.type ? statusColor[dto.statusDTO.type] : '#FFF' }} />
+                          <div className="issue-state-machine-block" style={{ backgroundColor: dto.statusDTO.type ? statusColor[dto.statusDTO.type].colour : '#FFF' }} />
                           <span id={dto.id} name={dto.statusDTO.name} style={{ display: 'inline-block', width: '100%' }}>{dto.statusDTO.name}</span>
                         </Option>
                       ))}
@@ -312,7 +309,7 @@ class EditStateMachine extends Component {
                           value={dto.statusDTO.id.toString()}
                           key={dto.statusDTO.toString()}
                         >
-                          <div className="issue-state-machine-block" style={{ backgroundColor: dto.statusDTO.type ? statusColor[dto.statusDTO.type] : '#FFF' }} />
+                          <div className="issue-state-machine-block" style={{ backgroundColor: dto.statusDTO.type ? statusColor[dto.statusDTO.type].colour : '#FFF' }} />
                           <span id={dto.statusDTO.id} name={dto.statusDTO.name} style={{ display: 'inline-block', width: '100%' }}>{dto.statusDTO.name}</span>
                         </Option>
                       ))}
@@ -447,7 +444,6 @@ class EditStateMachine extends Component {
   getCreateForm = () => {
     const { form, intl } = this.props;
     const { getFieldDecorator } = form;
-    const { getStageOptionsData } = StateStore;
     return (<div className="issue-region">
       <Form layout="vertical" className="issue-sidebar-form">
         <FormItem
@@ -501,7 +497,7 @@ class EditStateMachine extends Component {
               dropdownMatchSelectWidth
               size="default"
             >
-              {getStageOptionsData && getStageOptionsData.length > 0 && getStageOptionsData
+              {stageList
                 .map(stage => (
                   <Option
                     value={stage.code}
@@ -825,7 +821,7 @@ class EditStateMachine extends Component {
                       const newWide = getByteLen(name) > selectedCell.originWide
                         ? getByteLen(name) : selectedCell.originWide;
                       selectedCell.geometry.width = newWide;
-                      let fillColor = stateType && statusColor[stateType];
+                      let fillColor = stateType && statusColor[stateType].colour;
                       if (data.state.label) {
                         fillColor = data.state.label
                           && data.state.label.length
@@ -1033,7 +1029,8 @@ class EditStateMachine extends Component {
               const node = this.graph.getCell(`n${item.id}`);
               const change = this.changeStyle(node, transferData);
               if (this.changeStyle(node, transferData, cell)) {
-                node.setStyle('strokeColor=red');
+                const currentStyle = node.getStyle();
+                node.setStyle(`${currentStyle}strokeColor=red`);
                 this.graph.refresh();
               }
             });

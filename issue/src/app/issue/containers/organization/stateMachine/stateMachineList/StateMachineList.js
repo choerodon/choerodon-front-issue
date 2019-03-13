@@ -258,8 +258,7 @@ class StateMachineList extends Component {
     } = this.state;
 
     const { getFieldDecorator } = this.props.form;
-    const serviceData = StateMachineStore.getAllData;
-    const { singleData, getStageOptionsData } = StateMachineStore;
+    const { singleData } = StateMachineStore;
     const menu = AppState.currentMenuType;
     const { type, id: projectId, organizationId: orgId } = menu;
     const formContent = (
