@@ -71,7 +71,6 @@ class PriorityEdit extends Component {
         });
       }
     });
-    this.hideSidebar();
   };
 
   handleEditingCancel = () => {
