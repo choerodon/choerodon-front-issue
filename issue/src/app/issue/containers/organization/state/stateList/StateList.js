@@ -115,11 +115,11 @@ class StateList extends Component {
     ),
   }]);
 
-  linkToStateMachine = (machineId) => {
+  linkToStateMachine = (machineId, status) => {
     this.modelRef.destroy();
     const { history } = this.props;
     const { name, id, organizationId } = AppState.currentMenuType;
-    history.push(`/issue/state-machines/edit/${machineId}/state_machine_active?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
+    history.push(`/issue/state-machines/edit/${machineId}/${status || 'state_machine_active'}?type=organization&id=${id}&name=${encodeURIComponent(name)}&organizationId=${organizationId}`);
   };
 
   showStateMachines = (data) => {
@@ -131,7 +131,11 @@ class StateList extends Component {
           {
             data.stateMachineInfoList.map(stateMachine => (
               <li key={stateMachine.stateMachineId}>
-                <a onClick={() => this.linkToStateMachine(stateMachine.stateMachineId)}>
+                <a
+                  onClick={() => this.linkToStateMachine(
+                    stateMachine.stateMachineId, stateMachine.stateMachineStatus,
+                  )}
+                >
                   {stateMachine.stateMachineName}
                 </a>
               </li>
