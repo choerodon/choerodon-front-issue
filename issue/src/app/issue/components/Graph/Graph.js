@@ -864,6 +864,10 @@ class Graph extends Component {
       });
 
       graph.addListener(mxEvent.CELL_CONNECTED, (sender, evt) => {
+        // 暂不支持拖拽修改已有连线
+        if (evt.properties.point) {
+          return;
+        }
         const previous = evt.getProperty('previous');
         const edge = evt.getProperty('edge');
         const source = evt.getProperty('source');

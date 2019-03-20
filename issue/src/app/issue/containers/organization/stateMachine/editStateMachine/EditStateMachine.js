@@ -76,6 +76,7 @@ class EditStateMachine extends Component {
       isSelect: true,
     };
     this.graph = null;
+    this.update = false;
   }
 
   componentDidMount() {
@@ -551,6 +552,9 @@ class EditStateMachine extends Component {
               name,
               description,
               objectVersionNumber,
+              loading: false,
+            }, () => {
+              this.update = false;
             });
           }
         });
@@ -570,6 +574,9 @@ class EditStateMachine extends Component {
               name,
               description,
               objectVersionNumber,
+              loading: false,
+            }, () => {
+              this.update = false;
             });
           }
         });
@@ -577,6 +584,10 @@ class EditStateMachine extends Component {
   };
 
   refresh = () => {
+    this.setState({
+      loading: true,
+    });
+    this.update = true;
     this.loadStateMachine();
   };
 
@@ -1611,6 +1622,7 @@ class EditStateMachine extends Component {
               {nodeData && nodeData.length && (
                 <Spin spinning={loading}>
                   <Graph
+                    renderChanged={this.update}
                     setRef={this.setGraphRef}
                     onLink={this.handleOnTransfer}
                     header={status !== 'state_machine_active' && graphHeader}
