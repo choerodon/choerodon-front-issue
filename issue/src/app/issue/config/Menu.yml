@@ -7,13 +7,13 @@
         Routes: /issue/issue-type
         sort: 1
         permission:
-          - 'issue-service.issue-type.pageQuery'
+          - 'issue-service.issue-type.queryIssueTypeList'
     - "issue-type-schemes":
         icon: assignment_late
         Routes: /issue/issue-type-schemes
         sort: 2
         permission:
-          - 'issue-service.issue-type-scheme.pageQuery'
+          - 'issue-service.issue-type-scheme.queryIssueTypeSchemeList'
     - "state-machine":
         icon: transform
         Routes: /issue/state-machines
@@ -31,7 +31,7 @@
         Routes: /issue/states
         sort: 5
         permission:
-          - 'state-machine-service.status.pagingQuery'
+          - 'state-machine-service.status.queryStatusList'
     - "priorities":
         icon: format_list_numbered
         Routes: /issue/priorities

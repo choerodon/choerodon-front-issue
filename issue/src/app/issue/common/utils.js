@@ -80,12 +80,12 @@ export function getRequest(url) {
  */
 export function getStageList() {
   return [
-    {
-      id: 'prepare',
-      code: 'prepare',
-      name: '准备',
-      colour: '#F67F5A',
-    },
+    // {
+    //   id: 'prepare',
+    //   code: 'prepare',
+    //   name: '准备',
+    //   colour: '#F67F5A',
+    // },
     {
       id: 'todo',
       code: 'todo',
@@ -119,12 +119,12 @@ export function getStageList() {
  */
 export function getStageMap() {
   return {
-    prepare: {
-      id: 'prepare',
-      code: 'prepare',
-      name: '准备',
-      colour: '#F67F5A',
-    },
+    // prepare: {
+    //   id: 'prepare',
+    //   code: 'prepare',
+    //   name: '准备',
+    //   colour: '#F67F5A',
+    // },
     todo: {
       id: 'todo',
       code: 'todo',

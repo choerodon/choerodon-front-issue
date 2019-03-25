@@ -146,7 +146,7 @@ class Graph extends Component {
     this.setState({
       showSidebar: false,
     });
-  }
+  };
 
   // componentWillRecieveProps(nextProps) {
   //   const { initial } = this.state;
@@ -178,6 +178,27 @@ class Graph extends Component {
   };
 
   /**
+   * 检查新增状态是否和已有状态重叠，目前只校验纵向重叠
+   * @param height
+   * @returns {boolean}
+   */
+  checkIsOverlap = (height) => {
+    const { graph } = this.editor;
+    const cells = _.filter(graph.model && graph.model.cells, item => item.vertex || item.edge);
+    let tag = false;
+    _.forEach(cells, (cell) => {
+      if (cell.geometry
+        && cell.geometry.x === 150
+        && cell.geometry.y >= (height - 26)
+        && cell.geometry.y <= (height + 26)
+      ) {
+        tag = true;
+      }
+    });
+    return tag;
+  };
+
+  /**
    * 创建新状态
    */
   createStatus = (values) => {
@@ -191,11 +212,15 @@ class Graph extends Component {
         && values.statusDTO.name
         && getByteLen(values.statusDTO.name)) || 0;
       const statusWidth = textWidth > 62 ? textWidth : 62;
+      let height = 0;
+      while (this.checkIsOverlap(height)) {
+        height += 30;
+      }
       cell = graph.insertVertex(
         parent,
         `n${values.id}`,
         values.statusDTO && values.statusDTO.name,
-        150, 0, statusWidth, 26,
+        150, height, statusWidth, 26,
         `strokeColor=red;fillColor=${statusColor[values.statusDTO.type].colour
           ? `${statusColor[values.statusDTO.type].colour};`
           : '#E3E3E3;'}`,
@@ -839,6 +864,10 @@ class Graph extends Component {
       });
 
       graph.addListener(mxEvent.CELL_CONNECTED, (sender, evt) => {
+        // 暂不支持拖拽修改已有连线
+        if (evt.properties.point) {
+          return;
+        }
         const previous = evt.getProperty('previous');
         const edge = evt.getProperty('edge');
         const source = evt.getProperty('source');
