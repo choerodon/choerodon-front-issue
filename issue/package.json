@@ -6,6 +6,7 @@
   "scripts": {
     "start": "choerodon-front-boot start --config ../config.js",
     "build": "choerodon-front-boot build --config ../config.js",
+    "linux_build": "node --max_old_space_size=2048 node_modules/choerodon-front-boot/bin/choerodon-front-boot-build --config ./config.js",
     "test": "mocha"
   },
   "contributors": [
@@ -13,7 +14,7 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "choerodon-front-boot": "^0.10.4",
+    "choerodon-front-boot": "0.10.10",
     "immutability-helper": "^2.7.1",
     "mxgraph-js": "^1.0.1",
     "react-beautiful-dnd": "^8.0.7",
